@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/mario.png">
+  <link rel="mask-icon" href="/uploads/mario.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.just666.com","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="自从一咬牙购入了一台Synology之后感觉网络和存储的体验提升了很多。在这里总结一下购买理由，方便犹豫不决的朋友做个参考。 0X00 来自百度云盘的惊悚事件国内云盘一波洗牌过后，常用的几家都已经GG了，仅有一家百度还存活着。不过百度云说起来是免费的，实际如果使用的比较多的话就会发现，如果不充值为会员的话，速度就会非常的慢。所以说百度云盘也几乎是一个收费的网盘，超级会员算下来要将近30元&#x2F;月。 其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你为什么需要一台NAS">
+<meta property="og:url" content="https://blog.just666.com/2018/08/31/why-nas/index.html">
+<meta property="og:site_name" content="Shawn&#39;s Blog">
+<meta property="og:description" content="自从一咬牙购入了一台Synology之后感觉网络和存储的体验提升了很多。在这里总结一下购买理由，方便犹豫不决的朋友做个参考。 0X00 来自百度云盘的惊悚事件国内云盘一波洗牌过后，常用的几家都已经GG了，仅有一家百度还存活着。不过百度云说起来是免费的，实际如果使用的比较多的话就会发现，如果不充值为会员的话，速度就会非常的慢。所以说百度云盘也几乎是一个收费的网盘，超级会员算下来要将近30元&#x2F;月。 其">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-31T13:46:26.000Z">
+<meta property="article:modified_time" content="2023-07-09T11:58:31.162Z">
+<meta property="article:author" content="Shawn">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="NAS">
+<meta property="article:tag" content="Synology">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.just666.com/2018/08/31/why-nas/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.just666.com/2018/08/31/why-nas/","path":"2018/08/31/why-nas/","title":"你为什么需要一台NAS"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>你为什么需要一台NAS | Shawn's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Shawn's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个伪程序员的伪技术博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-%E6%9D%A5%E8%87%AA%E7%99%BE%E5%BA%A6%E4%BA%91%E7%9B%98%E7%9A%84%E6%83%8A%E6%82%9A%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">0X00 来自百度云盘的惊悚事件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X01-%E5%A4%A7%E5%AE%B6%E7%9A%84%E5%B8%A6%E5%AE%BD%E4%B9%9F%E6%B2%A1%E9%82%A3%E4%B9%88%E5%A4%A7"><span class="nav-number">2.</span> <span class="nav-text">0X01 大家的带宽也没那么大</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X02-%E5%A4%9A%E8%AE%BE%E5%A4%87%E5%90%8C%E6%AD%A5%E7%9B%AE%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">0X02 多设备同步目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X03-%E6%97%A0%E5%A4%84%E4%B8%8D%E5%9C%A8%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">0X03 无处不在的文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X04-NFS-SMB"><span class="nav-number">5.</span> <span class="nav-text">0X04 NFS&#x2F;SMB</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X05-git-server"><span class="nav-number">6.</span> <span class="nav-text">0X05 git server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X06-docker"><span class="nav-number">7.</span> <span class="nav-text">0X06 docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X07-VideoStadion"><span class="nav-number">8.</span> <span class="nav-text">0X07 VideoStadion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X08-DownloadStadion"><span class="nav-number">9.</span> <span class="nav-text">0X08 DownloadStadion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X09-%E5%85%B6%E4%BB%96%E4%BC%98%E5%8A%BF"><span class="nav-number">10.</span> <span class="nav-text">0X09 其他优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X0A-%E5%8A%A3%E5%8A%BF"><span class="nav-number">11.</span> <span class="nav-text">0X0A 劣势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X0B-%E4%B8%80%E4%BA%9B%E6%9B%BF%E4%BB%A3%E6%96%B9%E6%A1%88"><span class="nav-number">12.</span> <span class="nav-text">0X0B 一些替代方案</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shawn</p>
+  <div class="site-description" itemprop="description">分享我的知识、经验、生活与感悟</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">171</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawn-bluce" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawn-bluce" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shawnbluce@gmail.com" title="E-Mail → mailto:shawnbluce@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://zezeshe.com/" title="https:&#x2F;&#x2F;zezeshe.com&#x2F;" rel="noopener" target="_blank">Jrotty</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.cnblogs.com/303donatello" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;303donatello" rel="noopener" target="_blank">303Donatello</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://hubojing.github.io/" title="http:&#x2F;&#x2F;hubojing.github.io&#x2F;" rel="noopener" target="_blank">胡博靖</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.csdn.net/shouldnotappearcalm" title="http:&#x2F;&#x2F;blog.csdn.net&#x2F;shouldnotappearcalm" rel="noopener" target="_blank">不应有的淡定</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://hiwannz.com/" title="https:&#x2F;&#x2F;hiwannz.com&#x2F;" rel="noopener" target="_blank">见字如面</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2018/08/31/why-nas/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="你为什么需要一台NAS | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你为什么需要一台NAS
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-08-31 21:46:26" itemprop="dateCreated datePublished" datetime="2018-08-31T21:46:26+08:00">2018-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>自从一咬牙购入了一台Synology之后感觉网络和存储的体验提升了很多。在这里总结一下购买理由，方便犹豫不决的朋友做个参考。</p>
+<h1 id="0X00-来自百度云盘的惊悚事件"><a href="#0X00-来自百度云盘的惊悚事件" class="headerlink" title="0X00 来自百度云盘的惊悚事件"></a>0X00 来自百度云盘的惊悚事件</h1><p>国内云盘一波洗牌过后，常用的几家都已经GG了，仅有一家百度还存活着。不过百度云说起来是免费的，实际如果使用的比较多的话就会发现，如果不充值为会员的话，速度就会非常的慢。所以说百度云盘也几乎是一个收费的网盘，超级会员算下来要将近30元/月。</p>
+<p>其实收费无可厚非，毕竟大家花钱享受服务嘛。不过直到一天，在网上看到了这样一件事：</p>
+<blockquote>
+<p>一个人在自己的百度云盘中上传了大量自己拍摄的照片（纯一手自己拍摄的），过段时间后因为一些原因从百度云盘手动删除了。<strong>又过了不短的一段时间</strong>，该用户再次将自己的这些照片上传至百度云盘，发现居然所有图片都是使用 <strong>急速秒传</strong> 的方式上传的。那么就发现了一个问题，急速秒传使用的是文件摘要值对比后选择性上传的一个技术。那问题就来了，该用户自己纯一手拍摄的照片，在没有分享给任何人的情况下删除了，而且是过了不短的一段时间再次上传，居然是秒传。那就意味着百度的服务器上存储了该用户的这些数据，但是用户已经删除了这些数据。意味着什么呢？百度根本没有删除用户的数据，在用户删除之后也只是不展示给用户看了而已。</p>
+</blockquote>
+<p>现在想想是不是不寒而栗？</p>
+<span id="more"></span>
+<h1 id="0X01-大家的带宽也没那么大"><a href="#0X01-大家的带宽也没那么大" class="headerlink" title="0X01 大家的带宽也没那么大"></a>0X01 大家的带宽也没那么大</h1><p>还有一个原因就是”此时此刻大家的带宽还没有那么大”。说是云时代已经到来了，可是我们的手机还是需要64G，128G乃至更大的存储，并不能完全将数据存储到云端；我们的PC也是动辄TB级，并不能在线观看真正的蓝光原盘；甚至你的PS4也需要更大的硬盘以存储更多的游戏，不能从服务器上加载游戏；这些问题的一个交汇点就在“带宽&amp;流量”上。所以对于有大量数据存储与分享需求的用户，还是可以在家里部署一台NAS，毕竟现在的电脑、手机都是1000M的网卡，理论可以达到100m/s的传输速度还是要远远高于我们的互联网带宽。而且当你要备份数据到云端的时候，由于我们大多数都是ADSL的网络，会导致上传速度远低于下载速度。</p>
+<p>在我的网络环境下，如果我要备份一个5GB的文件到互联网的云上，没有一个半小时几乎是完成不了的，但是如果是使用内网的NAS的话，就可以在一分半以内完成。</p>
+<h1 id="0X02-多设备同步目录"><a href="#0X02-多设备同步目录" class="headerlink" title="0X02 多设备同步目录"></a>0X02 多设备同步目录</h1><p>如果家中有多台设备需要共享一些文件，比如照片/文档等。在Synology中可以轻松实现多台设备同步目录，你在一台设备上进行的改动会瞬间同步至所有设备。虽然很多公网云存储提供了这项服务，但是毕竟这是内网环境的，硬盘就在你家里，资料的私密性会很高。</p>
+<h1 id="0X03-无处不在的文件"><a href="#0X03-无处不在的文件" class="headerlink" title="0X03 无处不在的文件"></a>0X03 无处不在的文件</h1><p>现在的NAS都可以配置外部介入，以我用的Synology为例。如果自己家的宽带可以申请公网IP最好，如果不能也可以在Synology的控制面板中配置外部连接。不管你身在何处，只要能连接到网络就可以访问到自己的文件，而且不需要购买花生壳等服务，速度也还可以接受。</p>
+<h1 id="0X04-NFS-SMB"><a href="#0X04-NFS-SMB" class="headerlink" title="0X04 NFS/SMB"></a>0X04 NFS/SMB</h1><p>Synology中提供了共享目录的多种协议，在Linux上我使用NFS来挂载我的目录，Windows环境下使用SMB也是可以的。使用NFS或SMB挂载目录后就可以将NAS中的共享目录当作自己的磁盘来访问了，非常方便。</p>
+<h1 id="0X05-git-server"><a href="#0X05-git-server" class="headerlink" title="0X05 git server"></a>0X05 git server</h1><p>Synology的套件中心中提供了git server，可以在家中部署一个私有git server。安全可靠。</p>
+<h1 id="0X06-docker"><a href="#0X06-docker" class="headerlink" title="0X06 docker"></a>0X06 docker</h1><p>高级的Synology版本提供docker服务，有了docker再加上远程访问和端口转发后，你的Synology就几乎成为了一台真正的服务器了。</p>
+<h1 id="0X07-VideoStadion"><a href="#0X07-VideoStadion" class="headerlink" title="0X07 VideoStadion"></a>0X07 VideoStadion</h1><p>Synology中的VideoStadion套件可以分析你NAS中存储的电影，自动帮你整理、下载封面、下载影片介绍、下载字幕，简直就是一个家用的多媒体中心。虽然几乎每次看NAS中的电影都是使用本地播放器在播放，不过还是要承认Synology中的VideoStadion套件是很棒的,可能只是我不太喜欢用而已。</p>
+<h1 id="0X08-DownloadStadion"><a href="#0X08-DownloadStadion" class="headerlink" title="0X08 DownloadStadion"></a>0X08 DownloadStadion</h1><p>这个是我眼中的大杀器。假设你只有一台笔记本，如果你想要下载几部高清电影空了看，那么就只能在晚上的时候挂机下载，白天了再暂停带走去工作。拥有了Synology后可以把十几个种子、磁力链接、http地址丢在DownloadStadion中，设定好下载时间就不用再管他了。我的DownloadStadion就是每周一至周五的2:00到19:00进行数据下载，其他时间空闲。</p>
+<p>而且配合远程操作和搜索功能，可以实现在任何地方掏出手机命令家里的Synology下载文件，等你到家文件早就下载好了。</p>
+<h1 id="0X09-其他优势"><a href="#0X09-其他优势" class="headerlink" title="0X09 其他优势"></a>0X09 其他优势</h1><p>理论上一台HTPC经过一番配置部署也可以达到Synology的效果，不过Synology最大的特点是一台HTPC所不能比拟的。Synology非常省电，通常情况下它只有10W左右的功率；而且Synology的服务很全面，基本上你需要的功能都在了，不需要你过多折腾；还有就是专业的NAS会很稳定，持续运行很久都没有问题。</p>
+<h1 id="0X0A-劣势"><a href="#0X0A-劣势" class="headerlink" title="0X0A 劣势"></a>0X0A 劣势</h1><p>Synology最大的优势就是方便省事，但是最大的劣势却是“麻烦费事”。因为并不是所有人都有足够的计算机基础，对于大多数没有计算机基础的人来说这东西还是有点复杂，而且大多数人也并不会有购买一台NAS的需求。</p>
+<h1 id="0X0B-一些替代方案"><a href="#0X0B-一些替代方案" class="headerlink" title="0X0B 一些替代方案"></a>0X0B 一些替代方案</h1><p>如果不想购买一台NAS的话也有一些替代品，据我所知不错的方案有这几个：</p>
+<ol>
+<li>自建“黑群晖”（据说很麻烦，坑很多）</li>
+<li>OwnCloud/NextCloud等云存储程序</li>
+<li>使用OpenNAS自建功能完善的NAS</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.08.png" alt="Shawn 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.37.png" alt="Shawn 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shawn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.just666.com/2018/08/31/why-nas/" title="你为什么需要一台NAS">https://blog.just666.com/2018/08/31/why-nas/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/channel_name">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.png">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/uploads/xxx">
+            <span class="icon">
+              <i class="fab fa-instagram"></i>
+            </span>
+
+            <span class="label">Instagram</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+              <a href="/tags/NAS/" rel="tag"><i class="fa fa-tag"></i> NAS</a>
+              <a href="/tags/Synology/" rel="tag"><i class="fa fa-tag"></i> Synology</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/08/29/django-f-object/" rel="prev" title="Django中的F()">
+                  <i class="fa fa-chevron-left"></i> Django中的F()
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/09/06/django-queryset/" rel="next" title="Django中的一些非入门级用法">
+                  Django中的一些非入门级用法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shawn</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/shawn-bluce" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

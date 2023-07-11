@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/mario.png">
+  <link rel="mask-icon" href="/uploads/mario.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.just666.com","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0X00 按惯例得有一个标题众所周知save是 Django 中最常用的保存数据的方法。但是一般来说大家经常会把“常用“理解成“万能“，然后能用的时候就全用这一种方式。不过编程 中是没有所谓的“一招鲜吃遍天“的，Django 之所以提供了那么多中保存数据的方法也侧面证实了这一点。 首先来看一下我遇到的这个问题： 12345678from .models import Studentfrom .ut">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次 Django Save 导致的数据异常">
+<meta property="og:url" content="https://blog.just666.com/2020/07/11/django-save/index.html">
+<meta property="og:site_name" content="Shawn&#39;s Blog">
+<meta property="og:description" content="0X00 按惯例得有一个标题众所周知save是 Django 中最常用的保存数据的方法。但是一般来说大家经常会把“常用“理解成“万能“，然后能用的时候就全用这一种方式。不过编程 中是没有所谓的“一招鲜吃遍天“的，Django 之所以提供了那么多中保存数据的方法也侧面证实了这一点。 首先来看一下我遇到的这个问题： 12345678from .models import Studentfrom .ut">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/20200711151128.jpeg">
+<meta property="article:published_time" content="2020-07-11T05:22:47.000Z">
+<meta property="article:modified_time" content="2023-07-09T11:58:31.154Z">
+<meta property="article:author" content="Shawn">
+<meta property="article:tag" content="Django">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/20200711151128.jpeg">
+
+
+<link rel="canonical" href="https://blog.just666.com/2020/07/11/django-save/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.just666.com/2020/07/11/django-save/","path":"2020/07/11/django-save/","title":"记一次 Django Save 导致的数据异常"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次 Django Save 导致的数据异常 | Shawn's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Shawn's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个伪程序员的伪技术博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-%E6%8C%89%E6%83%AF%E4%BE%8B%E5%BE%97%E6%9C%89%E4%B8%80%E4%B8%AA%E6%A0%87%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">0X00 按惯例得有一个标题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shawn</p>
+  <div class="site-description" itemprop="description">分享我的知识、经验、生活与感悟</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">171</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawn-bluce" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawn-bluce" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shawnbluce@gmail.com" title="E-Mail → mailto:shawnbluce@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://zezeshe.com/" title="https:&#x2F;&#x2F;zezeshe.com&#x2F;" rel="noopener" target="_blank">Jrotty</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.cnblogs.com/303donatello" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;303donatello" rel="noopener" target="_blank">303Donatello</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://hubojing.github.io/" title="http:&#x2F;&#x2F;hubojing.github.io&#x2F;" rel="noopener" target="_blank">胡博靖</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.csdn.net/shouldnotappearcalm" title="http:&#x2F;&#x2F;blog.csdn.net&#x2F;shouldnotappearcalm" rel="noopener" target="_blank">不应有的淡定</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://hiwannz.com/" title="https:&#x2F;&#x2F;hiwannz.com&#x2F;" rel="noopener" target="_blank">见字如面</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2020/07/11/django-save/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次 Django Save 导致的数据异常 | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次 Django Save 导致的数据异常
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-11 13:22:47" itemprop="dateCreated datePublished" datetime="2020-07-11T13:22:47+08:00">2020-07-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0X00-按惯例得有一个标题"><a href="#0X00-按惯例得有一个标题" class="headerlink" title="0X00 按惯例得有一个标题"></a>0X00 按惯例得有一个标题</h1><p>众所周知<code>save</code>是 Django 中最常用的保存数据的方法。但是一般来说大家经常会把“常用“理解成“万能“，然后能用的时候就全用这一种方式。不过编程 中是没有所谓的“一招鲜吃遍天“的，Django 之所以提供了那么多中保存数据的方法也侧面证实了这一点。</p>
+<p>首先来看一下我遇到的这个问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Student</span><br><span class="line"><span class="keyword">from</span> .utils <span class="keyword">import</span> calculate_score</span><br><span class="line"></span><br><span class="line">queryset = Student.objects.<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> student <span class="keyword">in</span> queryset:</span><br><span class="line">    student.score = calculate_score(student)    <span class="comment"># 调用一个工具函数计算该学生的成绩</span></span><br><span class="line">    student.save()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这段代码乍一看没有什么问题，因为计算的值是通过<code>calculate_score</code>这个函数进行的，所以不能使用<code>queryset.update(xxx)</code>的方法。然后咱们看一下 Django 文档是如何描述 queryset 的。</p>
+<blockquote>
+<p>QuerySets are lazy – the act of creating a QuerySet doesn’t involve any database activity. You can stack filters together all day long, and Django won’t actually run the query until the QuerySet is evaluated. </p>
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/2.2/topics/db/queries/#querysets-are-lazy">QuerySets are lazy</a></p>
+</blockquote>
+<blockquote>
+<p>nternally, a QuerySet can be constructed, filtered, sliced, and generally passed around without actually hitting the database. No database activity actually occurs until you do something to evaluate the queryset.</p>
+<p><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/2.2/ref/models/querysets/#when-querysets-are-evaluated">When QuerySets are evaluated</a></p>
+</blockquote>
+<p>QuerySets are lazy 内容总结来说就是“Django 中的 QuerySet 只有在用的时候才会真的去数据库里查，而不是生成 QuerySet 的时候“。后面的 When QuerySet are evaluated 则标明了什么叫做“真正在使用“，给出了下面几个条件，当你做这些事情的时候就是“真正在使用“了。这些条件包括：迭代、 切片、列表等（我英文水平小学三年级，解读地不对的地方还希望大家指出）。 所以显然我们对这个 queryset 来了个 <code>for</code> 循环就满足了上述的“迭代“，所以这时候数 Django 就会真正的从数据库中将数据真正的 <strong>取出来</strong>。</p>
+<p>现在问题来了。我们思考一个问题，如果我一秒钟能计算10 个学生的成绩，然后整个<code>Student</code>表有 3W 学生，得出“处理所有学生信息需要消耗 50 分钟的时间“这样的结论（每秒 10 条和一共 3W 是乱写的，真实数据通常比这个大得多）。</p>
+<p><strong>如果在执行这个循环的时候，某位同学修改了自己的的信息，比如手机号，会发生什么？</strong> 有两种可能：第一种可能是这位同学修改自己手机号的时候计算分数的循环已经把他的分数计算完了，那么他的手机号修改也生效了（这种最好）。但是如果他改手机号的时候循环还没到他呢？假设他把手机号从原来的 123 改成了 456，那么他改完手机号的一瞬间数据库里存进去的确实是 456，没有问题。<strong>但是 queryset 里是他改手机号以前取出来的 123</strong>，这时候循环到他了，计算完之后来了一个<code>student.save()</code>，如此一来他刚刚改好的手机号码就又回到了 123。</p>
+<p>所以说这种写法并不会 100% 出现问题。整个循环耗时越久，出现问题的可能性越大；系统中数据变更越频繁，出现问题的可能性越大。当然了，bug 就是 bug，不能因为 bug 没触发就无所畏惧了，还是得解决的。通常来说有两种解决方法，下面是第一种</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> student <span class="keyword">in</span> queryset:</span><br><span class="line">    new_score = calculate_score(student)</span><br><span class="line">    Student.objects.<span class="built_in">filter</span>(<span class="built_in">id</span>=student.<span class="built_in">id</span>).update(score=new_score)</span><br></pre></td></tr></table></figure>
+
+<p>这种方式仍然比较 young 比较 simple 比较 naive，不过<strong>又不是不能用</strong>。<br><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/20200711151128.jpeg"></p>
+<p>但是这种用法显然是不好的，而且 <code>update</code> 本来也不是让我们这么用的。所以我们还是得回到<code>save</code>上，Django 其实已经提供了一个参数给 <code>save</code> 了，可以用下面这种方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> student <span class="keyword">in</span> queryset:</span><br><span class="line">    student.score = calculate_score(student)</span><br><span class="line">    student.save(update_fields=[<span class="string">&#x27;score&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>也就是在 <code>save</code> 的时候带上具体需要更新哪个字段，其他的就不更新了。而且通过传递的参数也可以看出，指定的是多个字段，如果有需要修改多个字段的话，就只修改这一个就好了。</p>
+<p>不过其实这里还是有一个潜在问题的，那就是说：恰好我们在更新 score 的时候，其他地方也在更新这个。不过这个更多的时候就是我们程序逻辑的问题了，因为在几乎同一时间对一个字段进行修改，然后修改的双方又互相不知道的话，总是会出问题的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.08.png" alt="Shawn 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.37.png" alt="Shawn 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shawn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.just666.com/2020/07/11/django-save/" title="记一次 Django Save 导致的数据异常">https://blog.just666.com/2020/07/11/django-save/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/channel_name">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.png">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/uploads/xxx">
+            <span class="icon">
+              <i class="fab fa-instagram"></i>
+            </span>
+
+            <span class="label">Instagram</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Django/" rel="tag"><i class="fa fa-tag"></i> Django</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/07/05/drf-permission/" rel="prev" title="如何在 Django 与 DRF 中优雅地校验权限">
+                  <i class="fa fa-chevron-left"></i> 如何在 Django 与 DRF 中优雅地校验权限
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/07/14/django-manager/" rel="next" title="Django 中的 Objects">
+                  Django 中的 Objects <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shawn</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/shawn-bluce" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

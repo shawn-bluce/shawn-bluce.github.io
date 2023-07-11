@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/mario.png">
+  <link rel="mask-icon" href="/uploads/mario.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.just666.com","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0X00 前言如果秉承着「能用就行」的原则，那么这篇文章提到的东西基本都没什么卵用；如果秉承着「写更好的代码」的原则，那么这里提到的东西也许对你有所帮助。  内容主要取材自 Effective Python，主要是作为自己学习后的一个输出而总结的这篇博客  0X01 使用 % 的 C 风格格式化首先是沿用自 C 风格的使用 % 进行的字符串格式化方法： 123456789101112131415&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 中格式化字符串的几种方式">
+<meta property="og:url" content="https://blog.just666.com/2021/10/12/python-string-format/index.html">
+<meta property="og:site_name" content="Shawn&#39;s Blog">
+<meta property="og:description" content="0X00 前言如果秉承着「能用就行」的原则，那么这篇文章提到的东西基本都没什么卵用；如果秉承着「写更好的代码」的原则，那么这里提到的东西也许对你有所帮助。  内容主要取材自 Effective Python，主要是作为自己学习后的一个输出而总结的这篇博客  0X01 使用 % 的 C 风格格式化首先是沿用自 C 风格的使用 % 进行的字符串格式化方法： 123456789101112131415&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-12T12:52:43.000Z">
+<meta property="article:modified_time" content="2023-07-09T11:58:31.160Z">
+<meta property="article:author" content="Shawn">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="String">
+<meta property="article:tag" content="format">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.just666.com/2021/10/12/python-string-format/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.just666.com/2021/10/12/python-string-format/","path":"2021/10/12/python-string-format/","title":"Python 中格式化字符串的几种方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python 中格式化字符串的几种方式 | Shawn's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Shawn's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个伪程序员的伪技术博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0X00 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X01-%E4%BD%BF%E7%94%A8-%E7%9A%84-C-%E9%A3%8E%E6%A0%BC%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">0X01 使用 % 的 C 风格格式化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X02-%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%9Aformat%E5%87%BD%E6%95%B0%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">0X02 另一种方法：format函数与方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X03-%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%96%B9%E6%B3%95-f-string-%E6%8F%92%E5%80%BC%E6%A0%BC%E5%BC%8F%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.</span> <span class="nav-text">0X03 更好的方法 f-string 插值格式字符串</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shawn</p>
+  <div class="site-description" itemprop="description">分享我的知识、经验、生活与感悟</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">171</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawn-bluce" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawn-bluce" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shawnbluce@gmail.com" title="E-Mail → mailto:shawnbluce@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://zezeshe.com/" title="https:&#x2F;&#x2F;zezeshe.com&#x2F;" rel="noopener" target="_blank">Jrotty</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.cnblogs.com/303donatello" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;303donatello" rel="noopener" target="_blank">303Donatello</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://hubojing.github.io/" title="http:&#x2F;&#x2F;hubojing.github.io&#x2F;" rel="noopener" target="_blank">胡博靖</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.csdn.net/shouldnotappearcalm" title="http:&#x2F;&#x2F;blog.csdn.net&#x2F;shouldnotappearcalm" rel="noopener" target="_blank">不应有的淡定</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://hiwannz.com/" title="https:&#x2F;&#x2F;hiwannz.com&#x2F;" rel="noopener" target="_blank">见字如面</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2021/10/12/python-string-format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python 中格式化字符串的几种方式 | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 中格式化字符串的几种方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-10-12 20:52:43" itemprop="dateCreated datePublished" datetime="2021-10-12T20:52:43+08:00">2021-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a>0X00 前言</h1><p>如果秉承着「能用就行」的原则，那么这篇文章提到的东西基本都没什么卵用；如果秉承着「写更好的代码」的原则，那么这里提到的东西也许对你有所帮助。</p>
+<blockquote>
+<p>内容主要取材自 <em>Effective Python</em>，主要是作为自己学习后的一个输出而总结的这篇博客</p>
+</blockquote>
+<h1 id="0X01-使用-的-C-风格格式化"><a href="#0X01-使用-的-C-风格格式化" class="headerlink" title="0X01 使用 % 的 C 风格格式化"></a>0X01 使用 % 的 C 风格格式化</h1><p>首先是沿用自 C 风格的使用 % 进行的字符串格式化方法：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>name = <span class="string">&#x27;Shawn&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>job = <span class="string">&#x27;developer&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text = <span class="string">&#x27;I am %s, a %s&#x27;</span> % (name, job)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text</span><br><span class="line"><span class="string">&#x27;I am Shawn, a developer&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>height = <span class="number">123.456</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text = <span class="string">&#x27;My height is %4d.&#x27;</span> % height</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text</span><br><span class="line"><span class="string">&#x27;My height is  123.&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text = <span class="string">&#x27;My height is %4f.&#x27;</span> % height</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text</span><br><span class="line"><span class="string">&#x27;My height is 123.456000.&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text = <span class="string">&#x27;My height is %4.8f.&#x27;</span> % height</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>text</span><br><span class="line"><span class="string">&#x27;My height is 123.45600000.&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这种写法在写惯了 C 的人身上比较常见，比较熟悉而且也比较简单。不过这种写法有几个问题，首先就是<strong>当百分号右侧的变量数量发生变化或者类型发生变化的时候，程序很有可能因为类型转化出现不兼容的情况</strong>（当然了，本来是 <code>%s %4d</code> 对应字符串和数字，现在两个都是字符串了当然就出错了）。如果要解决这种问题的话，必须每次修改都要检查百分号左右的占位符和具体数值是否能对应的伤，而且一旦占位符多了之后还很容易看花眼。</p>
+<p>还有一个问题就是<strong>填充数值的时候通常需要对具体的值进行一些处理，比如保留某几位长度之类的，这样一来表达式可能会很长，从而显得很混乱</strong>。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">coffee_price_list = [</span><br><span class="line">    (<span class="string">&#x27;Americano&#x27;</span>, <span class="number">15</span>),</span><br><span class="line">    (<span class="string">&#x27;Latte&#x27;</span>, <span class="number">25</span>),</span><br><span class="line">    (<span class="string">&#x27;Cappuccino&#x27;</span>, <span class="number">30</span>)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> index, (name, price) <span class="keyword">in</span> <span class="built_in">enumerate</span>(coffee_price_list):</span><br><span class="line">    content = <span class="string">&#x27;%d.  %-12s  -----  %.2f&#x27;</span> % (index, name, price)</span><br><span class="line">    <span class="built_in">print</span>(content)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output</span></span><br><span class="line"><span class="number">0.</span>  Americano     -----  <span class="number">15.00</span></span><br><span class="line"><span class="number">1.</span>  Latte         -----  <span class="number">25.00</span></span><br><span class="line"><span class="number">2.</span>  Cappuccino    -----  <span class="number">30.00</span></span><br></pre></td></tr></table></figure>
+
+<p>我们来看 <code>for</code> 循环里面那行，是不是确实看起来乱乱糟糟的，这还只是三个占位符，如果更多的话就会更混乱了。</p>
+<p>第三个问题是<strong>如果要用同一个值来填充多个位置，那就需要在右侧重复多次</strong>（废话之：你想要几个就得写几个）。我们假设你有一个保证书模板，只需要填入姓名、错误和保证内容就可以生成出例如「我XX再也不YY了，我保证以后ZZ」的十万字长文。但是整篇文章里出现了大量的空位，需要填入这些 XX/YY/ZZ 怎么搞呢？你可能需要在后面写上不计其数的 <code>&#39;--------%s-------%s-------%s-------%s&#39; % (xx, xx, yy, zz, zz, yy)</code> 这种东西（别跟我说你要用 <code>replace</code> 那是另外的内容，这里只讨论字符串格式化😅）。</p>
+<p>当然了这个问题也不是无解，我们使用 <code>dict</code> 来替换平时用的 <code>tuple</code> 就可以了，就是类似下面这种用法（虽然我从来没真的在代码里见过谁这么写）</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">value_a = <span class="string">&#x27;aaaaaaaaaaaaaaaa&#x27;</span></span><br><span class="line">value_b = <span class="string">&#x27;bbbbbbbbbbbbbbbb&#x27;</span></span><br><span class="line">value_c = <span class="string">&#x27;cccccccccccccccc&#x27;</span></span><br><span class="line"></span><br><span class="line">content = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    %(val_a)s, %(val_a)s, %(val_a)s</span></span><br><span class="line"><span class="string">    %(val_b)s, %(val_b)s, %(val_b)s</span></span><br><span class="line"><span class="string">    %(val_c)s, %(val_c)s, %(val_c)s</span></span><br><span class="line"><span class="string">    %(val_a)s, %(val_b)s, %(val_c)s</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span> % &#123;</span><br><span class="line">        <span class="string">&#x27;val_a&#x27;</span>: value_a,</span><br><span class="line">        <span class="string">&#x27;val_b&#x27;</span>: value_b,</span><br><span class="line">        <span class="string">&#x27;val_c&#x27;</span>: value_c</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(content)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output</span></span><br><span class="line"></span><br><span class="line">    aaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaa</span><br><span class="line">    bbbbbbbbbbbbbbbb, bbbbbbbbbbbbbbbb, bbbbbbbbbbbbbbbb</span><br><span class="line">    cccccccccccccccc, cccccccccccccccc, cccccccccccccccc</span><br><span class="line">    aaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbb, cccccccccccccccc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>虽然这种写法解决了多次重复使用的问题，但是加重了第二点也就是<strong>代码更冗长</strong>了，因为不仅要给变量做格式化，还要给每个占位符再设定一个 <code>key</code> 且为其匹配好。</p>
+<p>最后就是因为每次都需要把 <code>key</code> 至少写两次（占位符那里一次，后面的字典里一次），甚至因为 <code>value</code> 过长还可能再把变量提出去单独定义一下，就会导致整个表达式非常长，比较容易出现 bug 且定位 bug 比较复杂。</p>
+<h1 id="0X02-另一种方法：format函数与方法"><a href="#0X02-另一种方法：format函数与方法" class="headerlink" title="0X02 另一种方法：format函数与方法"></a>0X02 另一种方法：format函数与方法</h1><p><code>format</code> 是我平时用的最多的一种方法了，比较常规的方法是调用<code>str</code> 对象的 <code>format()</code> 方法，例如下面这样</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">name_1 = <span class="string">&#x27;shawn&#x27;</span></span><br><span class="line">name_2 = <span class="string">&#x27;bluce&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;hello &#123;&#125;, hello &#123;&#125;.&#x27;</span>.<span class="built_in">format</span>(name_1, name_2))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;hello &#123;:&lt;10&#125;, hello &#123;:&lt;20&#125;.&#x27;</span>.<span class="built_in">format</span>(name_1, name_2))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;hello &#123;1&#125;, hello &#123;0&#125;.&#x27;</span>.<span class="built_in">format</span>(name_1, name_2))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;hello &#123;1&#125;, hello &#123;0&#125;, hello &#123;0&#125;, hello &#123;1&#125;.&#x27;</span>.<span class="built_in">format</span>(name_1, name_2))</span><br><span class="line"></span><br><span class="line"><span class="comment"># output</span></span><br><span class="line">hello shawn, hello bluce.</span><br><span class="line">hello shawn     , hello bluce               .</span><br><span class="line">hello bluce, hello shawn.</span><br><span class="line">hello bluce, hello shawn, hello shawn, hello bluce.</span><br></pre></td></tr></table></figure>
+
+<p>第二种可能比较少见，不过规则比较简单，就是在花括号里写一个冒号，冒号右边可以用 C 方法格式化变量。第三四种就比较常见了，可以通过 <code>index</code> 来规定位置。</p>
+<p>这种方法还有一些更高级的用法，例如在花括号里访问字典的 <code>key</code> 或者访问列表中的下标（好像也没见人这么用过）</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data = [</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;shawn&#x27;</span>, <span class="string">&#x27;gender&#x27;</span>: <span class="string">&#x27;M&#x27;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;bluce&#x27;</span>, <span class="string">&#x27;gender&#x27;</span>: <span class="string">&#x27;F&#x27;</span>&#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#123;data[0][name]&#125; and &#123;data[1][name]&#125; is &#123;data[0][gender]&#125; and &#123;data[1][gender]&#125;&#x27;</span>.<span class="built_in">format</span>(data=data))</span><br><span class="line"></span><br><span class="line"><span class="comment"># output</span></span><br><span class="line">shawn <span class="keyword">and</span> bluce <span class="keyword">is</span> M <span class="keyword">and</span> F</span><br></pre></td></tr></table></figure>
+
+<h1 id="0X03-更好的方法-f-string-插值格式字符串"><a href="#0X03-更好的方法-f-string-插值格式字符串" class="headerlink" title="0X03 更好的方法 f-string 插值格式字符串"></a>0X03 更好的方法 f-string 插值格式字符串</h1><p>在 Python 3.6 中引入的这个特性可以解决上述提到的问题，语法要求格式化的字符串前面加上一个<code>f</code>做前缀，就类似于之前的<code>b/r</code>这种。这里也同样支持前面 <code>format</code> 那里用到的格式化方法，例如 <code>f&#39;&#123;name_1:&lt;10&#125;, &#123;value:.2f&#125;&#39;</code> 这种。</p>
+<p>一个简单的例子</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name_1 = <span class="string">&#x27;shawn&#x27;</span></span><br><span class="line">name_2 = <span class="string">&#x27;bluce&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;hello <span class="subst">&#123;name_1&#125;</span>, hello <span class="subst">&#123;name_2&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output</span></span><br><span class="line">hello shawn, hello bluce</span><br></pre></td></tr></table></figure>
+
+<p>我们现在再回过头来看一下最开始提到的四个问题：<strong>第一个</strong>，如果需要调整顺序，那么百分号左侧的正文要改，右侧的值也要改，就要改两次。现在没有百分号也就不再区分左右了，如果调整顺序那么就只调整一次就行，方便了很多。<strong>第二个</strong>，如果对填进去的值稍作处理可能会导致整个表达式变得很长。现在因为省略了百分号右边的内容，所以整个表达式还是精简了不少的。<strong>第三个</strong>，当某个变量/值要用多次的时候就需要左右共写两次那么多。用 <code>f-string</code> 方式的话，如果确实需要调用多次且每次都要进行修改（例如保留小数或是转成大写之类的），则可以考虑将其提取出去单独赋值，然后在格式化的时候用新值来代替，还能更加符合字符串格式化的语义。<strong>第四个</strong>是说如果使用 <code>dict</code> 的话会使代码变多，现在不用字典了当然也就没有这个问题了。</p>
+<p>下面是几种用法，看起来 <code>f-string</code> 并没有代码量少很多，是因为这个例子并不能很明显的体现出代码量少的优势，但是已经体现出可读性和维护性的优势了。如果一眼看过去，明显是 <code>f-string</code> 的用法最简单清晰明了。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">data = [</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;shawn&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">78.5</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;ami&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">89.0</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;jack&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">92.0</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;amber&#x27;</span>, <span class="string">&#x27;score&#x27;</span>: <span class="number">99.5</span>&#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;------------- style_1 -------------&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">    style_1 = <span class="string">&#x27;name: %-10s score: %2.2f&#x27;</span> % (item[<span class="string">&#x27;name&#x27;</span>], item[<span class="string">&#x27;score&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(style_1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n\n------------- style_2 -------------&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">    style_2 = <span class="string">&#x27;name: &#123;:10s&#125; score: &#123;:2.2f&#125;&#x27;</span>.<span class="built_in">format</span>(item[<span class="string">&#x27;name&#x27;</span>], item[<span class="string">&#x27;score&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(style_2)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n\n------------- style_3 -------------&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">    style_3 = <span class="string">&#x27;name: &#123;name:10s&#125; score: &#123;score:2.2f&#125;&#x27;</span>.<span class="built_in">format</span>(name=item[<span class="string">&#x27;name&#x27;</span>], score=item[<span class="string">&#x27;score&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(style_3)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n\n------------- f-string -------------&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">    f_string = <span class="string">f&#x27;name: <span class="subst">&#123;item[<span class="string">&quot;name&quot;</span>]:10s&#125;</span> score: <span class="subst">&#123;item[<span class="string">&quot;score&quot;</span>]:<span class="number">2.2</span>f&#125;</span>&#x27;</span></span><br><span class="line">    <span class="built_in">print</span>(f_string)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output</span></span><br><span class="line">------------- style_1 -------------</span><br><span class="line">name: shawn      score: <span class="number">78.50</span></span><br><span class="line">name: ami        score: <span class="number">89.00</span></span><br><span class="line">name: jack       score: <span class="number">92.00</span></span><br><span class="line">name: amber      score: <span class="number">99.50</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------------- style_2 -------------</span><br><span class="line">name: shawn      score: <span class="number">78.50</span></span><br><span class="line">name: ami        score: <span class="number">89.00</span></span><br><span class="line">name: jack       score: <span class="number">92.00</span></span><br><span class="line">name: amber      score: <span class="number">99.50</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------------- style_3 -------------</span><br><span class="line">name: shawn      score: <span class="number">78.50</span></span><br><span class="line">name: ami        score: <span class="number">89.00</span></span><br><span class="line">name: jack       score: <span class="number">92.00</span></span><br><span class="line">name: amber      score: <span class="number">99.50</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------------- f-string -------------</span><br><span class="line">name: shawn      score: <span class="number">78.50</span></span><br><span class="line">name: ami        score: <span class="number">89.00</span></span><br><span class="line">name: jack       score: <span class="number">92.00</span></span><br><span class="line">name: amber      score: <span class="number">99.50</span></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.08.png" alt="Shawn 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.37.png" alt="Shawn 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shawn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.just666.com/2021/10/12/python-string-format/" title="Python 中格式化字符串的几种方式">https://blog.just666.com/2021/10/12/python-string-format/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/channel_name">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.png">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/uploads/xxx">
+            <span class="icon">
+              <i class="fab fa-instagram"></i>
+            </span>
+
+            <span class="label">Instagram</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+              <a href="/tags/String/" rel="tag"><i class="fa fa-tag"></i> String</a>
+              <a href="/tags/format/" rel="tag"><i class="fa fa-tag"></i> format</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/21/data-recover/" rel="prev" title="记一次惨痛的数据恢复经验">
+                  <i class="fa fa-chevron-left"></i> 记一次惨痛的数据恢复经验
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/31/2021-bye/" rel="next" title="2021 年度总结">
+                  2021 年度总结 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shawn</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/shawn-bluce" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

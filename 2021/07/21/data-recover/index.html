@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/mario.png">
+  <link rel="mask-icon" href="/uploads/mario.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.just666.com","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0X00 背景前两段属于并不那么重要的“故事”部分，如果切实需要一些数据恢复的经验和方法的话可以直接跳到0X02部分，给个一键三连就好（哦不对这不是B站视频，那你白嫖好了）。 故事大概是这样的，之前我有一台 Synology 的成品 NAS 用来存储我自己的照片、视频、音乐、电脑数据备份和喜欢的电影，不过因为它是单盘位的用了大概三年之后它就几乎满了，我也就开始准备升级 NAS。后来经过一番调研发现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次惨痛的数据恢复经验">
+<meta property="og:url" content="https://blog.just666.com/2021/07/21/data-recover/index.html">
+<meta property="og:site_name" content="Shawn&#39;s Blog">
+<meta property="og:description" content="0X00 背景前两段属于并不那么重要的“故事”部分，如果切实需要一些数据恢复的经验和方法的话可以直接跳到0X02部分，给个一键三连就好（哦不对这不是B站视频，那你白嫖好了）。 故事大概是这样的，之前我有一台 Synology 的成品 NAS 用来存储我自己的照片、视频、音乐、电脑数据备份和喜欢的电影，不过因为它是单盘位的用了大概三年之后它就几乎满了，我也就开始准备升级 NAS。后来经过一番调研发现">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-21T12:49:04.000Z">
+<meta property="article:modified_time" content="2023-07-09T11:58:31.153Z">
+<meta property="article:author" content="Shawn">
+<meta property="article:tag" content="data recover">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.just666.com/2021/07/21/data-recover/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.just666.com/2021/07/21/data-recover/","path":"2021/07/21/data-recover/","title":"记一次惨痛的数据恢复经验"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次惨痛的数据恢复经验 | Shawn's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Shawn's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个伪程序员的伪技术博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">0X00 背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X01-%E4%BA%8B%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text">0X01 事发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X02-%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">0X02 总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shawn</p>
+  <div class="site-description" itemprop="description">分享我的知识、经验、生活与感悟</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">171</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawn-bluce" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawn-bluce" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shawnbluce@gmail.com" title="E-Mail → mailto:shawnbluce@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://zezeshe.com/" title="https:&#x2F;&#x2F;zezeshe.com&#x2F;" rel="noopener" target="_blank">Jrotty</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.cnblogs.com/303donatello" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;303donatello" rel="noopener" target="_blank">303Donatello</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://hubojing.github.io/" title="http:&#x2F;&#x2F;hubojing.github.io&#x2F;" rel="noopener" target="_blank">胡博靖</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.csdn.net/shouldnotappearcalm" title="http:&#x2F;&#x2F;blog.csdn.net&#x2F;shouldnotappearcalm" rel="noopener" target="_blank">不应有的淡定</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://hiwannz.com/" title="https:&#x2F;&#x2F;hiwannz.com&#x2F;" rel="noopener" target="_blank">见字如面</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2021/07/21/data-recover/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次惨痛的数据恢复经验 | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次惨痛的数据恢复经验
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-21 20:49:04" itemprop="dateCreated datePublished" datetime="2021-07-21T20:49:04+08:00">2021-07-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0X00-背景"><a href="#0X00-背景" class="headerlink" title="0X00 背景"></a>0X00 背景</h1><p>前两段属于并不那么重要的“故事”部分，如果切实需要一些数据恢复的经验和方法的话可以直接跳到<code>0X02</code>部分，给个一键三连就好（哦不对这不是B站视频，那你白嫖好了）。</p>
+<p>故事大概是这样的，之前我有一台 Synology 的成品 NAS 用来存储我自己的照片、视频、音乐、电脑数据备份和喜欢的电影，不过因为它是单盘位的用了大概三年之后它就几乎满了，我也就开始准备升级 NAS。后来经过一番调研发现自己的需求其实不太适合用 Synology 的成品，因为它性价比低的同时附带的很多软件功能我都不需要，相比于自建 NAS 所需要的计算机知识我也正好具备，就选择自己搭建一台 TrueNAS 出来。准备的配置是<code>CPU Intel G6400 + RAM 8G X 2 + SSD 120G + SSD 240G + HDD 8T X 3 + HDD 4T</code>，其中双核四线程的 CPU 给这台 NAS 用已经是完全没有问题了，同时因为使用 ZFS 也就配备了 16G 的内存，8T X 3 作为主要数据存储并且搭配了 240G 的缓存盘；另外那块 4T 是从老群晖上拆下来的，作为独立存储使用；最后最小的 SSD 用来装系统。当时还整理了一篇博客来<a href="https://blog.just666.com/2021/04/19/nas/">记录这件事</a>（最近有一点点小改动）。</p>
+<p>本来我那个 4T 的盘拆下来之后就一直没用，直到前几天我突然想把它也塞到我现在的NAS里去，正好把 OMV 换成 TrueNAS，再加一个缓存盘，重构一下自用 NAS 的架构从此就不再管它了。然后我就把重要数据打包一股脑塞到了那个小硬盘里准备重建 NAS（此时我自己的照片、视频、备份文件全部都在这个小硬盘里）。等了几天需要用的 PCI-E 转 m.2 的扩展卡和 PCI-E 转 SATA 的扩展卡都到了之后就开始重新装机。</p>
+<p>把扩展卡和 SSD 之类的都装好之后，我特意把小硬盘的线给拔了，防止在重装系统或者其他的时候误伤到它。然后开始一路顺利的安装好了 TrueNAS 并且配置好了 3 X 8T 的存储池之后关机，准备接上小硬盘电源开始往大存储池里恢复数据。</p>
+<h1 id="0X01-事发"><a href="#0X01-事发" class="headerlink" title="0X01 事发"></a>0X01 事发</h1><p>拆开机箱盖、拆开侧面版、给小硬盘插上线、装好侧面版、装好机箱盖、插上电源网线、开机、坐到笔记本前、打开 Firefox 开发者版、打开 TrueNAS 管理页面、输入用户名密码、登陆、找到存储池、格式化刚刚接入的硬盘…… woc，woc，woc 我干了啥！！！</p>
+<p>当我意识到我格式化了装满了重要数据的 4T 硬盘之后，本来整个人都很困，结果一秒钟之内就像喝了一百杯 Espresso 一样清醒了。当时脑子里的意识流差不多就是“卧槽完了、卧槽没了、卧槽出大事情了”，愣了几秒钟之后意识到了一个重要的事“刚刚格式化的是机械硬盘”，然后第一时间卸载了挂好的硬盘并且关机断电拆机拔线。</p>
+<p>拔掉线之后冷静了一下觉得数据应该还能找回来，赶紧开始想办法。想办法的过程中又想到“我磁盘分区貌似是 xfs 来着，这个估计还难搞”，想到难搞之后整个人又是一愣🤣</p>
+<p>然后我开始东找找西找找，看看有没有什么好办法可以恢复数据的。当时第一时间是想到找线下的数据恢复公司，但是找数据恢复公司的话就非常贵了，而且又非常麻烦，就打算想想办法有没有可能自己把数据恢复回来。又想到 <code>DiskGenius</code> 可以恢复，但是去官网看了一下这玩意儿好像还有点贵（官网售价 468 元人民币），当然如果肯定可以恢复回来 468 还是值得的，不过我还是想去找找看有没有便宜一点的方案。然后也陆续找了一些其他软件，要么就是没听过的小公司搞的，要么就是特别特别贵的。就在打算去买 <code>DiskGenius</code> 的时候发现了一个叫做 <strong>万兴恢复专家</strong> 的软件，当时第一反应是“这种名字一般都不靠谱，就像 21 天精通CPP一样不靠谱”。不过在调查了一下这个软件和公司之后，我发现背后的这家“万兴科技”是上市公司，且旗下有亿图和墨刀两大将，就打算去试试看了。</p>
+<p>软件下载下来之后扫描了很长时间，虽然我费尽心思下载到的46G让子弹飞这种都没有扫描到，但是我最最最最重要的照片们几乎都扫描到了，然后我就眼睛都没眨的付费买了永久授权的这个软件，因为才160+块钱对于这么多重要数据来说真的不值一提，然后用了很长一段时间把数据恢复了回来。不过值得说的是，我的几十部电影无一幸存，但是自己拍的照片的幸存率超出 90%（估计的），这个我也没搞明白是为什么。</p>
+<p>现在我已经把重要的数据都整理出来了，所以才有心情来整理这篇文章。说是一篇文章，但是前面这段可能对于看官来说都是废话，我也只是想记录一下这么个经历才把它写出来的。最后来总结一下遇到类似情况的时候应该怎么做吧。</p>
+<h1 id="0X02-总结"><a href="#0X02-总结" class="headerlink" title="0X02 总结"></a>0X02 总结</h1><p>首先，首先，首先，数据恢复的最佳时机永远是在数据丢失之前做，换句话说就是 <strong>不要把自己的重要数据搞丢</strong> 。然后如果数据万一真的丢了，那么我总结了几点这次的经验也许对大家有那么一丢丢的帮助</p>
+<ol>
+<li>还是强调不要删掉自己的重要数据，在删除东西之前最好 <strong>冷静</strong> 几秒钟，格式化磁盘之前最好 <strong>冷静</strong> 几分钟</li>
+<li>如果万一删除了或者格式化了，请第一时间先弹出、卸载磁盘，保证 <strong>不要再像磁盘中写入任何数据</strong></li>
+<li>找到一个你信得过的数据恢复软件，接上存储设备先扫描看看（大多数收费的数据恢复软件扫描也是不要钱的，所以你可以先看看究竟能恢复出来多少数据，可以根据这个数量决定是不是要付费购买软件）</li>
+<li>使用数据恢复软件将数据恢复出来 <strong>不要放在恢复的磁盘里</strong> ，应该单独找个地方存储这些恢复出来的数据</li>
+</ol>
+<blockquote>
+<p>什么？你说盗版软件？这种事情就不至于还用盗版软件了吧，别人的软件帮你找回了你最重要的数据，如果是万兴的年费版的话才99块钱，难道你最重要的数据连 99 块钱都不值？</p>
+</blockquote>
+<p>最后需要注意的几个小问题</p>
+<ol>
+<li>如果是误删和“快速格式化”的话，找回来的几率都还比较大</li>
+<li>如果是复写性质的格式化，那基本上也就别想恢复的事儿了</li>
+<li>即使数据恢复回来了，通常情况下文件名也都彻底乱掉了</li>
+<li>如果误删或者格式化之后又写入过文件，写的越多越没戏</li>
+<li>如果你有 100 个文件，恢复率 99% 的话可能会丢一个</li>
+<li>如果 100 个文件压缩保存，恢复率 99% 的话就彻底废了</li>
+</ol>
+<p>最后的最后还有嘿嘿，如果你想要彻底毁掉你的硬盘，不想给别人拿着你硬盘恢复数据的机会的话</p>
+<ol>
+<li>格式化的时候不要选择“快速格式化”</li>
+<li>使用专门的工具全盘复写几次</li>
+<li>上一条做不到的话就往磁盘里塞电影，塞满删掉塞满删掉连续个三四次</li>
+</ol>
+<p>（毕竟你卖二手电脑，二手相机的时候肯定不会想成为下一个冠希哥吧</p>
+<p>好了，我能想到的就只有这些内容了，最后希望大家永远永远永远不会用到这里面数据恢复相关的经验～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.08.png" alt="Shawn 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.37.png" alt="Shawn 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shawn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.just666.com/2021/07/21/data-recover/" title="记一次惨痛的数据恢复经验">https://blog.just666.com/2021/07/21/data-recover/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/channel_name">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.png">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/uploads/xxx">
+            <span class="icon">
+              <i class="fab fa-instagram"></i>
+            </span>
+
+            <span class="label">Instagram</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/data-recover/" rel="tag"><i class="fa fa-tag"></i> data recover</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/02/linux-unbasic-permission/" rel="prev" title="Linux 中不那么基础的权限">
+                  <i class="fa fa-chevron-left"></i> Linux 中不那么基础的权限
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/10/12/python-string-format/" rel="next" title="Python 中格式化字符串的几种方式">
+                  Python 中格式化字符串的几种方式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shawn</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/shawn-bluce" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

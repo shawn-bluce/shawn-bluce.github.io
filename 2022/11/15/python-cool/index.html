@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/mario.png">
+  <link rel="mask-icon" href="/uploads/mario.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.just666.com","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0X00 这是一个描述下面介绍几个我自己常用的小技巧，均可以在日常工作中给自己带来一些小小的便利🤪 0X01 临时 web 服务器如果你电脑上装了 Python3 则可以使用 python3 -m http.server --bind 0.0.0.0 2333 这个命令在当前目录启动一个简单的 web 服务，监听在 0.0.0.0:2333 上。这样一来别人就可以访问你的 ip 来下载当前目录下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="属于 Python 程序员的小技巧">
+<meta property="og:url" content="https://blog.just666.com/2022/11/15/python-cool/index.html">
+<meta property="og:site_name" content="Shawn&#39;s Blog">
+<meta property="og:description" content="0X00 这是一个描述下面介绍几个我自己常用的小技巧，均可以在日常工作中给自己带来一些小小的便利🤪 0X01 临时 web 服务器如果你电脑上装了 Python3 则可以使用 python3 -m http.server --bind 0.0.0.0 2333 这个命令在当前目录启动一个简单的 web 服务，监听在 0.0.0.0:2333 上。这样一来别人就可以访问你的 ip 来下载当前目录下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/15/pythonhttp.png">
+<meta property="og:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/15/oneliner.png">
+<meta property="article:published_time" content="2022-11-15T14:23:34.000Z">
+<meta property="article:modified_time" content="2023-07-09T11:58:31.158Z">
+<meta property="article:author" content="Shawn">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/15/pythonhttp.png">
+
+
+<link rel="canonical" href="https://blog.just666.com/2022/11/15/python-cool/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.just666.com/2022/11/15/python-cool/","path":"2022/11/15/python-cool/","title":"属于 Python 程序员的小技巧"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>属于 Python 程序员的小技巧 | Shawn's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Shawn's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个伪程序员的伪技术博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">0X00 这是一个描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X01-%E4%B8%B4%E6%97%B6-web-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">0X01 临时 web 服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X02-%E4%BD%BF%E7%94%A8-pdb-ipdb-%E8%B0%83%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">0X02 使用 pdb&#x2F;ipdb 调试脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X03-%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="nav-number">4.</span> <span class="nav-text">0X03 指定版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X04-%E4%B8%80%E8%A1%8C%E6%B5%81"><span class="nav-number">5.</span> <span class="nav-text">0X04 一行流</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shawn</p>
+  <div class="site-description" itemprop="description">分享我的知识、经验、生活与感悟</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">171</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawn-bluce" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawn-bluce" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shawnbluce@gmail.com" title="E-Mail → mailto:shawnbluce@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://zezeshe.com/" title="https:&#x2F;&#x2F;zezeshe.com&#x2F;" rel="noopener" target="_blank">Jrotty</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.cnblogs.com/303donatello" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;303donatello" rel="noopener" target="_blank">303Donatello</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://hubojing.github.io/" title="http:&#x2F;&#x2F;hubojing.github.io&#x2F;" rel="noopener" target="_blank">胡博靖</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.csdn.net/shouldnotappearcalm" title="http:&#x2F;&#x2F;blog.csdn.net&#x2F;shouldnotappearcalm" rel="noopener" target="_blank">不应有的淡定</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://hiwannz.com/" title="https:&#x2F;&#x2F;hiwannz.com&#x2F;" rel="noopener" target="_blank">见字如面</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/11/15/python-cool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="属于 Python 程序员的小技巧 | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          属于 Python 程序员的小技巧
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-15 22:23:34" itemprop="dateCreated datePublished" datetime="2022-11-15T22:23:34+08:00">2022-11-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0X00-这是一个描述"><a href="#0X00-这是一个描述" class="headerlink" title="0X00 这是一个描述"></a>0X00 这是一个描述</h1><p>下面介绍几个我自己常用的小技巧，均可以在日常工作中给自己带来一些小小的便利🤪</p>
+<h1 id="0X01-临时-web-服务器"><a href="#0X01-临时-web-服务器" class="headerlink" title="0X01 临时 web 服务器"></a>0X01 临时 web 服务器</h1><p>如果你电脑上装了 Python3 则可以使用 <code>python3 -m http.server --bind 0.0.0.0 2333</code> 这个命令在当前目录启动一个简单的 web 服务，监听在 0.0.0.0:2333 上。这样一来别人就可以访问你的 ip 来下载当前目录下的文件了。不过使用这个方法的时候要注意自己当前的工作目录哈，不要傻乎乎的在自己的 <code>$HOME</code> 下面用这个命令，小心别人下载你的隐私数据喔。</p>
+<p>不过如果你搞不懂什么是「监听、0.0.0.0、端口」的话，还是先去搞一下计算机网络吧。<br><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/15/pythonhttp.png" alt="python_http"></p>
+<h1 id="0X02-使用-pdb-ipdb-调试脚本"><a href="#0X02-使用-pdb-ipdb-调试脚本" class="headerlink" title="0X02 使用 pdb/ipdb 调试脚本"></a>0X02 使用 pdb/ipdb 调试脚本</h1><p>我们都知道用 <code>pdb</code> 模块可以逐行调试 Python 脚本，只需要在脚本里 <code>import pdb</code> 然后在需要打断点的地方加上 <code>pdb.set_trace()</code> 就可以了。但其实 Python 还有一个三方库叫做 <code>ipdb</code> 是 <code>pdb</code> 的升级版，应该各位也都知道吧，通过简单的 <code>pip install</code> 就可以装好。不论是 <code>pdb</code> 还是 <code>ipdb</code> 其实都有这个用法：不修改脚本内容，仅通过 <code>python3 -m ipdb script_filename.py</code> 来从头调试脚本。并且会在每次脚本结束之后从头开始，直到手动退出为止。</p>
+<p>tips: pdb/ipdb 运行时可以使用 <code>b line_number</code> 来在指定行打上断点，然后再 <code>c</code> 跳到下一个断点处从而方便调试。</p>
+<h1 id="0X03-指定版本"><a href="#0X03-指定版本" class="headerlink" title="0X03 指定版本"></a>0X03 指定版本</h1><p>我们都知道可以用 virtualenv 之类的东西处理 Python 的虚拟环境，但是还有这么一种简单粗犷的方式也可以凑合一用（尤其是同时存在 Python 2.7/3.7/3.8/3.9… 的这种环境）。</p>
+<p>使用 <code>python2.7 -m pip install requests</code> 或者 <code>python3.9 -m pip install xxx</code> 可以指定具体的 Python 版本，如果你有多个虚拟环境也可以直接指定到 Python 的二进制文件，再通过 <code>-m pip</code> 的方式将所需的库安装到正确的位置~</p>
+<h1 id="0X04-一行流"><a href="#0X04-一行流" class="headerlink" title="0X04 一行流"></a>0X04 一行流</h1><p>这个「一行流」比较骚气，相当于把 Python 当成普通命令来用，简单的说就是 <code>python -c &quot;xxxxx&quot;</code> 可以在一行命令里执行一个 Python 脚本。例如有下面这些用法（其实就是把脚本写成一行）</p>
+<p>比如说使用 <code>python3 -c &quot;import json; print(json.dumps(json.load(open(&#39;data.json&#39;)), indent=4))&quot;</code> 这样的方法可以直接将 json 文件格式化输出。（当然了这个需求其实有 <code>jq</code> 命令可以做的更好，只是这里举个例子而已）</p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/15/oneliner.png" alt="one_liner"></p>
+<p>具体这个一行流的用法有多强，那就要看各位的脑洞了，唯一一个需要提示的就是 Python 其实是允许使用分号来终止一个语句的，类似 C 那样，所以才使得一行流可以实现~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.08.png" alt="Shawn 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.37.png" alt="Shawn 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shawn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.just666.com/2022/11/15/python-cool/" title="属于 Python 程序员的小技巧">https://blog.just666.com/2022/11/15/python-cool/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/channel_name">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.png">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/uploads/xxx">
+            <span class="icon">
+              <i class="fab fa-instagram"></i>
+            </span>
+
+            <span class="label">Instagram</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/21/tired/" rel="prev" title="「累」">
+                  <i class="fa fa-chevron-left"></i> 「累」
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/28/kind-k8s/" rel="next" title="使用 Kind 飞快的创建一个 Kubernetes 集群">
+                  使用 Kind 飞快的创建一个 Kubernetes 集群 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shawn</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/shawn-bluce" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

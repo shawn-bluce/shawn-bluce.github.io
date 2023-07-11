@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/mario.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/mario.png">
+  <link rel="mask-icon" href="/uploads/mario.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.just666.com","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.17.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0X00 为嘛用 kind作为一个纯新手想要学习 Linux、MySQL、Python… 的第一步往往都是先装一个来看看，当然 Kubernetes 也不例外。装 Linux 也许跟着教程在虚拟机里一会儿就装好了，尤其是现在很多发行版本都有图形化安装界面了，但是 Kubernetes 就不一样了，如果你去部署一套 K8S 集群的话极有可能会遇到一系列问题，包括但不限于：  交换分区没关，导致服务异">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Kind 飞快的创建一个 Kubernetes 集群">
+<meta property="og:url" content="https://blog.just666.com/2022/11/28/kind-k8s/index.html">
+<meta property="og:site_name" content="Shawn&#39;s Blog">
+<meta property="og:description" content="0X00 为嘛用 kind作为一个纯新手想要学习 Linux、MySQL、Python… 的第一步往往都是先装一个来看看，当然 Kubernetes 也不例外。装 Linux 也许跟着教程在虚拟机里一会儿就装好了，尤其是现在很多发行版本都有图形化安装界面了，但是 Kubernetes 就不一样了，如果你去部署一套 K8S 集群的话极有可能会遇到一系列问题，包括但不限于：  交换分区没关，导致服务异">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kinddownload.png">
+<meta property="og:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kindcreatecluster.png">
+<meta property="og:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kindmultiplenodes.png">
+<meta property="article:published_time" content="2022-11-28T13:10:43.000Z">
+<meta property="article:modified_time" content="2023-07-09T11:58:31.156Z">
+<meta property="article:author" content="Shawn">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="kind">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kinddownload.png">
+
+
+<link rel="canonical" href="https://blog.just666.com/2022/11/28/kind-k8s/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.just666.com/2022/11/28/kind-k8s/","path":"2022/11/28/kind-k8s/","title":"使用 Kind 飞快的创建一个 Kubernetes 集群"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 Kind 飞快的创建一个 Kubernetes 集群 | Shawn's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Shawn's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个伪程序员的伪技术博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-%E4%B8%BA%E5%98%9B%E7%94%A8-kind"><span class="nav-number">1.</span> <span class="nav-text">0X00 为嘛用 kind</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X01-%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">0X01 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X02-%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">0X02 使用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shawn</p>
+  <div class="site-description" itemprop="description">分享我的知识、经验、生活与感悟</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">171</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawn-bluce" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawn-bluce" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shawnbluce@gmail.com" title="E-Mail → mailto:shawnbluce@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://zezeshe.com/" title="https:&#x2F;&#x2F;zezeshe.com&#x2F;" rel="noopener" target="_blank">Jrotty</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.cnblogs.com/303donatello" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;303donatello" rel="noopener" target="_blank">303Donatello</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://hubojing.github.io/" title="http:&#x2F;&#x2F;hubojing.github.io&#x2F;" rel="noopener" target="_blank">胡博靖</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://blog.csdn.net/shouldnotappearcalm" title="http:&#x2F;&#x2F;blog.csdn.net&#x2F;shouldnotappearcalm" rel="noopener" target="_blank">不应有的淡定</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://hiwannz.com/" title="https:&#x2F;&#x2F;hiwannz.com&#x2F;" rel="noopener" target="_blank">见字如面</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/11/28/kind-k8s/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 Kind 飞快的创建一个 Kubernetes 集群 | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Kind 飞快的创建一个 Kubernetes 集群
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-28 21:10:43" itemprop="dateCreated datePublished" datetime="2022-11-28T21:10:43+08:00">2022-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0X00-为嘛用-kind"><a href="#0X00-为嘛用-kind" class="headerlink" title="0X00 为嘛用 kind"></a>0X00 为嘛用 kind</h1><p>作为一个纯新手想要学习 Linux、MySQL、Python… 的第一步往往都是先装一个来看看，当然 Kubernetes 也不例外。装 Linux 也许跟着教程在虚拟机里一会儿就装好了，尤其是现在很多发行版本都有图形化安装界面了，但是 Kubernetes 就不一样了，如果你去部署一套 K8S 集群的话极有可能会遇到一系列问题，包括但不限于：</p>
+<ul>
+<li>交换分区没关，导致服务异常</li>
+<li>搞不清楚 CRI-O/docker/containerd 之间的关系</li>
+<li>刚装好的 <code>kubelet</code> 服务疯狂重启</li>
+<li>cni 网络插件搞不明白，导致 <code>kubeadm init</code> 一直不成功</li>
+<li>缺少内核模块导致的集群初始化异常</li>
+<li>缺少内核参数导致的集群初始化异常</li>
+<li>想用 <code>crictl</code> 却怎么都看不到 <code>container</code> 状态</li>
+</ul>
+<p>这些在熟手眼里可能根本不是问题，但是对于第一次接触的人来说还是挺麻烦的。所以我们需要一种简单的方式来快速部署一个 Kubernetes 来看一看试一试，而不是上来就先部署一套三四个节点的真正意义上的集群。</p>
+<p>Kubernetes 官方推荐了几种单节点/单机部署的方式，kind 就是其中一种。它是基于 docker 的部署方式，如果你还不熟悉 docker 的话建议先把 docker 学一学再开始 Kubernetes 的学习。如果你已经了解 docker 并能简单的使用它了，那接下来就开始安装 Kubernetes 吧~</p>
+<p>tips: 建议在虚拟机中安装，分配 2C4G 然后随便装一个比较新比较常用的 Linux 发行版本就可以</p>
+<span id="more"></span>
+
+<h1 id="0X01-安装"><a href="#0X01-安装" class="headerlink" title="0X01 安装"></a>0X01 安装</h1><p>既然是基于 docker 的那自然要先安装 docker 了，常见三种安装方式：</p>
+<ol>
+<li>直接 <code>apt install docker</code> ❌ 不推荐</li>
+<li>按照官网操作：新增 mirror、更新 cache、安装 docker ✅ 推荐</li>
+<li>使用官方脚本 <a target="_blank" rel="noopener" href="https://get.docker.com/">https://get.docker.com/</a> ✅ 推荐</li>
+</ol>
+<p>第二步是安装 kubectl ，它是用来管理 Kubernetes 集群的，类似于 docker 体系中的 docker client 吧。原则上是可以不装 kubectl 的，没有它集群也能正常工作，但没法操作集群的话那还怎么学呢。因为 kubectl 只是一个单纯的二进制文件，所以「安装」就仅仅意味着：下载、挪到 $PATH 中、赋予执行权限。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -LO <span class="string">&quot;https://dl.k8s.io/release/<span class="subst">$(curl -L -s https://dl.k8s.io/release/stable.txt)</span>/bin/linux/amd64/kubectl&quot;</span></span><br><span class="line"></span><br><span class="line">chmod +x kubectl</span><br><span class="line"></span><br><span class="line">mv kubectl /usr/<span class="built_in">local</span>/bin/.</span><br></pre></td></tr></table></figure>
+
+<p>装好 kubectl 后就该装 kind 了，kind 方便就方便在它也是一个二进制文件。所以我们去 <a target="_blank" rel="noopener" href="https://github.com/kubernetes-sigs/kind/releases">GitHub 的 release 页面</a>找到自己平台最新的二进制包下载，然后依旧是赋权和移动位置就搞定了。</p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kinddownload.png" alt="kind-download"></p>
+<p>（可选）最后可以将 <code>source &lt;(kind completion bash)</code> 和 <code>source &lt;(kubectl completion bash)</code> 追加到 <code>~/.bashrc</code> 最后，再手动 <code>source ~/.bashrc</code> 一下，就可以为这两个命令提供自动补全了。</p>
+<p>到此为止 kind 就安装完成了，接下来可以简单介绍一下它的用法。</p>
+<h1 id="0X02-使用"><a href="#0X02-使用" class="headerlink" title="0X02 使用"></a>0X02 使用</h1><p>首先可以使用 <code>sudo kind create cluster</code> 来创建一个单节点的 Kubernetes（后面可以接 <code>--name</code> 参数为集群取名，默认叫做 <code>kind</code>）。因为是基于 docker 的所以需要从 dockerhub 拉镜像，如果「网络通畅」的话速度会比较快，如果不通畅的话可以用更科学的姿势上网~<br><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kindcreatecluster.png" alt="kind-create-cluster"></p>
+<p>也可以使用配置文件的方式来创建集群，例如下面的配置，使用 <code>sudo kind create cluster --config CONFIG_FILE.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Cluster</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">kind.sigs.k8s.io/v1alpha3</span></span><br><span class="line"><span class="attr">kubeadmConfigPatches:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">|</span></span><br><span class="line">  <span class="attr">apiVersion:</span> <span class="string">kubeadm.k8s.io/v1beta1</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ClusterConfiguration</span></span><br><span class="line">  <span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">  <span class="attr">networking:</span></span><br><span class="line">    <span class="attr">serviceSubnet:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line">  <span class="attr">imageRepository:</span> <span class="string">registry.aliyuncs.com/google_containers</span></span><br><span class="line">  <span class="attr">nodeRegistration:</span></span><br><span class="line">    <span class="attr">kubeletExtraArgs:</span></span><br><span class="line">      <span class="attr">pod-infra-container-image:</span> <span class="string">registry.aliyuncs.com/google_containers/pause:3.1</span>  </span><br><span class="line"><span class="bullet">-</span> <span class="string">|</span></span><br><span class="line">  <span class="attr">apiVersion:</span> <span class="string">kubeadm.k8s.io/v1beta1</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">InitConfiguration</span></span><br><span class="line">  <span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">  <span class="attr">networking:</span></span><br><span class="line">    <span class="attr">serviceSubnet:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line">  <span class="attr">imageRepository:</span> <span class="string">registry.aliyuncs.com/google_containers</span>  </span><br><span class="line"><span class="attr">nodes:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">control-plane</span></span><br></pre></td></tr></table></figure>
+
+<p>当然如果你不想管这么多配置的话也可以用「极简配置」</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Cluster</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">kind.x-k8s.io/v1alpha4</span></span><br><span class="line"><span class="attr">nodes:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">control-plane</span></span><br></pre></td></tr></table></figure>
+
+<p>还可以创建「多个节点」的集群，因为仍然是在同一台机器上，所以用了引号，并非传统意义上的集群。不过创建多节点集群必须要用配置文件了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Cluster</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">kind.x-k8s.io/v1alpha4</span></span><br><span class="line"><span class="attr">nodes:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">control-plane</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">worker</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">worker</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">worker</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">role:</span> <span class="string">worker</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/11/28/kindmultiplenodes.png" alt="kind-multiple-nodes"></p>
+<p>其他 tips：</p>
+<ul>
+<li>使用 <code>kind get kubeconfig</code> 可以获取当前的配置文件，可以给 <code>kubectl</code> 用</li>
+<li>使用 <code>kind delete cluster</code> 可以删除默认集群，也可以接 <code>--name</code> 删除指定集群</li>
+<li>可以同时创建多个集群，不重名就行，可以用 <code>kind get clusters</code> 查看当前存在的集群</li>
+</ul>
+<p>使用 kind 还能做到：高可用集群、端口映射、指定 Kubernetes 版本、配置代理等等，不过具体的就要去看<a target="_blank" rel="noopener" href="https://kind.sigs.k8s.io/docs/user/quick-start/">官方的简明文档</a>喽</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.08.png" alt="Shawn 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/iShot2020-05-1923.25.37.png" alt="Shawn 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shawn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.just666.com/2022/11/28/kind-k8s/" title="使用 Kind 飞快的创建一个 Kubernetes 集群">https://blog.just666.com/2022/11/28/kind-k8s/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/channel_name">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.png">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/uploads/xxx">
+            <span class="icon">
+              <i class="fab fa-instagram"></i>
+            </span>
+
+            <span class="label">Instagram</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
+              <a href="/tags/Kubernetes/" rel="tag"><i class="fa fa-tag"></i> Kubernetes</a>
+              <a href="/tags/kind/" rel="tag"><i class="fa fa-tag"></i> kind</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/15/python-cool/" rel="prev" title="属于 Python 程序员的小技巧">
+                  <i class="fa fa-chevron-left"></i> 属于 Python 程序员的小技巧
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/12/08/k8s-cluster-tips/" rel="next" title="部署 Kubernetes 集群时遇到的一些问题">
+                  部署 Kubernetes 集群时遇到的一些问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shawn</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/shawn-bluce" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
