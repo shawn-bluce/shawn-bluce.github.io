@@ -122,7 +122,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">146</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,6 +177,90 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2020/11/04/ab-http-load/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/04/ab-http-load/" class="post-title-link" itemprop="url">使用 Ab 和 Http_load 进行简单的性能测试</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-11-04 23:31:02" itemprop="dateCreated datePublished" datetime="2020-11-04T23:31:02+08:00">2020-11-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-概述"><a href="#0X00-概述" class="headerlink" title="0X00 概述"></a>0X00 概述</h1><p>我们经常想要简单测试一下某个页面的性能，或者 REST API 的性能，用 postman 这种程序虽然可以很快的模拟请求出来但是并不方便发送大量请求；自己写脚本虽然自定义程度很高，但是写起来总归还是有点麻烦，而且并不能很方便得输出我们需要的一些常用数据。那这种时候一般就需要找些专业的工具来做这种专业的事情了。下面两个就是平时比较常用的性能测试工具，可以针对某个/某些 url 做性能测试，并且输出相对完整的报告。</p>
+<p>软件具体怎么装就自己想想办法吧，毕竟 Linux/macOS/windows 之间都不太一样，而且 Linux 上还有 apt/dnf/pacman 巴拉巴拉一堆包管理器，用法都不一样，没必要一个个找出来贴上。需要了解 API 性能的人肯定能很轻松装上这些工具了~</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/11/04/ab-http-load/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -544,97 +628,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2020/07/14/django-manager/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/07/14/django-manager/" class="post-title-link" itemprop="url">Django 中的 Objects</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-07-14 20:55:27" itemprop="dateCreated datePublished" datetime="2020-07-14T20:55:27+08:00">2020-07-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-objects-是个啥"><a href="#0X00-objects-是个啥" class="headerlink" title="0X00 objects 是个啥"></a>0X00 objects 是个啥</h1><p>想必所有用过 Django 的人都会用到 Django 自带的 ORM 进行数据库查询。那既然用过 Django 的 ORM 就来看一下这段代码好了， <code>models.Stuent.objects.filter(name=&#39;Shawn&#39;)</code> 这段代码是什么意思呢？很简单，就是查询到名字为”Shawn”的学生信息。具体来说， <code>models</code> 应该是一个放了多个 model 的文件，<code>Student</code> 是一个具体的模型，<code>filter</code> 是筛选，<code>name=&#39;Shawn&#39;</code> 则是筛选条件。那么问题来了，中间那个 <code>objects</code> 是个啥呢？（你知道？知道还在这儿看啥，有这空看看其他文章，打打游戏看看电影不好吗🤣）</p>
-<p>通过 <code>type</code> 可知，这个 <code>objects</code> 是一个 <code>django.db.models.manager.Manager</code> 的实例（或者是他子类的实例）。然后我们来看看这个<code>Manager</code>是个什么❓</p>
-<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/20200714212410.png" alt="Django ORM"></p>
-<blockquote>
-<p>A Manager is the interface through which database query operations are provided to Django models. At least one Manager exists for every model in a Django application.</p>
-</blockquote>
-<p>从 Django 文档得知“Manager 是 Django 用来进行数据库查询的一个接口，在 Django 应用中每个 model 都需要至少有一个 Manager”。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/07/14/django-manager/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

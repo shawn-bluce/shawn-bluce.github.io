@@ -122,7 +122,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-count">146</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,6 +177,105 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2023/05/24/about-sudo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/05/24/about-sudo/" class="post-title-link" itemprop="url">关于 Sudo 命令也许你需要知道的</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-24 22:00:32" itemprop="dateCreated datePublished" datetime="2023-05-24T22:00:32+08:00">2023-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-介绍"><a href="#0X00-介绍" class="headerlink" title="0X00 介绍"></a>0X00 介绍</h1><p>不管对 sudo 的了解具体有多少，至少应该都用过 sudo 命令来临时将自己的非 root 用户提权至 root 了吧。不过 sudo 当然不只是将用户变成 root 的这么一个简单工具了，虽然它确实是将用户临时变更为 root ，但是页还是有不少其他更加细致的配置与选项。</p>
+<blockquote>
+<p>sudo 是 Linux 中的一个命令，用于以管理员身份执行命令。它允许普通用户在不切换到 root 用户的情况下执行需要特权的操作，从而提高了系统的安全性和可管理性。sudo 可以通过配置文件进行自定义，以控制哪些用户可以以何种方式执行哪些命令。同时，sudo 还可以记录用户的操作日志，以便系统管理员进行审计和监控。</p>
+</blockquote>
+<p>还有一个需要注意的就是，sudo 本质上是一个应用，并非最基础系统的一部分，它比 Unix 晚诞生了有近 10 年。这也就意味着并不是所有的 Linux 发行版本都会自带这个程序（比如 minimal 模式安装的 Ubuntu Server 就是没有的），如果遇到这种情况还是需要自己手动安装一下，不过这种多人共用的操作系统中没有 sudo 的情况还是很罕见的。</p>
+<h1 id="0X01-修改配置"><a href="#0X01-修改配置" class="headerlink" title="0X01 修改配置"></a>0X01 修改配置</h1><h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>sudo 的配置文件是 <code>/etc/sudoer</code>，虽然它是一个纯文本但是这里要提醒一下 <strong>不要使用任何文本编辑器直接打开并编辑这个文件</strong>。因为一旦这个文件被改出问题来了，那可就麻烦大了。在一个没有给 root 用户手动设置密码的操作系统中，用自己的用户把 sudo 的配置文件改崩了，这时候想再 <code>sudo vim /etc/sudoer</code> 的时候极有可能因为配置文件蹦了导致 sudo 不能正常工作，这也就意味着可能你甚至所有用户都永久失去了成为 root 的机会，任何需要 root 的操作就都没办法操作了。</p>
+<p>那应该怎么改这个文件呢？答案是用 <code>visudo</code> 这个命令。不要慌，即使你不会用/用不好 vi 也没关系，这个工具的名字虽然带有 vi 但其实是根据你环境变量的 <code>$EITOR</code> 来决定的，你也可以用 <code>EDITOR=/bin/nano visudo</code> 来临时用 nano 进行编辑。</p>
+<p>那用 <code>visudo</code> 有什么好处呢？主要是下面两点</p>
+<ol>
+<li>visudo <strong>带锁</strong>，当有一个用户正在编辑配置文件的时候你用了这个命令，你就会被通知并且没有办法修改该配置文件，直到对方保存退出了你才可以打开文件进行编辑。这样一来保障了多人同时编辑带来的问题。</li>
+<li>visudo 有<strong>语法检查</strong>，也就是说每当你保存配置文件的时候都会进行一次基础的语法检查，防止该文件出现语法错误。如果单行配置写的不对，可能只会影响到对应的那行配置；但是如果语法有问题则会导致整个配置文件出错，问题就大了</li>
+</ol>
+<p>最后关于如何编辑配置文件还有一个需要注意的是：使用 <code>visudo</code> 编辑配置文件后，保存并不会生效，要退出才会生效。这里可以注意观察一下，用 <code>visudo</code> 打开文件后直接保存，vi 的下面会提示将配置文件保存到 <code>/etc/sudoers.tmp</code> 了，只有当退出之后才会将配置写入到 <code>/etc/sudoers</code></p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2023/05/24/sudoersconfigfile.png" alt="sudoers_config_file"></p>
+<blockquote>
+<p>一个 Linux 系统上的小 Tips：<code>man</code>命令不仅可以看某个命令的文档，输入 <code>man /etc/sudoers</code> 试试吧～</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/05/24/about-sudo/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -710,103 +809,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/12/27/xargs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/12/27/xargs/" class="post-title-link" itemprop="url">Xargs 基本用法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-12-27 20:41:38" itemprop="dateCreated datePublished" datetime="2022-12-27T20:41:38+08:00">2022-12-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-简单用法"><a href="#0X00-简单用法" class="headerlink" title="0X00 简单用法"></a>0X00 简单用法</h1><p>内容比较少，主要是介绍一下 <code>xargs</code> ，直接开始吧～</p>
-<blockquote>
-<p>首先假定各位能够熟练运用基础的管道操作，能够理解 <code>ps aux | grep nginx | awk -F &#39; &#39; &#123;print $1&#125;</code> 这样的命令。</p>
-</blockquote>
-<p>我们日常使用管道的时候肯定会用到 <code>ls | grep xxx | grep xxx ｜ rm </code> 这样的操作，想从一堆文件里筛选出自己需要的文件并将其删除/移动/复制等。但其实这样的操作是不行的，因为前面管道传过来的是数据流但是 <code>rm</code> 命令却并不能处理它。如果想实现这种效果就可以用 <code>xargs</code> 将其进行转换了，如下图所示使用 <code>ls | grep bbb | grep &quot;[3-5]&quot; | xargs rm</code> 就可以完成任务。</p>
-<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/12/27/20221227xargs1.png" alt="20221227-xargs-1"></p>
-<p>此处 <code>xargs</code> 的功能就是将前面的数据流逐行分解并一个个丢给 <code>rm</code>  去执行。不过通常的管道都是一个命令执行一次，配合 <code>xargs</code> 之后就是做一个循环了，将管道前面的的输出逐行取出作为参数交给下一个命令去执行。我这里画了一个简易的图，也许能够便于理解。</p>
-<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/12/27/20221227xargs2.png" alt="20221227-xargs-2"></p>
-<blockquote>
-<p>其实如果只是找到文件并删除的话，还有更简单的方法啦，例如 <code>find . -regex &quot;\./test_bbb_[3-5]&quot; -delete</code></p>
-</blockquote>
-<p>现在虽然解决了删除的问题，但其实并没有解决复制的问题。因为你写了 <code>ls | xargs cp target_dir/.</code> 之后它会翻译成 <code>cp target_dir/. ./aaa ./bbb ./ccc</code> 这样的命令，显然是不对劲的。所以 <code>xargs</code> 还提供了宏功能，使用类似 <code>find . -regex &quot;\./test_bbb_[3-5]&quot; | xargs -I &#123;&#125; cp &#123;&#125; target_dir/.</code> 这样的命令就可以将前面的输出拆分后准确的塞入到后面命令的指定位置，实现想要的功能了。</p>
-<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/12/27/20221227xargs3.png" alt="20221227-xargs-3"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/12/27/xargs/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
