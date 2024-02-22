@@ -122,13 +122,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">172</span>
+        <span class="site-state-item-count">173</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -177,6 +177,101 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/11/28/kind-k8s/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/11/28/kind-k8s/" class="post-title-link" itemprop="url">使用 Kind 飞快的创建一个 Kubernetes 集群</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-28 21:10:43" itemprop="dateCreated datePublished" datetime="2022-11-28T21:10:43+08:00">2022-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-为嘛用-kind"><a href="#0X00-为嘛用-kind" class="headerlink" title="0X00 为嘛用 kind"></a>0X00 为嘛用 kind</h1><p>作为一个纯新手想要学习 Linux、MySQL、Python… 的第一步往往都是先装一个来看看，当然 Kubernetes 也不例外。装 Linux 也许跟着教程在虚拟机里一会儿就装好了，尤其是现在很多发行版本都有图形化安装界面了，但是 Kubernetes 就不一样了，如果你去部署一套 K8S 集群的话极有可能会遇到一系列问题，包括但不限于：</p>
+<ul>
+<li>交换分区没关，导致服务异常</li>
+<li>搞不清楚 CRI-O/docker/containerd 之间的关系</li>
+<li>刚装好的 <code>kubelet</code> 服务疯狂重启</li>
+<li>cni 网络插件搞不明白，导致 <code>kubeadm init</code> 一直不成功</li>
+<li>缺少内核模块导致的集群初始化异常</li>
+<li>缺少内核参数导致的集群初始化异常</li>
+<li>想用 <code>crictl</code> 却怎么都看不到 <code>container</code> 状态</li>
+</ul>
+<p>这些在熟手眼里可能根本不是问题，但是对于第一次接触的人来说还是挺麻烦的。所以我们需要一种简单的方式来快速部署一个 Kubernetes 来看一看试一试，而不是上来就先部署一套三四个节点的真正意义上的集群。</p>
+<p>Kubernetes 官方推荐了几种单节点/单机部署的方式，kind 就是其中一种。它是基于 docker 的部署方式，如果你还不熟悉 docker 的话建议先把 docker 学一学再开始 Kubernetes 的学习。如果你已经了解 docker 并能简单的使用它了，那接下来就开始安装 Kubernetes 吧~</p>
+<p>tips: 建议在虚拟机中安装，分配 2C4G 然后随便装一个比较新比较常用的 Linux 发行版本就可以</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/11/28/kind-k8s/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -540,85 +635,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/06/15/git-stash-remake/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/06/15/git-stash-remake/" class="post-title-link" itemprop="url">Git Stash 命名 / Git Stash 用法「重置版」</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-06-15 22:04:16" itemprop="dateCreated datePublished" datetime="2022-06-15T22:04:16+08:00">2022-06-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a>0X00 前言</h1><p>本篇文章是这篇「<a href="/2018/03/05/git-stash/">使用 git stash save 将暂存区命名</a>」的重置版。因为根据 Google 的统计数据我得知某些问题的关键词搜索出来之后我的博客排行会比较靠前，所以把最容易被各位点击到的文章做了个重置计划，改进之前的一些不足，争取能够说的更清楚一些，也能节省各位一点点时间，希望能真正的帮助到从搜索引擎点进来的各位~</p>
-<h1 id="0X01-极度精炼的使用说明"><a href="#0X01-极度精炼的使用说明" class="headerlink" title="0X01 极度精炼的使用说明"></a>0X01 极度精炼的使用说明</h1><p>可以使用 <code>git stash save &quot;message&quot;</code> 的方式为 stash 起来的变动命名，方便后面再次使用。<br><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/06/15/gitstashsave.png" alt="git-stash-save"></p>
-<p>stash 起来过后可以使用 <code>git stash list</code> 来查看已经被 stash 的列表，这里可以看到已经有两条了，值得注意的是 stash 的 id 每次都在更新，最近 stash 的是 0，1 就是上次 stash 的，以此类推<img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/06/15/gitstashlist.png" alt="git-stash-list"></p>
-<p>如果需要从新应用某个 stash 的改动，可以使用 <code>git stash apply STASH_ID</code> 的方式，例如使用 <code>git stash apply 1</code> 就可以重新应用 id 为 1 的这个 stash。如果要丢弃掉某个 stash 的话使用 <code>git stash drop STASH_ID</code> 就可以了</p>
-
       
     </div>
 
