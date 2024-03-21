@@ -122,13 +122,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">173</span>
+        <span class="site-state-item-count">176</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -177,6 +177,90 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2023/07/31/git-tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/31/git-tips/" class="post-title-link" itemprop="url">写给 Git 新手的 6 个小技巧</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-07-31 22:18:01 / 修改时间：22:33:17" itemprop="dateCreated datePublished" datetime="2023-07-31T22:18:01+08:00">2023-07-31</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-header"><a href="#0X00-header" class="headerlink" title="0X00 header"></a>0X00 header</h1><p>首先，git 是没有 header 这个命令的:)</p>
+<p>平时经常会用到一些 git 的用法，也有遇到过别人来问怎么实现某某操作，但是都太零散了并不成体系，所以这里就简单整理一下不做分类了。希望对不小心通过 Google 搜到该文章的你有所帮助（不会的有人能搜到吧🤣）</p>
+<h1 id="0X01-pull-与-pull-–rebase"><a href="#0X01-pull-与-pull-–rebase" class="headerlink" title="0X01 pull 与 pull –rebase"></a>0X01 pull 与 pull –rebase</h1><p>首先是搞清楚 <code>git pull</code> 和 <code>git pull --rebase</code> 的区别，我们学 git 第一天肯定就学了 <code>git push</code> 是推代码，<code>git pull</code> 是拉代码，那么这个 <code>git pull --rebase</code> 又是个什么东西呢？</p>
+<p><code>git pull</code> 本质上是 <code>git fetch</code> 加上 <code>git merge</code> 的功能，也就是说把代码拉到本地来再和本地代码进行一次 merge。这就意味着，如果出现冲突的话 git 会创建一个 Merge commit 来解决这个问题。</p>
+<p><code>git pull --rebase</code> 则是 <code>git fetch</code> 和 <code>git rebase</code> 的组合。使用的时候会先将本地比远端多出来的 commit 暂存起来，等将本地代码与远端代码同步后再将暂存的 commit 逐个应用。这样一来提交历史会更加整洁（因为没有额外的 Merge），但是需要注意的是使用 <code>rebase</code> 可能会造成 commit 历史发生变化。</p>
+<blockquote>
+<p>吐槽一句，这个 rebase 被中文翻译成「变基」虽然确实合理，但真的好怪啊🤔</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/31/git-tips/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -600,112 +684,6 @@
 <blockquote>
 <p>好了，现在可以和以前那个只知道用 ping 来判断网络通不通的自己说再见了👋</p>
 </blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2023/03/01/trophy-system/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/01/trophy-system/" class="post-title-link" itemprop="url">人生奖杯系统</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-03-01 21:57:07" itemprop="dateCreated datePublished" datetime="2023-03-01T21:57:07+08:00">2023-03-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-介绍"><a href="#0X00-介绍" class="headerlink" title="0X00 介绍"></a>0X00 介绍</h1><p>奖杯系统这东西是从 PlayStation 上借鉴过来的，PlayStation 上每个游戏均会设置一些奖杯，当玩家达成奖杯对应条件的时候就会解锁该奖杯，从而给玩家的游玩过程以正反馈。XBox 上也有类似的成就系统，都是用来给玩家正反馈的。</p>
-<p>我作为一个游戏玩家就很喜欢拿到奖杯的感觉，尤其是拿到了一个金杯、白金杯（虽然我还从来没拿过白金杯）然后看到只有百分之一的玩家得到了这个奖杯的时候。既然游戏制作人可以为游戏设置将被，那我们为什么不考虑把自己的人生作为一个游戏来给它设置一些奖杯呢～ </p>
-<p>在开始之前要说明一下人生奖杯系统是什么又不是什么：</p>
-<ul>
-<li>奖杯系统是成就系统，<strong>不是代办清单</strong></li>
-<li>奖杯系统是自我激励和正向反馈的，<strong>不是用来给自己压力的</strong></li>
-<li>奖杯系统是非常个人化的，<strong>不是有最佳实践的</strong></li>
-</ul>
-<h1 id="0X01-我的奖杯系统"><a href="#0X01-我的奖杯系统" class="headerlink" title="0X01 我的奖杯系统"></a>0X01 我的奖杯系统</h1><p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2023/02/28/jiang-bei-xi-tong.png" alt="奖杯系统"></p>
-<p>先来给大家介绍一下我自己的奖杯系统，它是用 <a target="_blank" rel="noopener" href="https://www.notion.so/">Notion</a> 的数据库功能制作的。细心的朋友可以看出来我整个 Notion 都是「游戏化」的，工作区叫做「地球Online」，核心页叫「初始台地」，专业技能的笔记叫「主修技能」，一些其他的非专业技能笔记叫做「辅修技能」，还有武功秘籍之类的东西。</p>
-<blockquote>
-<p>不要问我为啥我一个奖杯都没拿到，这不是为了截图公开出来就把完成了的放在后面了嘛～</p>
-</blockquote>
-<p>我的奖杯系统算是比较简单的，目前只设置了：名字、描述、难度、日期和图片五个字段。</p>
-<ul>
-<li>其中「名字」是尽可能参照之前玩过的游戏奖杯风格去设计的。我觉得用「永不消失的电波」作为奖杯名比「通过无线电考试」感觉更酷一点～</li>
-<li>「描述」则是对成就的具体描述，说清楚了如何才能拿到这个奖杯。比如光看「好机车噢」可能并不能知道怎么才能拿到，所以需要一个描述的稍微详细一些的字段</li>
-<li>「难度」就很好理解了，我是把它分成了：青铜、白银、黄金、白金、梦幻五个档次。其中铜杯是稍稍努力就能轻松拿到的，银杯是七八成努力就稳稳能拿到的，金杯是全力输出后大概率可以拿到的，白金杯是全力输出后拿到奖杯的概率也并不很高的，梦幻则是全力输出也大概率拿不到的（比如我奖杯系统中的买一套 130+ 平米的房子😭）</li>
-<li>「时间」和「图片」最好理解，就是拿到这个奖杯的时间和记录性质的一张照片或者截图。</li>
-</ul>
-<h1 id="0X02-你的奖杯系统"><a href="#0X02-你的奖杯系统" class="headerlink" title="0X02 你的奖杯系统"></a>0X02 你的奖杯系统</h1><p>介绍完了我的奖杯系统该看看如何创建你的奖杯系统了～</p>
-<p>首先选择一个工具，比如 Notion、Excel、滴答清单、甚至最朴素的纸笔都是可以的。如果打算创建一个我这类的奖杯系统建议选择对表格支持的比较好的软件。</p>
-<p>其次就该规划字段了，看看每个奖杯都有一些什么属性。通常来说：名字、描述、难度、加入时间、完成时间、奖励点、照片、感受、备注等等这种字段都可以加，完全看自己觉得需要些什么东西。</p>
-<ul>
-<li>「名字」最好短一些，与奖杯内容关联强一些，有趣一些就更好了</li>
-<li>「描述」也是精简一些，说清楚究竟完成了什么事情就能拿到这个奖杯即可</li>
-<li>「难度」则可以从三档到五档分一分，当然你想用 0～100 的数字来精细化管理也是可以的</li>
-<li>「奖励点」是我一直想设置，但最终因为麻烦放弃的。如果要设置的话，可以根据每个奖杯的具体难度设置一些奖励点，例如「通过英语四级考试 – 3点」、「通过英语六级考试 – 5」、「首次跑完一场半马 – 3」、「首次跑完一场全马 – 5」这样，然后再给这些奖励点一个倍数比如 100。这样当你完成半马之后就获得了 <code>3 * 100 = 300</code> 元的奖励资金，可以买个自己喜欢的东西来奖励自己～当然也可以针对性的对每一个奖杯设置一个奖励，比如「跑完一场半马 – 奖励自己一双xxx跑鞋」或者「自己的照片被XX杂志选中 – 奖励自己一颗新镜头」</li>
-</ul>
-<p>好了现在奖杯系统设置好了，就差内容填充了。那么 <strong>什么样的事情适合作为奖杯加入其中呢？</strong> 其实原则上小到「连续一周不迟到」，大到「三小时速登珠峰」都是可以的。但是如果太多极低难度奖杯的话，拿到奖杯的成就感会大打折扣，难度太高的话又会导致三两年也拿不到一个，最后都是让这个奖杯系统废掉。所以我认为比较合理的就是从「稍稍努力就能完成」到「全力以赴才有一点点可能」的这个范围内的事情，从简单到困难数量递减分布，这样每隔一段时间都会拿到一个奖杯有正向反馈，也会有高难度奖杯在吊着你让你更努力的生活去完成它。</p>
-<p>那么现在你的奖杯系统已经准备好了，可以开始尽情的填充内容了～</p>
 
       
     </div>

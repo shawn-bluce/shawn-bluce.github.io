@@ -122,13 +122,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">173</span>
+        <span class="site-state-item-count">176</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -177,6 +177,110 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/12/08/k8s-cluster-tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/12/08/k8s-cluster-tips/" class="post-title-link" itemprop="url">部署 Kubernetes 集群时遇到的一些问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-12-08 20:30:11" itemprop="dateCreated datePublished" datetime="2022-12-08T20:30:11+08:00">2022-12-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-🛡️叠buff"><a href="#0X00-🛡️叠buff" class="headerlink" title="0X00 🛡️叠buff"></a>0X00 🛡️叠buff</h1><ul>
+<li>我是个 Kubernetes 纯新手，并不懂很多原理和概念，可能会有误导；</li>
+<li>我只是将自己遇到过的问题列出来，如果你想找「权威」请看官方文档；</li>
+<li>每个人的基础环境不同，Kubernetes 版本也不同，参考应该学会变通；</li>
+<li>此处记录的仅为个人部署过程中遇到的问题记录，并非「教程」或「指南」；</li>
+</ul>
+<h1 id="0X01-正文"><a href="#0X01-正文" class="headerlink" title="0X01 正文"></a>0X01 正文</h1><h2 id="注意交换分区"><a href="#注意交换分区" class="headerlink" title="注意交换分区"></a>注意交换分区</h2><p>部署 Kubernetes 的节点是不允许使用交换分区的，临时禁用可以 <code>swapoff -a</code>。然后在 <code>/etc/fstab</code> 中将交换分区的自动挂载给注释掉就可以了。</p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/12/08/k8sswap.png" alt="k8s_swap"></p>
+<h2 id="不使用-docker"><a href="#不使用-docker" class="headerlink" title="不使用 docker"></a>不使用 docker</h2><p>Kubernetes 已经不建议使用 docker 作为容器运行时了，可以考虑使用 <code>containerd</code> 或者 <code>CRI-O</code>。注意这里提到的 Dockershim 已经移除并不意味着不能再用 Docker 了，而是说 Kubernetes 并不会原生支持 Docker 了，以后 Docker 的地位和其他运行时的地位相同了。</p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/12/08/k8scontainerruntime.png" alt="k8s-container-runtime"></p>
+<h2 id="Containerd-的默认配置"><a href="#Containerd-的默认配置" class="headerlink" title="Containerd 的默认配置"></a>Containerd 的默认配置</h2><p>如果使用 Containerd 作为容器运行时的话，安装好 Containerd 之后要检查一下配置文件 <code>/etc/containerd/config.toml</code>。如果没有的话需要手动创建一个默认配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /etc/containerd</span><br><span class="line">containerd config default &gt; /etc/containerd/config.toml</span><br></pre></td></tr></table></figure>
+
+<h2 id="kubelet-疯狂重启"><a href="#kubelet-疯狂重启" class="headerlink" title="kubelet 疯狂重启"></a>kubelet 疯狂重启</h2><p>如果你还没有搞定 <code>kubeadm init</code> 的话，kubelet 疯狂重启是正常行为，它在等待 kubeadm。</p>
+<h2 id="需要-AppArmor"><a href="#需要-AppArmor" class="headerlink" title="需要 AppArmor"></a>需要 AppArmor</h2><p>我之前手贱把 AppArmor 给卸掉了，自以为是得认为它会影响到 Kubernetes 的运行。其实它确实会影响，因为 Kubernetes 的运行时需要它的，所以后来看日志在报错就又装回来了。</p>
+<h2 id="正确配置-cni-网络插件"><a href="#正确配置-cni-网络插件" class="headerlink" title="正确配置 cni 网络插件"></a>正确配置 cni 网络插件</h2><p>如果你是使用 Containerd 的话，可以参考 <a target="_blank" rel="noopener" href="https://github.com/containerd/containerd/blob/main/script/setup/install-cni">https://github.com/containerd/containerd/blob/main/script/setup/install-cni</a></p>
+<h2 id="容器运行时的冲突"><a href="#容器运行时的冲突" class="headerlink" title="容器运行时的冲突"></a>容器运行时的冲突</h2><p>如果要用 Containerd 的话就记得先把 docker 卸载干净，否则可能会导致一些冲突和不兼容的状况。</p>
+<h2 id="正确加载内核模块和内核参数"><a href="#正确加载内核模块和内核参数" class="headerlink" title="正确加载内核模块和内核参数"></a>正确加载内核模块和内核参数</h2><p>我当时使用的是 Ubuntu 22.04，默认没加载 <code>br_netfilter</code> 模块，所以需要使用 <code>modprobe br_netfilter</code> 临时加载，并且使用 <code>echo br_netfilter &gt;&gt; /etc/modules</code> 持久化加载，保证其重启后也是被加载的。可以使用 <code>lsmod | br_netfilter</code> 的方式检查是否已经加载了该模块。</p>
+<p>然后就是内核参数，首先可以通过 <code>sysctl -a | grep xxx</code> 的方式检查当前参数是否设置正确了。如果没设置正确的话需要在 <code>/etc/sysctl.conf</code> 中进行修改。改好之后 <code>sysctl --system</code> 可以使改动生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.ip_forward&#x3D;1</span><br><span class="line">net.bridge.bridge-nf-call-iptables&#x3D;1</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-crictl-命令"><a href="#使用-crictl-命令" class="headerlink" title="使用 crictl 命令"></a>使用 crictl 命令</h2><p>如果你想使用 <code>crictl</code> 命令查看容器/镜像，则需要修改其配置文件让它能够连接到你的容器运行时，配置文件在 <code>/etc/crictl.yaml</code>。如果你用的是 Containerd 的话配置文件可以写成 </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">runtime-endpoint:</span> <span class="string">unix:///run/containerd/containerd.sock</span></span><br><span class="line"><span class="attr">image-endpoint:</span> <span class="string">unix:///run/containerd/containerd.sock</span></span><br><span class="line"><span class="attr">timeout:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">debug:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="关于认证文件"><a href="#关于认证文件" class="headerlink" title="关于认证文件"></a>关于认证文件</h2><p>当 <code>kubeadm init</code> 成功之后，记得关注一下它打出来的内容，里面包含了你该如何让其他节点加入，还包含了如何从其他机器上管理 Kubernetes 集群。</p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/12/08/kubeadminit.png" alt="kubeadm_init"></p>
+<h2 id="get-nodes"><a href="#get-nodes" class="headerlink" title="get nodes"></a>get nodes</h2><p>当使用 <code>kubectl get nodes</code> 命令查看到的所有节点都处于 Ready 并且过一两分钟也没有异常状态时，也就意味着你的 Kubernetes 集群已经部署完成了🎉</p>
+<h2 id="关于-dashboard"><a href="#关于-dashboard" class="headerlink" title="关于 dashboard"></a>关于 dashboard</h2><p>刚刚部署了一个 kubenetes-dashboard 结果 401/403/40x 了？可以尝试使用端口转发的方案：<a target="_blank" rel="noopener" href="https://github.com/kubernetes/dashboard/issues/5542#issuecomment-706395744">https://github.com/kubernetes/dashboard/issues/5542#issuecomment-706395744</a></p>
+<p>dashboard 打开了，但是没有 Token 登陆不了？那就创建一个 token 喽 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md">https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -532,104 +636,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/09/22/lvm-basic/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/07/09/safe-password/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/07/09/safe-password/" class="post-title-link" itemprop="url">如何使数据库中的密码更安全：哈希、加密和加盐</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-07-09 00:18:31" itemprop="dateCreated datePublished" datetime="2022-07-09T00:18:31+08:00">2022-07-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a>0X00 前言</h1><p>设计一个系统，不论是 Web 还是其他的什么形式，通过用户名和密码认证也是一个再正常不过的事情了。但是如何保存密码却是一个值得讨论的问题，相信各位最开始的一个有用户名和密码的程序多半也是用明文存储的密码吧 🤓</p>
-<p>这里总结了六种比较常用于密码存储的方式，接下来可以逐一进行简单的分析以帮助我们更好的保护用户的密码</p>
-<p>一清二白：明文存储密码，直接存 <code>password</code></p>
-<p>掩耳盗铃：使用 <code>BASE64</code> 之类的编码，存储为 <code>cGFzc3dvcmQ=</code></p>
-<p>盘古之法：使用早已不再安全的 <code>md5</code> 之类的摘要算法，存储为</p>
-<p><code>5f4dcc3b5aa765d61d8327deb882cf99</code></p>
-<p>祖宗之法：使用也已经不再安全的 <code>sha-1</code> 之类的摘要算法，存储为</p>
-<p><code>5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8</code></p>
-<p>凑合能用：使用现代的安全的例如 <code>sha-256</code> 之类额算法，存储为</p>
-<p><code>5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8</code></p>
-<p>现代手段：采用系统化的多次迭代的加盐哈希方式加密，例如常见的 <code>PBKDF2</code></p>
-<p>有兴趣的话可以把我上面的这几个 md5/sha-1/sha-256 拿来到 <a target="_blank" rel="noopener" href="https://crackstation.net/">CrackStation</a> 尝试解一下，就知道弱密码究竟有多危险了。</p>
-<p>不过在开始之前要先进行一些简单的科普，以便于能够比较好的理解后面的东西。</p>
-<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><p>拖库：简单来说就是有不怀好意的小老弟获取了你数据库的访问权限，甚至将其 <code>dump</code> 然后下载下来了<br>撞库：当你有某个库的用户名和密码明文了，其实可以拿着用户名密码去其他系统也尝试登录，因为很多人的用户名和密码在各个系统都是一样的，比如同一个邮箱注册的密码也用的完全相同<br>碰撞：一般是说 hash 碰撞，在有一对原文和对应的 hash 值后再找到一个 hash 值相同但原文不同的的方法<br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%9B%90_(%E5%AF%86%E7%A0%81%E5%AD%A6)">盐</a>：加盐是一种在进行散列前向原文指定位置插入内容，将散列前的原文变得很长从而使彩虹表等方式失效的行为</p>
-<h2 id="密码破解"><a href="#密码破解" class="headerlink" title="密码破解"></a>密码破解</h2><p>常见的几种破解密码的方式有：暴力破解、用字典的暴力破解、彩虹表、社会工程学。</p>
-<p>其中<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Brute-force_attack">暴力破解</a>最为暴力（废话噢），就是把所有可能的密码组合一个个的尝试一直尝试到天荒地老。如果是一个 8 位密码且只由大小写数字构成的话也有 62^8=218340105584896 这么多种组合，就算每秒钟能算出来十万个也需要七十年才能完全遍历一遍；<br>其次是用<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Dictionary_attack">字典</a>，字典就是将常用的弱密码、生日这种存起来，暴力破解的时候不再尝试所有组合，而是从字典中逐个取出来尝试，速度较快但是成功率降低了，毕竟只尝试了可能性最大的一小部分密码；<br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rainbow_table">彩虹表</a>也是类似于字典，但是字典每条只是一个密码，彩虹表是密码明文与 hash 之后的 key-value 对，当数据库被拖/泄露了之后，可以尝试拿泄露出来的 hash 值来反查密码原文；<br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Social_engineering_(security)">社会工程学</a>听起来好像很野，但是谁还没有过用生日和手机号作为密码解密的尝试呢 🤣</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/07/09/safe-password/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
