@@ -122,7 +122,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">148</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,6 +177,112 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/09/22/lvm-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/22/lvm-basic/" class="post-title-link" itemprop="url">LVM 的创建扩容与压缩</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-09-22 21:56:58" itemprop="dateCreated datePublished" datetime="2022-09-22T21:56:58+08:00">2022-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-介绍"><a href="#0X00-介绍" class="headerlink" title="0X00 介绍"></a>0X00 介绍</h1><blockquote>
+<p>阅读并了解 LVM 需要了解：Linux 基本操作、分区概念、文件系统概念</p>
+</blockquote>
+<p>首先 LVM 的全称是 <em>Logical Volume Manager</em> 逻辑卷管理。传统的方式是将一个磁盘分成类似于 <code>sda1/sda2/sda3</code> 的分区，然后再将这些分区格式化成类似于 <code>ext4/xfs</code> 这种文件系统，最后将文件系统挂载到某个目录上。但是这种方式下对磁盘空间进行重分配是比较麻烦的，将新安装的磁盘融入到现有系统中也是比较费力的，这就是 LVM 需要解决的问题。</p>
+<p>总结下来 LVM 拥有这些功能</p>
+<ol>
+<li>LVM 可以方便的对现有逻辑卷进行压缩（初次分配多的空间不会浪费，可以压缩出来）</li>
+<li>空闲的空间可以随时重新分配给逻辑卷（传统模式只能将空间分给最后一个分区，或者创建新分区）</li>
+<li>新加入的磁盘也可以为其他逻辑卷扩容（传统模式并不方便为某个现有分区扩容）</li>
+<li>可以将两块磁盘融合创建出一个更大的逻辑卷（两块 1T 磁盘可以创建出 2T 的分区）</li>
+</ol>
+<p>特别需要注意的，RAID0 也可以将两个 1T 的磁盘合并为一个 2T 的，并且理论读写速度都会翻倍，但是这和 LVM 完全是两种不同的操作。</p>
+<h1 id="0X01-相关概念"><a href="#0X01-相关概念" class="headerlink" title="0X01 相关概念"></a>0X01 相关概念</h1><p>开始使用 LVM 前需要先搞清楚它的几个基本概念</p>
+<ul>
+<li>PV 是 Physical Volume 物理卷 — 从磁盘上分出来的物理分区</li>
+<li>VG 是 Volume Group 卷组 — 多个 PV 组成的一个 Group</li>
+<li>LV 是 Logical Volume 逻辑卷 — 从某个 VG 里创建出来的逻辑卷（可以格式化够挂载）</li>
+<li>PE 是 Physical Extent 物理区域 — 是 PV 中最小的存储单元</li>
+<li>LE 是 Logical Extent 逻辑区域 — 是 LV 中做小的存储单元</li>
+</ul>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2022/09/15/lvm-cropped.jpg" alt="LVM Cropped"></p>
+<blockquote>
+<p>只是「简单用用」的话可以不管 PE/LE 这两个概念</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/22/lvm-basic/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -537,91 +643,6 @@
 <blockquote>
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/functions.html#oct">https://docs.python.org/zh-cn/3/library/functions.html#oct</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2022/05/12/docker-mount-and-volume/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/12/docker-mount-and-volume/" class="post-title-link" itemprop="url">Docker 容器中的文件持久化</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-05-12 20:39:58" itemprop="dateCreated datePublished" datetime="2022-05-12T20:39:58+08:00">2022-05-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 19:58:31" itemprop="dateModified" datetime="2023-07-09T19:58:31+08:00">2023-07-09</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-最常见的持久化方式：挂载出来"><a href="#0X00-最常见的持久化方式：挂载出来" class="headerlink" title="0X00 最常见的持久化方式：挂载出来"></a>0X00 最常见的持久化方式：挂载出来</h1><p>相信各位学习使用 Docker 的时候都会出现过好不容易用 Docker 启动了个数据库容器，然后发现只要容器消失之后数据也就一起消失了的情况。然后通常来说会使用这么一个方法来解决问题：将宿主机的某个目录挂载到容器里，这样一来那个数据库容器就可以将数据内容和配置持久化地存储下来了。一般会使用这么一个方法将某个目录挂载到容器内部 <code>docker run -dit --name new_container --mount type=bind,source=/Users/shawn/Downloads/test/test_dir,target=/test_dir alpine</code> 。</p>
-<p>下面图中首先创建了一个名为 this_container 的容器，并将其 <code>/test_dir</code> 目录和宿主机的 <code>/Users/shawn/Downloads/test/test_dir</code> 目录绑定到一起了。然后在容器里向 <code>/test_dir</code> 写入文件之后发现在宿主机的对应位置也是可以看到的，并且文件不会因为容器的生命周期结束而被删除（如果数据在容器内部的话当容器被删除后自然也就不在了）。</p>
-<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/docker-mount.png" alt="将目录挂载到容器内部"></p>
-<p>这种方式其实更适合宿主机和容器需要共享一些文件的时候使用，例如我本地的开发环境在容器里但是代码又在宿主机上的情况就很适合这种方案。当然也可以将数据文件、配置文件等通过这种方式挂载出来。一般使用 Docker 部署各类服务的时候，都会将配置文件通过这种方式共享出来，方便我们在宿主机上修改配置然后在容器内部生效。</p>
-<h1 id="0X01-另一种持久化的方式：卷"><a href="#0X01-另一种持久化的方式：卷" class="headerlink" title="0X01 另一种持久化的方式：卷"></a>0X01 另一种持久化的方式：卷</h1><p>说来惭愧，我一直以为只有上面一种数据持久化的方式，直到昨天看书的时候才知道 Docker 还有一种叫做 Volume 的存在。如果说上面说的将数据挂载出来到宿主机的方式有点类似与宿主机与虚拟机共享目录的话，那通过 Volume 持久化文件就类似于给虚拟机挂载一个虚拟磁盘了。</p>
-<p>我们首先可以通过 <code>docker volume ls</code> 的方式检查一下当前环境是不是存在已经创建好了的 Volume，通常来说如果你的 Docker 环境已经用过一段时间并且创建过各种不同的容器的话那很有可能已经有存在的 Volume 了。接下来我们通过 <code>docker run -dit --name volatiner --mount source=bizvol,target=/vol alpine</code> 来启动一个容器，后面 mount 的参数就是将名为 bizvol 的 Volume 挂载到容器的 /vol 目录上。这里值得注意的一点是即使你没有手动创建这个名为 bizvol 的 Volume 也是可以正常启动这个容器的，Docker 会为我们自动创建这个 bizvol Volume 的。接下来再使用 <code>docker volume ls</code> 就可以看到这个被创建好了的 Volume 了，我们尝试着向其中写入一点点数据，然后删除这个容器，可以发现这个 Volume 还是健在的，此时我们再启动一个新的容器使用这个 Volume 是没问题的，甚至启动多个容器同时挂载都是可以的，这些容器里都能正常读写该 Volume 的数据。</p>
-<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/docker-volume.png" alt="使用 Volume"></p>
-<p>关于 Volume 有如下几个命令，这里简单介绍一下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker volume create    <span class="comment"># 创建 Volume</span></span><br><span class="line">docekr volume ls        <span class="comment"># 查看当前存在的 Volume</span></span><br><span class="line">docker volume inspect   <span class="comment"># 检查 Volume 的详细信息</span></span><br><span class="line">docker volume prune     <span class="comment"># 删除未被容器或服务使用的全部 Volume</span></span><br><span class="line">docker volume rm        <span class="comment"># 删除指定 Volume</span></span><br></pre></td></tr></table></figure>
-
 
       
     </div>
