@@ -122,7 +122,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">150</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,6 +177,154 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2024/07/02/nas-2024/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shawn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shawn's Blog">
+      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Shawn's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/02/nas-2024/" class="post-title-link" itemprop="url">Nas-2024</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-07-02 21:48:46 / 修改时间：22:03:18" itemprop="dateCreated datePublished" datetime="2024-07-02T21:48:46+08:00">2024-07-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="0X00-你需要一台-NAS-吗"><a href="#0X00-你需要一台-NAS-吗" class="headerlink" title="0X00 你需要一台 NAS 吗"></a>0X00 你需要一台 NAS 吗</h1><p>不知怎么的，在移动互联网疯狂发展的今天，反而慢慢开始兴起了自建网络服务这种复古风潮。最近这些年身边的朋友同事越来越多聊到 NAS 了，甚至 B 站上出现了一小撮 NAS 区 UP 主（没错，你知道我说的是谁）。就更不说现在淘宝咸鱼上大量的 NAS 专用机箱，甚至是 3D 打印的定制化版本了。</p>
+<p>你真的需要一台 NAS 吗？NAS 说白了就是一块连着网的硬盘，速度比直接插电脑上还慢一些，如果你平日里需要访问数据的设备并不多，且拥有一个台式电脑，那不如先买两块硬盘插上去。通过文件共享功能将台式机转换成一个带有存储功能的兼职 NAS。</p>
+<p>如果你家里的多个手机、平板、电脑、电视都需要访问存储，或者你没有台式机可以扩容，那确实可以考虑搞一台 NAS。</p>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2024/unraid-dashboard.png"></p>
+<p>我自己的需求是这样的：</p>
+<ul>
+<li>平时喜欢摄影，每次拍摄回来的照片少则 10G 多则 50G，日积月累已经有大几百 G 了，需要备份</li>
+<li>也喜欢拍一些视频，相机拍摄的码率都很高，随随便便 50G 100G 的，需要备份</li>
+<li>患有仓鼠症，喜欢囤一些高清电影电视剧来看，总共搞了有差不多 8T 了</li>
+<li>手机、平板、电视、电脑都需要访问上面的影视资源</li>
+</ul>
+<p>什么，你说你就是想要，不管需求？那就买呀，挑着贵的和好玩的买～</p>
+<h1 id="0X01-我的-NAS-之路"><a href="#0X01-我的-NAS-之路" class="headerlink" title="0X01 我的 NAS 之路"></a>0X01 我的 NAS 之路</h1><p>最早的一台 NAS 是 2018 年买的 Synology DS118 性能烂到家了，也只有一个盘位，配了一块 4T 红盘，不过还是老老实实用了差不多 3 年。</p>
+<p>DS118 存储告急之后打算升级 NAS，觉得自己很少用得上群晖引以为豪的软件，再加上对自己的技术实力有一捏捏🤏的信心，所以开始尝试自组 NAS。硬件选择了奔腾 G6400 + 16G 内存，第一次使用了 OMV ，觉得它对 Linux 的改动很少，所以相对来说更玩得惯。不过用了没多久还是换成了 TrueNAS Core，这套平台就稳定运行了很久。</p>
+<blockquote>
+<p>当时买了 8T 的 HC320，买了没几天奇亚币就上天了，我的硬盘价格也跟着上天了。时隔一周，我 899 买的硬盘店家就卖 1899 了 🤷‍♂️</p>
+</blockquote>
+<p>因为 TrueNAS Core 是基于 BSD 的系统，后来看 TrueNAS SCALE（基于 Linux 的）稳定了之后就切到了 SCALE 版本，也顺势将 G6400 升级成了 i3-10100，内存也加到了 32G。</p>
+<p>升级之后的 NAS 一直稳定运行到了今年，突然有一天我觉得家里另外一台用作 homelab 的服务器开机时间太少了，然后我看着身边的一台性能「强劲」的 homelab 和一台性能「羸弱」的 NAS 陷入了沉思。沉思过后，从兜里掏出了一张「融合」：<br><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2024/ronghe.png"></p>
+<h1 id="0X02-有点强的硬件配置"><a href="#0X02-有点强的硬件配置" class="headerlink" title="0X02 有点强的硬件配置"></a>0X02 有点强的硬件配置</h1><p>说是融合，其实就是选用了 homelab 的 CPU内存主板和原 NAS 的机箱硬盘，大概配置如下</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Model</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU</td>
+<td>AMD Epyc 7551P 32C64T</td>
+</tr>
+<tr>
+<td>主板</td>
+<td>SuperMicro H11SSL-i</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>DDR4 16G ECC * 4</td>
+</tr>
+<tr>
+<td>HDD</td>
+<td>HC320 8T * 3</td>
+</tr>
+<tr>
+<td>HDD</td>
+<td>红盘 4T * 1</td>
+</tr>
+<tr>
+<td>HDD</td>
+<td>银河 4T * 1</td>
+</tr>
+<tr>
+<td>SSD</td>
+<td>Intel 1.6T</td>
+</tr>
+<tr>
+<td>网卡</td>
+<td>Intel 2.5G</td>
+</tr>
+</tbody></table>
+<p><img src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/2024/unraid-configure.png"></p>
+<p>试问哪个程序员不想要一台 32 核 64 线程 64G 内存 近 30T 存储容量的 NAS 呢 🤣</p>
+<blockquote>
+<p>配置单疑点：</p>
+<ol>
+<li>真有必要上这种 CPU 吗？没有，完全没有，事实上是之前 i3-10100 应付我的需求也完全没有任何问题。我只是正好有这个，卖也不怎么值钱，不如装上。</li>
+<li>真有必要上 64G 内存吗？没有，完全没有，事实上之前 32G 内存 应付我的需求也完全没有任何问题。我只是…有点上头，所以上了 64G。</li>
+<li>真有必要搞这么多存储吗？<del>没有，完全没有，事实上</del>🤦‍♂️这个还是有的，或者说因人而异，毕竟我确实要存好多照片、视频和电影电视剧。</li>
+<li>听说 HC320 很拉？其实我没觉得，所谓炒豆子声确实存在一些，不过也只存在于读写的时候，但是 NAS 其实大多数时候磁盘是可以休眠的。另外我放在桌子下面使用完全不会在意，只要别放卧室就没有问题。</li>
+<li>你那个 1.6T 是不是有点扎眼？这是我在咸鱼上收的二手，当时放在 homelab 上用的，现在拿过来做缓存（缓存意味着丢了也问题不大），正经自己配置缓存的话一般 250G 就妥妥够用了。</li>
+</ol>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/07/02/nas-2024/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -514,84 +662,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/02/04/whats-encrypt/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.just666.com/2024/01/04/python-collections/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shawn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shawn's Blog">
-      <meta itemprop="description" content="分享我的知识、经验、生活与感悟">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Shawn's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/01/04/python-collections/" class="post-title-link" itemprop="url">Python 标准库之 Collections</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2024-01-04 22:12:52 / 修改时间：22:14:08" itemprop="dateCreated datePublished" datetime="2024-01-04T22:12:52+08:00">2024-01-04</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0X00-Header"><a href="#0X00-Header" class="headerlink" title="0X00 Header"></a>0X00 Header</h1><p>相信各位肯定都对 Python 中的基础、常见数据类型和数据结构比较熟悉了吧，不管是 <code>int</code>、<code>float</code>、<code>string</code>、<code>bool</code> 还是 <code>list</code>、<code>tuple</code>、<code>set</code> 用起来应该也都是手到擒来了吧。下面我们就来简单了解一下相对高级一些的 Python 内置数据结构，这些数据结构全都在 <code>collections</code> 的标准库中。</p>
-<p>掌握这些数据结构虽然并不能让你「精通 Python」，但起码可以让你的代码更加 Pythonic，也能让你少写几行冗余的代码。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/01/04/python-collections/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
