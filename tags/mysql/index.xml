@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on Shawn's blog</title><link>https://blog.programmer.work/tags/mysql/</link><description>Recent content in MySQL on Shawn's blog</description><generator>Hugo</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Thu, 16 Jan 2025 09:45:43 +0000</lastBuildDate><atom:link href="https://blog.programmer.work/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 查询执行内幕-基础篇</title><link>https://blog.programmer.work/posts/mysql-query-exec-basic/</link><pubDate>Mon, 16 Nov 2020 13:03:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-query-exec-basic/</guid><description>&lt;h1 id="0x00-前言"&gt;0X00 前言&lt;/h1&gt;
+&lt;p&gt;这篇博文概述了一次查询从一条 SQL 到拿到数据的过程，是掌握了基础的 CRUD 后想要进阶 MySQL 的一条必经路（当然我是说这个只知识是必经路，并不是我这篇文章）。如果有兴趣的话就继续看下去吧~&lt;/p&gt;</description></item><item><title>MySQL 中的四种隔离等级</title><link>https://blog.programmer.work/posts/mysql-isolation-level/</link><pubDate>Sun, 30 Aug 2020 02:01:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-isolation-level/</guid><description>&lt;h1 id="0x00-whats-this"&gt;0X00 What&amp;rsquo;s this&lt;/h1&gt;
+&lt;p&gt;我们知道 MySQL 中存在“事务”这么个事物（我是故意拗口的，哈哈哈哈哈哈哈）；我们也知道事务“一荣俱荣，一损俱损”（要么事物内所有查询均生效，要么均不生效）。那么现在问题来了，银行数据库中有两个事务在同时进行，我们来看一下这两个事务&lt;/p&gt;</description></item><item><title>使用 Docker 部署 MySQL 和 Redis</title><link>https://blog.programmer.work/posts/docker-mysql-redis/</link><pubDate>Thu, 14 Nov 2019 12:56:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/docker-mysql-redis/</guid><description>&lt;h1 id="0x00-使用docker部署的优势"&gt;0X00 使用docker部署的优势&lt;/h1&gt;
+&lt;p&gt;在使用docker部署之前，一般都是直接将MySQL和Redis这类服务直接安装在机器上的。以至于好多新手才开始安装使用的时候经常会出问题，出了问题解决不了就重装系统然后再重装软件，而且如果想同时用MySQL5和MySQL8就非常麻烦了。话说回来，在生产环境服务器上其实还是很多直装的服务的，不过其实使用docker部署一套相同的环境是非常有利于自己本地开发的。&lt;/p&gt;</description></item><item><title>MySQL 慢查询初步</title><link>https://blog.programmer.work/posts/mysql-slowquer-simple/</link><pubDate>Sun, 03 Nov 2019 12:17:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-slowquer-simple/</guid><description>&lt;h1 id="0x00-io总是比运算慢"&gt;0X00 IO总是比运算慢&lt;/h1&gt;
+&lt;p&gt;众所周知计算机的IO都要比计算慢很多很多，即时是目前民用的高级SSD：三星970PRO，它的读写速度都要比内存慢上几个数量级，更不要说CPU了。所以软件的IO通常都是瓶颈，很多时候都是CPU等内存，内存等磁盘，磁盘等网络。&lt;/p&gt;</description></item><item><title>解决 Linux 下 MySQL/MariaDB 中文变问号 ？ 问题</title><link>https://blog.programmer.work/posts/mysql-zh-exception/</link><pubDate>Thu, 15 Dec 2016 11:33:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-zh-exception/</guid><description>&lt;h1 id="0x00-修改配置文件"&gt;0X00 修改配置文件&lt;/h1&gt;
+&lt;p&gt;MySQL/MariaDB默认并没有采用utf-8编码，所以我们要修改配置文件，以让其使用utf-8。
+&lt;code&gt;/etc/my.cnf&lt;/code&gt;就是配置文件，打开之后在&lt;code&gt;[mysqld]&lt;/code&gt;下面加入两行，使其变成&lt;/p&gt;</description></item><item><title>Linux 下 MariaDB/MySql 的安装配置、用户管理和备份</title><link>https://blog.programmer.work/posts/linux-mysql-mariadb-simple/</link><pubDate>Sun, 20 Nov 2016 14:17:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/linux-mysql-mariadb-simple/</guid><description>&lt;h1 id="0x00-mariadb的身世"&gt;0x00 MariaDB的身世&lt;/h1&gt;
+&lt;p&gt;自从MySQL被Oracle收购之后，社区就一直担心MySQL可能会被闭源或者一些其他的原因导致MySQL的支持出现问题。所以现在好多发行版本默认的数据库都从MySQL转移到了Mariadb。而且社区也开始大力支持Mariadb，再加上Mariadb的使用和API和MySQL完全一样，所以这里选择使用Mariadb而不是MySQL。&lt;/p&gt;</description></item><item><title>Mariadb/MySQL 增删查改 数据库操作 建表 建数据库</title><link>https://blog.programmer.work/posts/mysql-super-simple/</link><pubDate>Tue, 15 Mar 2016 09:30:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-super-simple/</guid><description>&lt;p&gt;首先需要安装好MySQL/Mariadb的服务端和客户端，并且能连接到服务端&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;命令中的大写字母是SQL的关键字，小写字母是自己的相关属性和数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="0x00-连接到数据库"&gt;0X00 连接到数据库&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 使用mysql连接到127.0.0.1并用root用户登陆，密码等待输入
+ mysql -h 127.0.0.1 -u root -p
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="0x01-创建数据库"&gt;0X01 创建数据库&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 创建一个名为school的数据库
+ CREATE DATABASE school;
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="0x02-建立一个表"&gt;0X02 建立一个表&lt;/h1&gt;
+&lt;p&gt;建立一个名为student的表
+索引：
+10个字符长度的name 不能为空
+11个字符长度的number 不能为空
+int类型的age 不能为空&lt;/p&gt;</description></item></channel></rss>

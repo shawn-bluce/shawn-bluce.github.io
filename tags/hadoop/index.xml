@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hadoop on Shawn's blog</title><link>https://blog.programmer.work/tags/hadoop/</link><description>Recent content in Hadoop on Shawn's blog</description><generator>Hugo</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Thu, 16 Jan 2025 08:59:43 +0000</lastBuildDate><atom:link href="https://blog.programmer.work/tags/hadoop/index.xml" rel="self" type="application/rss+xml"/><item><title>浅析 HDFS</title><link>https://blog.programmer.work/posts/hdfs-simple/</link><pubDate>Mon, 06 Mar 2017 12:18:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/hdfs-simple/</guid><description>&lt;h1 id="0x00-hdfs的设计"&gt;0X00 HDFS的设计&lt;/h1&gt;
+&lt;p&gt;HDFS作为GFS的开源实现，和GFS是高度一致的。在HDFS中有着下面的优点&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对超大文件支持良好，由于其分布式实现，可以存储超大文件，甚至单个文件大小可以超过集群中任意一台机器的磁盘大小&lt;/li&gt;
+&lt;li&gt;采用流式数据访问，一次写入、多次读取是最高效的访问模式。因为Hadoop作为一个大数据处理平台，并没有频繁的写入操作，只是在需要的时候一次将大量的数据写入然后在对这些数据进行读操作&lt;/li&gt;
+&lt;li&gt;Hadoop并不需要运行在昂贵且高可靠的硬件之上，单个节点可能性能可靠性都参差不齐，但是由于其高可靠性的设计，使之能在遇到节点故障时继续运行且不让用户察觉到明显的终端&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;但是HDFS也不是适用于各种场景，一下的几种场景就不适&lt;/p&gt;</description></item></channel></rss>

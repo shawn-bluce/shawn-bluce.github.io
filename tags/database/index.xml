@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Database on Shawn's blog</title><link>https://blog.programmer.work/tags/database/</link><description>Recent content in Database on Shawn's blog</description><generator>Hugo</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Thu, 16 Jan 2025 09:42:31 +0000</lastBuildDate><atom:link href="https://blog.programmer.work/tags/database/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 中的四种隔离等级</title><link>https://blog.programmer.work/posts/mysql-isolation-level/</link><pubDate>Sun, 30 Aug 2020 02:01:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-isolation-level/</guid><description>&lt;h1 id="0x00-whats-this"&gt;0X00 What&amp;rsquo;s this&lt;/h1&gt;
+&lt;p&gt;我们知道 MySQL 中存在“事务”这么个事物（我是故意拗口的，哈哈哈哈哈哈哈）；我们也知道事务“一荣俱荣，一损俱损”（要么事物内所有查询均生效，要么均不生效）。那么现在问题来了，银行数据库中有两个事务在同时进行，我们来看一下这两个事务&lt;/p&gt;</description></item><item><title>关系型数据库索引初步使用</title><link>https://blog.programmer.work/posts/database-index-simple/</link><pubDate>Sun, 15 Sep 2019 09:00:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/database-index-simple/</guid><description>&lt;h1 id="0x00-前言"&gt;0X00 前言&lt;/h1&gt;
+&lt;p&gt;不论多初级的后端程序员，只要认可自己是“后端程序员”那最起码也是听过“数据库索引”这个东西的，应该也直到这东西能让数据库变快。但是具体“数据库索引”是个什么东西，怎么用，为什么能让数据库变快可能就不一定清楚了。&lt;/p&gt;</description></item><item><title>Linux 下 MariaDB/MySql 的安装配置、用户管理和备份</title><link>https://blog.programmer.work/posts/linux-mysql-mariadb-simple/</link><pubDate>Sun, 20 Nov 2016 14:17:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/linux-mysql-mariadb-simple/</guid><description>&lt;h1 id="0x00-mariadb的身世"&gt;0x00 MariaDB的身世&lt;/h1&gt;
+&lt;p&gt;自从MySQL被Oracle收购之后，社区就一直担心MySQL可能会被闭源或者一些其他的原因导致MySQL的支持出现问题。所以现在好多发行版本默认的数据库都从MySQL转移到了Mariadb。而且社区也开始大力支持Mariadb，再加上Mariadb的使用和API和MySQL完全一样，所以这里选择使用Mariadb而不是MySQL。&lt;/p&gt;</description></item><item><title>Mariadb/MySQL 增删查改 数据库操作 建表 建数据库</title><link>https://blog.programmer.work/posts/mysql-super-simple/</link><pubDate>Tue, 15 Mar 2016 09:30:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/mysql-super-simple/</guid><description>&lt;p&gt;首先需要安装好MySQL/Mariadb的服务端和客户端，并且能连接到服务端&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;命令中的大写字母是SQL的关键字，小写字母是自己的相关属性和数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="0x00-连接到数据库"&gt;0X00 连接到数据库&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 使用mysql连接到127.0.0.1并用root用户登陆，密码等待输入
+ mysql -h 127.0.0.1 -u root -p
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="0x01-创建数据库"&gt;0X01 创建数据库&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; 创建一个名为school的数据库
+ CREATE DATABASE school;
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id="0x02-建立一个表"&gt;0X02 建立一个表&lt;/h1&gt;
+&lt;p&gt;建立一个名为student的表
+索引：
+10个字符长度的name 不能为空
+11个字符长度的number 不能为空
+int类型的age 不能为空&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSRF on Shawn's blog</title><link>https://blog.programmer.work/tags/csrf/</link><description>Recent content in CSRF on Shawn's blog</description><generator>Hugo</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Thu, 16 Jan 2025 07:38:12 +0000</lastBuildDate><atom:link href="https://blog.programmer.work/tags/csrf/index.xml" rel="self" type="application/rss+xml"/><item><title>防范 CSRF</title><link>https://blog.programmer.work/posts/csrf-simple/</link><pubDate>Wed, 18 Nov 2020 13:28:00 +0000</pubDate><author>shawnbluce@gmail.com (Shawn)</author><guid>https://blog.programmer.work/posts/csrf-simple/</guid><description>&lt;h1 id="0x00-前言"&gt;0X00 前言&lt;/h1&gt;
+&lt;p&gt;&lt;img
+ class="lazyload"
+ src="https://blog.programmer.work/svg/loading.min.svg"
+ data-src="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/csrf.png"
+ data-srcset="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/csrf.png, https://blog-1251664340.cos.ap-chengdu.myqcloud.com/csrf.png 1.5x, https://blog-1251664340.cos.ap-chengdu.myqcloud.com/csrf.png 2x"
+ data-sizes="auto"
+ alt="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/csrf.png"
+ title="https://blog-1251664340.cos.ap-chengdu.myqcloud.com/csrf.png" /&gt;&lt;/p&gt;
+&lt;p&gt;假设有这么一个银行（肯定要假设，如果真有这么蠢的话这银行也早就倒闭了）的网上银行站点，他提供了一套的 API，通过&lt;code&gt;GET https://api.xxbank.com/transfer?amount=3000&amp;amp;to=shawn&lt;/code&gt;可以向 shawn 转账 3000 块。虽然用 GET 来修改数据是挺蠢的但是好像也没什么大问题是吧。&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,108 @@
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>git 初步使用经验 - Shawn's blog</title><meta name=Description content="分享我的知识、经验、生活与感悟"><meta property="og:url" content="https://blog.programmer.work/posts/git-simple/"><meta property="og:site_name" content="Shawn's blog"><meta property="og:title" content="git 初步使用经验"><meta property="og:description" content="0X00 怎样正确使用分支 通常情况下一个git仓库要保持三个及以上的分支，基本的分支明明如下：
+name function master 正常运行的稳定版本 develop 正常运行的开发版 feature 添加新功能的分支 hotfix 紧急修复bug的分支 如果你已经fork了一份代码到自己本地，当你想添加一个新功能比如「用户管理」的时候，就应该先换到develop分支，然后由这个分支创建一个新的名为feture_add_usermanager的分支。在新分支里编写代码后将代码提交一个PullRequest到自己的develop分支，合并起来后再提交一个PullRequest到团队的仓库中，等待团队其他成员review后就可以正式将代码合并到团队的develop中了。等下一次发布新版本的时候就可以将团队的develop分支合并到团队的master分支中了了。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2017-11-12T07:24:00+00:00"><meta property="article:modified_time" content="2025-01-16T08:53:55+00:00"><meta property="article:tag" content="Git"><meta property="og:image" content="https://blog.programmer.work/logo.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.programmer.work/logo.png"><meta name=twitter:title content="git 初步使用经验"><meta name=twitter:description content="0X00 怎样正确使用分支 通常情况下一个git仓库要保持三个及以上的分支，基本的分支明明如下：
+name function master 正常运行的稳定版本 develop 正常运行的开发版 feature 添加新功能的分支 hotfix 紧急修复bug的分支 如果你已经fork了一份代码到自己本地，当你想添加一个新功能比如「用户管理」的时候，就应该先换到develop分支，然后由这个分支创建一个新的名为feture_add_usermanager的分支。在新分支里编写代码后将代码提交一个PullRequest到自己的develop分支，合并起来后再提交一个PullRequest到团队的仓库中，等待团队其他成员review后就可以正式将代码合并到团队的develop中了。等下一次发布新版本的时候就可以将团队的develop分支合并到团队的master分支中了了。"><meta name=application-name content="Shawn's blog"><meta name=apple-mobile-web-app-title content="Shawn's blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.programmer.work/posts/git-simple/><link rel=prev href=https://blog.programmer.work/posts/linux-software-recommend/><link rel=next href=https://blog.programmer.work/posts/python-iteration-yield/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"git 初步使用经验","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.programmer.work\/posts\/git-simple\/"},"genre":"posts","keywords":"Git","wordcount":1532,"url":"https:\/\/blog.programmer.work\/posts\/git-simple\/","datePublished":"2017-11-12T07:24:00+00:00","dateModified":"2025-01-16T08:53:55+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Shawn"},"description":""}</script></head><body data-header-desktop=auto data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="Shawn's blog">Shawn's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="Shawn's blog">Shawn's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">git 初步使用经验</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Shawn</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2017-11-12>2017-11-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 1532 字&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div></div><div class=content id=content><h1 id=0x00-怎样正确使用分支>0X00 怎样正确使用分支</h1><p>通常情况下一个git仓库要保持三个及以上的分支，基本的分支明明如下：</p><table><thead><tr><th>name</th><th>function</th></tr></thead><tbody><tr><td>master</td><td>正常运行的稳定版本</td></tr><tr><td>develop</td><td>正常运行的开发版</td></tr><tr><td>feature</td><td>添加新功能的分支</td></tr><tr><td>hotfix</td><td>紧急修复bug的分支</td></tr></tbody></table><p>如果你已经fork了一份代码到自己本地，当你想添加一个新功能比如「用户管理」的时候，就应该先换到<code>develop</code>分支，然后由这个分支创建一个新的名为<code>feture_add_usermanager</code>的分支。在新分支里编写代码后将代码提交一个PullRequest到自己的<code>develop</code>分支，合并起来后再提交一个PullRequest到团队的仓库中，等待团队其他成员review后就可以正式将代码合并到团队的<code>develop</code>中了。等下一次发布新版本的时候就可以将团队的<code>develop</code>分支合并到团队的<code>master</code>分支中了了。</p><p>如果中途项目出现了严重bug(不能登录)需要即使修改上线，那就从自己的<code>master</code>分支上新建一个名为<code>hotfix_cantlogin</code>的分支，修改完后直接提交PullRequest到团队的<code>master</code>分支，review且合并后就可以将该分支删除了。</p><h1 id=0x01-合并多次commit>0X01 合并多次commit</h1><p>有的时候会出现这么一种情况：连续的n次commit解决的都是同一个问题，为了让最终的提交记录清晰明了，可以将这几次的commit合并为一次。看下面的实例：</p><pre tabindex=0><code>    commit bc83e15e3245ad4064fdd9fe2bf105252d0c51fc (HEAD -&gt; develop)
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Mon Nov 6 00:52:43 2017 +0800
+
+        fix usermanager
+
+    commit affc0acb9a3de30288f144ae2d0b28a9fd60af4b
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Mon Nov 6 00:52:33 2017 +0800
+
+        fix usermanager
+
+    commit fcf13d712bd3dbd483442ffd316741e04acaaa3e
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Mon Nov 6 00:52:23 2017 +0800
+
+        fix usermanager
+
+    commit 2812e2928913e9b3a7650e389602b8bb10ca388b
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Mon Nov 6 00:52:08 2017 +0800
+
+        fix usermanager
+
+    commit f7f273d9c36d748183ac3e6a90f06ff14ed42f95
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Mon Nov 6 00:51:52 2017 +0800
+
+        add user_manager
+</code></pre><p>最近的四次提交内容都是一样的，修改了四次bug最终才解决了问题，因为最近四次的commit是相同含义的修改，所以最好合并在一起，可以使用这个方法</p><pre tabindex=0><code>    # 最后接的id是你合并的这些commit之前的一个
+    git rebase -i f7f273d9c36d748183ac3e6a90f06ff14ed42f95
+
+    ＃ 输入命令之后到vi环境的界面
+    pick 2812e29 fix usermanager
+    pick fcf13d7 fix usermanager
+    pick affc0ac fix usermanager
+    pick bc83e15 fix usermanager
+
+    # 我们将其修改为
+    pick 2812e29 fix usermanager
+    squash fcf13d7 fix usermanager
+    squash affc0ac fix usermanager
+    squash bc83e15 fix usermanager
+
+    # 保存退出，进入commit message修改的界面
+    这里会展示出合并的这几次commit的message，我们选择性的修改一下将这几次的commit message整合一下，继续保存。这次保存之后就相当把这几次的commit合并成一次了。
+</code></pre><blockquote><p>注意，如果你是从仓库中clone下来的项目，那么有可能在你合并完几个commit后再<code>git push</code>会提示错误。假设以前是有100次commit的，现在你合并了最后的三次，再push，就会和远端的仓库出现分歧。一般情况下都是在确认自己的代码没问题之后，使用<code>git push -f</code>的方式强行把代码推上去，这样就会覆盖掉最后的几次commit，以你新push的代码为基准了。</p></blockquote><h1 id=0x02-迁移一次commit>0X02 迁移一次commit</h1><p>有的时候我们需要将某个分支中的某次提交复制到另一个分支，具体使用情景有很多。这里展示一个使用样例：</p><pre><code>git log 查看master分支的commit，只有这一次
+</code></pre><pre tabindex=0><code>    commit 2959f92753d84bff5b125b15cd9497c4d8dff637 (HEAD -&gt; master)
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:09:07 2017 +0800
+
+        完成XXX功能
+
+    切换到dev分支查看commit，有四次
+    commit bba77c7faf7821802b108688a17d8e6655975b7e (HEAD -&gt; dev)
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:11:47 2017 +0800
+
+        整理XXX
+
+    commit 9001f8250ce47a067c9af50bf62af025b872c3bc
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:11:37 2017 +0800
+
+        添加XXX
+
+    commit 6e4171ad632a7627be08ec7c9afaf64f55ccc98d
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:11:21 2017 +0800
+
+        修复XXX
+
+    commit 2959f92753d84bff5b125b15cd9497c4d8dff637 (master)
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:09:07 2017 +0800
+
+        完成XXX功能
+
+    如果此时我想将那个“添加XXX”的commit移到master分支，可以使用`git cherry-pick`
+    可以看到“添加XXX”的那次commit的ID为`6e4171ad632a7627be08ec7c9afaf64f55ccc98d`
+    我们复制这个ID，切到master分支，使用`git cherry-pick commit_id`
+    shawn in ~/test on master λ git cherry-pick 6e4171ad632a7627be08ec7c9afaf64f55ccc98d
+    [master f77b496] 修复XXX
+     Date: Sun Nov 12 16:11:21 2017 +0800
+     1 file changed, 0 insertions(+), 0 deletions(-)
+     create mode 100644 b
+    shawn in ~/test on master λ git log
+    commit f77b49677efb1ba967dbc323332e2f8495fdbca1 (HEAD -&gt; master)
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:11:21 2017 +0800
+
+        修复XXX
+
+    commit 2959f92753d84bff5b125b15cd9497c4d8dff637
+    Author: shawn &lt;shawnbluce@gmail.com&gt;
+    Date:   Sun Nov 12 16:09:07 2017 +0800
+
+        完成XXX功能
+</code></pre><pre><code>这样一个commit就复制过来了。如果有冲突的话需要将冲突解决完才能合并。
+</code></pre></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2025-01-16</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/git/>Git</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/linux-software-recommend/ class=prev rel=prev title="用好 Linux 之：软件推荐"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>用好 Linux 之：软件推荐</a>
+<a href=/posts/python-iteration-yield/ class=next rel=next title="Python 中的迭代、生成和 yield 关键字">Python 中的迭代、生成和 yield 关键字<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2019 - 2025</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Shawn</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/contrib/auto-render.min.js></script><script type=text/javascript src=/lib/katex/contrib/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/contrib/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{gitalk:{admin:[""],clientID:"",clientSecret:"",id:"2017-11-12T07:24:00Z",owner:"",repo:"",title:"git 初步使用经验"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

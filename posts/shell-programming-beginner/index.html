@@ -1,0 +1,283 @@
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Shell编程入门笔记 新手教程 - Shawn's blog</title><meta name=Description content="分享我的知识、经验、生活与感悟"><meta property="og:url" content="https://blog.programmer.work/posts/shell-programming-beginner/"><meta property="og:site_name" content="Shawn's blog"><meta property="og:title" content="Shell编程入门笔记  新手教程"><meta property="og:description" content="0X00 hello,world 从一本 The C Programming Language 开始，我们就开始了几十年的’hello,world’之路。从那以后，机会所有的教程都从输出一句’hello,world’开始，这次也不例外。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2016-10-02T10:03:00+00:00"><meta property="article:modified_time" content="2025-01-17T01:56:02+00:00"><meta property="article:tag" content="Shell"><meta property="article:tag" content="Linux"><meta property="og:image" content="https://blog.programmer.work/logo.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.programmer.work/logo.png"><meta name=twitter:title content="Shell编程入门笔记  新手教程"><meta name=twitter:description content="0X00 hello,world 从一本 The C Programming Language 开始，我们就开始了几十年的’hello,world’之路。从那以后，机会所有的教程都从输出一句’hello,world’开始，这次也不例外。"><meta name=application-name content="Shawn's blog"><meta name=apple-mobile-web-app-title content="Shawn's blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.programmer.work/posts/shell-programming-beginner/><link rel=prev href=https://blog.programmer.work/posts/python-oop/><link rel=next href=https://blog.programmer.work/posts/openssh-key/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Shell编程入门笔记  新手教程","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.programmer.work\/posts\/shell-programming-beginner\/"},"genre":"posts","keywords":"Shell, Linux","wordcount":5449,"url":"https:\/\/blog.programmer.work\/posts\/shell-programming-beginner\/","datePublished":"2016-10-02T10:03:00+00:00","dateModified":"2025-01-17T01:56:02+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Shawn"},"description":""}</script></head><body data-header-desktop=auto data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="Shawn's blog">Shawn's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="Shawn's blog">Shawn's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Shell编程入门笔记 新手教程</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Shawn</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2016-10-02>2016-10-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 5449 字&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;预计阅读 11 分钟&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#运行脚本>运行脚本</a></li></ul><ul><li><a href=#只读变量>只读变量</a></li><li><a href=#删除变量>删除变量</a></li></ul><ul><li><a href=#字符串拼接>字符串拼接</a></li><li><a href=#获取长度>获取长度</a></li><li><a href=#部分截取>部分截取</a></li><li><a href=#查找位置>查找位置</a></li></ul><ul><li><a href=#获取数组的长度>获取数组的长度</a></li></ul><ul><li><a href=#bool布尔运算>bool布尔运算</a></li><li><a href=#逻辑运算>逻辑运算</a></li><li><a href=#字符串运算符>字符串运算符</a></li><li><a href=#运算符总结>运算符总结：</a><ul><li><a href=#算术运算符>算术运算符</a></li><li><a href=#关系运算符>关系运算符</a></li><li><a href=#布尔运算符>布尔运算符</a></li><li><a href=#逻辑运算符>逻辑运算符</a></li><li><a href=#字符串运算符-1>字符串运算符</a></li><li><a href=#文件测试运算符>文件测试运算符</a></li></ul></li></ul><ul><li><a href=#if-else>if-else</a></li><li><a href=#case>case</a></li></ul><ul><li><a href=#for>for</a></li><li><a href=#while>while</a></li><li><a href=#until>until</a></li></ul><ul><li><a href=#方案1>方案1</a></li><li><a href=#方案2>方案2</a></li></ul><ul><li><a href=#针对数字的测试>针对数字的测试</a></li><li><a href=#针对字符串的测试>针对字符串的测试</a></li><li><a href=#针对文件的测试>针对文件的测试</a></li></ul></nav></div></div><div class=content id=content><h1 id=0x00-helloworld>0X00 hello,world</h1><p>从一本 <em>The C Programming Language</em> 开始，我们就开始了几十年的&rsquo;hello,world&rsquo;之路。从那以后，机会所有的教程都从输出一句&rsquo;hello,world&rsquo;开始，这次也不例外。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span></code></pre></div><p>这里的第一行是注释，这个注释是很特殊的，他会告诉系统我们使用哪个解释器来运行下面的代码，这里我们用的是<code>/bin/bash</code>，当然Python的代码就要加上<code>#!/usr/bin/python</code>。
+第二行就是输出一句&rsquo;hello,world&rsquo;。<code>echo</code>就是输出语句。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#f92672>[</span>root@mail shell<span style=color:#f92672>]</span><span style=color:#75715e># chmod +x test.sh</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>[</span>root@mail shell<span style=color:#f92672>]</span><span style=color:#75715e># ./test.sh</span>
+</span></span><span style=display:flex><span>    hello,world
+</span></span></code></pre></div><h2 id=运行脚本>运行脚本</h2><p>执行之前要给脚本一个x权限，也就是执行权限。然后直接运行就行了。还有一种运行方式是<code>/bin/bash test.sh</code> 这样就是执行bash这个命令，将test.sh作为参数传进去，这样就可以不必写第一行的解释器声明。但是建议使用第一种方式执行脚本。</p><h1 id=0x01-使用变量>0X01 使用变量</h1><p>既然是编程，那一定会有变量。Shell编程里的变量和C、Java不同，我们不需要声明一个变量就能直接赋值，想下面这样。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    echo $str
+</span></span></code></pre></div><blockquote><p>这里需要注意一点，我们在写一些代码的时候，可能习惯了像这样使用操作符<code>str = "hello,world"</code>,也就是在操作符两端加上空格。但是在Shell编程里这样做是被禁止的，加了空格就会导致语法错误。所以Shell编程里的空格限制是很严格的。</p></blockquote><p>给一个新的变量赋值的时候我们可以直接写变量名，但是我们调用这个变量的时候要给变量名前面加上一个<code>$</code>符号，就像上面我写的那样。当然最好写成下面这种形式<code>${str}</code>因为这样会更加清晰的显示出变量名。</p><h2 id=只读变量>只读变量</h2><p>在Shell中有一种变量叫‘只读变量’，顾名思义，这种变量的值不会被改变，是固定的，我们这样来声明一个只读变量<code>readonly str</code>。只读变量之前也是可以随意更改的，只是在后面给它加上了一个只读属性而已，就像下面这样。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    readonly str
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hey,world&#34;</span>
+</span></span><span style=display:flex><span>    echo str
+</span></span></code></pre></div><p>就会报错：&rsquo;./hello.sh: line 5: str: readonly variable'</p><h2 id=删除变量>删除变量</h2><p>当我们不再使用一个变量的时候，可以把这个变量删除掉</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    unset str
+</span></span><span style=display:flex><span>    echo str
+</span></span></code></pre></div><p>这里什么都不会输出，因为并没有str这个变量。在Shell中输出一个并不存在的变量不会有提示。</p><h1 id=0x02-执行一行命令>0X02 执行一行命令</h1><p>既然是Shell编程，那么执行命令是最重要的事情了。所以在Shell编程里执行命令也是非常简单的，直接把要执行的命令写到这里就行了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    lscpu  <span style=color:#75715e>#这个命令是查看CPU相关信息的</span>
+</span></span></code></pre></div><h1 id=0x03-字符串>0X03 字符串</h1><p>字符串可以用单引号包起来，也可以用双引号包起来。单引号包起来的字符串会原封不动，会忽略转义字符和变量；双引号包起来的字符串会识别转义字符和变量。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    a<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello&#34;</span>
+</span></span><span style=display:flex><span>    str1<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;$a, world&#39;</span>  <span style=color:#75715e>#单引号字符串</span>
+</span></span><span style=display:flex><span>    str2<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$a<span style=color:#e6db74>, world&#34;</span>  <span style=color:#75715e>#双引号字符串</span>
+</span></span><span style=display:flex><span>    echo $str1
+</span></span><span style=display:flex><span>    echo $str2
+</span></span></code></pre></div><p>输出是这样的</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#f92672>[</span>root@mail shell<span style=color:#f92672>]</span><span style=color:#75715e># ./hello.sh</span>
+</span></span><span style=display:flex><span>    $a, wrld        <span style=color:#75715e>#可以看到这里没有识别到变量</span>
+</span></span><span style=display:flex><span>    hello, world    <span style=color:#75715e>#这里是识别到了变量的</span>
+</span></span></code></pre></div><h2 id=字符串拼接>字符串拼接</h2><p>Shell里拼接字符串的语法非常简陋，直接把两个字符串变量写在一起就行了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str1<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,&#34;</span>
+</span></span><span style=display:flex><span>    str2<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;world&#34;</span>
+</span></span><span style=display:flex><span>    echo $str1$str2  <span style=color:#75715e>#就这么简单粗暴</span>
+</span></span></code></pre></div><p>这样就可以输出一个&rsquo;hello,world&rsquo;了</p><h2 id=获取长度>获取长度</h2><p>在Shell编程里获取字符串长度不是通过一个len方法或者.length属性获取，而是通过下面这种并不直观的方式获取长度。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    str_len<span style=color:#f92672>=</span><span style=color:#e6db74>${#</span>str<span style=color:#e6db74>}</span>
+</span></span><span style=display:flex><span>    echo $str_len
+</span></span></code></pre></div><h2 id=部分截取>部分截取</h2><p>在Shell编程里我们可以截取一个字符串中的某一段，只需要两个参数，一个来指定开始位置，一个来指定结束位置。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>${</span>str:1:4<span style=color:#e6db74>}</span>
+</span></span></code></pre></div><p>这样可以截取str字符串从1到4的部分。是一个闭区间，从0开始计数。</p><h2 id=查找位置>查找位置</h2><p>我们经常会需要从一段字符串里找到某个字符出现的位置，可以通过下面的方法来查找。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    index<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>expr index <span style=color:#e6db74>&#34;</span>$str<span style=color:#e6db74>&#34;</span> lo<span style=color:#e6db74>`</span> <span style=color:#75715e>#查找l或者o这个字符首次出现在字符串的哪个位置</span>
+</span></span></code></pre></div><h1 id=0x04-搞个数组>0X04 搞个数组</h1><p>既然是编程，那么当然要有数组这个最基本的数据结构了。但是Shell只支持一维数组，并不支持二维和多维数组。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    array_str<span style=color:#f92672>=(</span><span style=color:#e6db74>&#34;hello&#34;</span> <span style=color:#e6db74>&#34;hey&#34;</span> <span style=color:#e6db74>&#34;nihao&#34;</span><span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>${</span>array_str[2]<span style=color:#e6db74>}</span> <span style=color:#75715e>#定义的时候用的是小括号，调用的时候是大括号</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>${</span>array_str[@]<span style=color:#e6db74>}</span> <span style=color:#75715e>#这里的一个@表示数组里的所有内容</span>
+</span></span></code></pre></div><h2 id=获取数组的长度>获取数组的长度</h2><p>获取数组长度的方式和获取字符串长度的方式差不太多。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    array_str<span style=color:#f92672>=(</span><span style=color:#e6db74>&#34;hello&#34;</span> <span style=color:#e6db74>&#34;hey&#34;</span> <span style=color:#e6db74>&#34;nihao&#34;</span><span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>    length<span style=color:#f92672>=</span><span style=color:#e6db74>${#</span>array_str[@]<span style=color:#e6db74>}</span> <span style=color:#75715e>#获取数组长度</span>
+</span></span><span style=display:flex><span>    echo $length
+</span></span><span style=display:flex><span>    length<span style=color:#f92672>=</span><span style=color:#e6db74>${#</span>array_str[2]<span style=color:#e6db74>}</span> <span style=color:#75715e>#获取数组中某个元素的长度</span>
+</span></span><span style=display:flex><span>    echo $length
+</span></span></code></pre></div><h1 id=0x05-别忘了注释>0X05 别忘了注释</h1><p>编程的时候给关键代码加上注释是一个非常好的习惯。Shell编程里只支持单行注释，不支持多行注释。单行注释是这样的</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    str<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;hello&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#str=&#34;world&#34;</span>
+</span></span><span style=display:flex><span>    echo $str
+</span></span></code></pre></div><p>这样输出的结果是&rsquo;hello&rsquo;而不是&rsquo;world&rsquo;因为哪一行被注释掉了，并不会执行。
+那么我们需要多行注释怎么办呢？其实也不是不可以，我们可以用一个诡异的方式来实现多行注释：把需要注释掉的代码改写成一个函数，只要我们在后面不去调用这个函数，那不就和被注释掉是一样的效果了嘛。关于函数的问题下面会说的。</p><h1 id=0x06-shell参数>0X06 Shell参数</h1><p>我们的Shell脚本经常是需要传入参数进来的，那么应该怎么传进来呢？我们有下面一段代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;1. </span>$1<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;2. </span>$2<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;3. </span>$3<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;all is </span>$#<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;pid is </span>$$<span style=color:#e6db74>&#34;</span>
+</span></span></code></pre></div><p>我们运行一下这段代码，并传入两个参数</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#f92672>[</span>root@mail shell<span style=color:#f92672>]</span><span style=color:#75715e># ./hello.sh hello world</span>
+</span></span><span style=display:flex><span>    1. hello
+</span></span><span style=display:flex><span>    2. world
+</span></span><span style=display:flex><span>    3.
+</span></span><span style=display:flex><span>    all is <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>    pid is <span style=color:#ae81ff>22017</span>
+</span></span></code></pre></div><blockquote><p>$1 $2 $3 这些参数表示：传入的第几个参数
+$# 表示传入的参数总数
+$$ 表示这个脚本运行的PID （进程号）</p></blockquote><h1 id=0x07-运算符>0X07 运算符</h1><p>运算符示例</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    val<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>expr <span style=color:#ae81ff>1</span> + 1<span style=color:#e6db74>`</span> <span style=color:#75715e>#注意空格问题</span>
+</span></span><span style=display:flex><span>    echo $val
+</span></span></code></pre></div><p>最常见的 <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>=</code> <code>==</code> 全都有的，不过注意的一点是，运算符两边一定要加空格，一定。</p><h2 id=bool布尔运算>bool布尔运算</h2><p><code>!</code> 非
+<code>-o</code> 或
+<code>-a</code> 且
+-eq 是‘判断是否相等，相等则true’</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    a<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    b<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> $a -eq $b -o $a <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;ok&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;not ok&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>fi</span>
+</span></span></code></pre></div><p>这段代码输出的是&rsquo;ok&rsquo;因为虽然$a和$b并不相等，但是后面的<code>-o</code>表示或，或后面的<code>$a == 1</code>成立了，所以还是输出了ok</p><h2 id=逻辑运算>逻辑运算</h2><p><code>&&</code> and
+<code>||</code> or
+下面这段Demo代码和上面的效果几乎是一样的</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    a<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    b<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#f92672>[[</span> $a -eq $b <span style=color:#f92672>||</span> $a <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>]]</span> <span style=color:#75715e>#这里比上面多了一组中括号</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;ok&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;not ok&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>fi</span>
+</span></span></code></pre></div><h2 id=字符串运算符>字符串运算符</h2><p><code>=</code> 这里不是赋值，是判断两个字符串是否相等
+<code>!=</code> 这里是判断不相等
+<code>-n</code> 检测字符串长度，不为0则返回true
+<code>-z</code> 检测字符串长度，为0则返回true
+<code>str</code> 检测字符串是否为空，这里的str表示一切字符串或者变量</p><h2 id=运算符总结>运算符总结：</h2><h3 id=算术运算符>算术运算符</h3><pre tabindex=0><code>    运算符	说明	                                        举例
+    +	     加法	                                    `expr $a + $b` 结果为 30。
+    -	     减法	                                    `expr $a - $b` 结果为 -10。
+    *	     乘法	                                    `expr $a \* $b` 结果为  200。
+    /	     除法	                                    `expr $b / $a` 结果为 2。
+    %	     取余	                                    `expr $b % $a` 结果为 0。
+    =	     赋值	a=$b 将把变量 b 的值赋给 a。
+    ==	     相等。用于比较两个数字，相同则返回 true。	[ $a == $b ] 返回 false。
+    !=	     不相等。用于比较两个数字，不相同则返回 true。[ $a != $b ] 返回 true。
+</code></pre><h3 id=关系运算符>关系运算符</h3><pre tabindex=0><code>    运算符	说明	                                      举例
+    -eq	   检测两个数是否相等，相等返回 true。	 [ $a -eq $b ] 返回 false。
+    -ne	   检测两个数是否相等，不相等返回 true。[ $a -ne $b ] 返回 true。
+    -gt	   检测左边的数是否大于右边的，如果是，则返回 true。[ $a -gt $b ] 返回 false。
+    -lt	   检测左边的数是否小于右边的，如果是，则返回 true。[ $a -lt $b ] 返回 true。
+    -ge	   检测左边的数是否大等于右边的，如果是，则返回 true。[ $a -ge $b ] 返回 false。
+    -le	   检测左边的数是否小于等于右边的，如果是，则返回 true。[ $a -le $b ] 返回 true。
+</code></pre><h3 id=布尔运算符>布尔运算符</h3><pre tabindex=0><code>    运算符	说明	                                             举例
+    !	     非运算，表达式为 true 则返回 false，否则返回 true。[ ! false ] 返回 true。
+    -o	    或运算，有一个表达式为 true 则返回 true。          [ $a -lt 20 -o $b -gt 100 ] 返回 true。
+    -a	    与运算，两个表达式都为 true 才返回 true。	         [ $a -lt 20 -a $b -gt 100 ] 返回 false。
+</code></pre><h3 id=逻辑运算符>逻辑运算符</h3><pre tabindex=0><code>    运算符	说明	      举例
+    &amp;&amp;	    逻辑的 AND	[[ $a -lt 100 &amp;&amp; $b -gt 100 ]] 返回 false
+    ||	    逻辑的 OR	 [[ $a -lt 100 || $b -gt 100 ]] 返回 true
+</code></pre><h3 id=字符串运算符-1>字符串运算符</h3><pre tabindex=0><code>    运算符	说明	                                   举例
+    =	     检测两个字符串是否相等，相等返回 true。  [ $a = $b ] 返回 false。
+    !=	    检测两个字符串是否相等，不相等返回 true。[ $a != $b ] 返回 true。
+    -z	    检测字符串长度是否为0，为0返回 true。    [ -z $a ] 返回 false。
+    -n	    检测字符串长度是否为0，不为0返回 true。  [ -n $a ] 返回 true。
+    str   	检测字符串是否为空，不为空返回 true。	   [ $a ] 返回 true。
+</code></pre><h3 id=文件测试运算符>文件测试运算符</h3><pre tabindex=0><code>    操作符	 说明	                                             举例
+    -b file	检测文件是否是块设备文件，如果是，则返回 true。	   [ -b $file ] 返回 false。
+    -c file	检测文件是否是字符设备文件，如果是，则返回 true。	 [ -c $file ] 返回 false。
+    -d file	检测文件是否是目录，如果是，则返回 true。	         [ -d $file ] 返回 false。
+    -f file	检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。[ -f $file ] 返回 true。
+    -g file	检测文件是否设置了 SGID 位，如果是，则返回 true。	 [ -g $file ] 返回 false。
+    -k file	检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true。[ -k $file ] 返回 false。
+    -p file	检测文件是否是具名管道，如果是，则返回 true。	     [ -p $file ] 返回 false。
+    -u file	检测文件是否设置了 SUID 位，如果是，则返回 true。	 [ -u $file ] 返回 false。
+    -r file	检测文件是否可读，如果是，则返回 true。	           [ -r $file ] 返回 true。
+    -w file	检测文件是否可写，如果是，则返回 true。	           [ -w $file ] 返回 true。
+    -x file	检测文件是否可执行，如果是，则返回 true。	         [ -x $file ] 返回 true。
+    -s file	检测文件是否为空（文件大小是否大于0），不为空返回 true。[ -s $file ] 返回 true。
+    -e file	检测文件（包括目录）是否存在，如果是，则返回 true。[ -e $file ] 返回 true。
+</code></pre><h1 id=0x08-条件判断语句>0X08 条件判断语句</h1><h2 id=if-else>if-else</h2><p>Shell 编程里的if语句和平时接触的编程语言有点区别</p><ol><li>if后面要加一个中括号，中括号之间是条件，而且中括号前后都要有一个空格；</li><li>if调节写好之后要写一个then表示接下来执行什么</li><li>then结束之后如果没有别的条件了的话就接一个if的逆字符串fi来表示if语句结束</li><li>如果还有其他条件那就用elif，然后也是一个中括号里写条件，then后面接要执行的语句</li><li>最后的else可写可不写，表示上面的条件没达成的话要执行的语句。</li><li>if语句的最后一定是一个fi，表示if语句的结束</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> $1 <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;1&#34;</span> <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;input is 1&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>elif</span> <span style=color:#f92672>[</span> $1 <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;input is 2&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>elif</span> <span style=color:#f92672>[</span> $1 <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;3&#34;</span> <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;input is 3&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;input is big&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>fi</span>
+</span></span></code></pre></div><p>运行起来是这样的，比如我运行的参数是<code>./hello.sh 2 </code>，那么就会输出'2'</p><h2 id=case>case</h2><p>跟if一起的一般还有一个switch-case语句，但是Shell里没有switch这个关键字，但是功能是一样的。<code>case $1 in</code>表示的是$1这个变量去对比下面的选项。下面的每一个选项都要加一个回括号，然后写上要执行的语句，再加上两个连续的分号，表示这一段结束，最后的<code>* )</code>表示匹配其他全部没有匹配到的可能。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>case</span> $1 in
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;1&#34;</span> <span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>            echo <span style=color:#e6db74>&#34;word is 1&#34;</span>
+</span></span><span style=display:flex><span>            ;;
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>            echo <span style=color:#e6db74>&#34;word is 2&#34;</span>
+</span></span><span style=display:flex><span>            ;;
+</span></span><span style=display:flex><span>        * <span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>            echo <span style=color:#e6db74>&#34;word is other&#34;</span>
+</span></span><span style=display:flex><span>            ;;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>esac</span>
+</span></span></code></pre></div><h1 id=0x09-几种循环>0X09 几种循环</h1><h2 id=for>for</h2><p>在Shell编程里有我们非常熟悉的for循环，但是语法个其他编程语言还是有一定的出入。
+在Shell里用for循环的话，要给每一段循环体加上<code>do...done</code>，表示这之间的代码是循环体，注意for的一行后面没有冒号，像Python的话就会有个冒号。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> a in <span style=color:#e6db74>&#34;hello,wrld&#34;</span>	<span style=color:#75715e>#循环输出字符串中的每个字符</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>        echo $a
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>done</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> a in <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>2</span> <span style=color:#ae81ff>3</span> <span style=color:#ae81ff>4</span> <span style=color:#ae81ff>5</span>      <span style=color:#75715e>#循环输出列表中的每一个数据</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>        echo $a
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>done</span>
+</span></span></code></pre></div><p><code>in</code>关键字前面是一个a后面是一堆数据，我们可以理解成把a从后面的一堆数据上走一遍，也就是说相当于Python代码中这样</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i in <span style=color:#f92672>[</span><span style=color:#e6db74>&#39;123&#39;</span>, <span style=color:#e6db74>&#39;234&#39;</span>, <span style=color:#e6db74>&#39;345&#39;</span>, <span style=color:#e6db74>&#39;456&#39;</span><span style=color:#f92672>]</span>:
+</span></span><span style=display:flex><span>    	print i
+</span></span></code></pre></div><h2 id=while>while</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> <span style=color:#f92672>[[</span> $1 <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#f92672>]]</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>done</span>
+</span></span></code></pre></div><p>这段代码如果我是这样运行<code>./hello.sh 2</code> 那么因为<code>$1</code>是2所以就会进入死循环，否则就什么都不会输出。
+while循环就是说，如果while后面的表达式成立，那么就执行一次循环。因为我这段代码没有改变$1的值，所以才会出现要么无输出要么死循环的情况。我们改成下面这种情况就好了，这意思是当我运行这个脚本，就执行10次。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    a<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> <span style=color:#f92672>[[</span> $a -lt <span style=color:#ae81ff>10</span> <span style=color:#f92672>]]</span>  <span style=color:#75715e>#这里的 -lt 的意思是 &#39;当左边的值小于右边的值就返回true&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>        a<span style=color:#f92672>=</span>$a+1
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>done</span>
+</span></span></code></pre></div><h2 id=until>until</h2><p>until循环就相当于C和Java中的do-while循环，表示一个‘直到’的效果。下面就是说，执行循环体里的内容，一直到$a的变量大于右边的数值的时候才停止，所以才输出了11次&rsquo;hello,world'</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    a<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>until</span> <span style=color:#f92672>[[</span> $a -gt <span style=color:#ae81ff>10</span> <span style=color:#f92672>]]</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>        a<span style=color:#f92672>=</span>$a+1
+</span></span><span style=display:flex><span>        echo <span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>done</span>
+</span></span></code></pre></div><h1 id=0x0a-写个函数>0X0A 写个函数</h1><p>Shell里的函数有两种定义方式，效果是一样的。</p><h2 id=方案1>方案1</h2><p>方案一是直接写函数名，后面接一个括号，然后大括号里写上函数体就好了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    myFunction<span style=color:#f92672>(){</span>
+</span></span><span style=display:flex><span>    	echo <span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span></code></pre></div><h2 id=方案2>方案2</h2><p>方案二是<code>function name()</code>这样定义，先声明这是一个函数，然后写上函数名，最后也是一对小括号，大括号里写函数体。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#66d9ef>function</span> name<span style=color:#f92672>(){</span>
+</span></span><span style=display:flex><span>    	echo <span style=color:#e6db74>&#34;hello,world&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>Shell的函数也是有返回值的，不过返回值的类型很少不像Java中可以返回数字字符串甚至返回对象，在Shell中只能返回数字，还只能是0~255的。变量只有8个二进制位，就算你返回了一个255以上的数字也会返回出溢出之后的数字的。返回值是不可以赋值的，想使用函数的返回值的话要用<code>$?</code>，这个符号代表上一次调用的函数的返回值。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> my<span style=color:#f92672>(){</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> $1
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    my <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    echo $?
+</span></span><span style=display:flex><span>    my <span style=color:#ae81ff>10</span>
+</span></span><span style=display:flex><span>    echo $?
+</span></span><span style=display:flex><span>    my <span style=color:#ae81ff>256</span>
+</span></span><span style=display:flex><span>    echo $?
+</span></span><span style=display:flex><span>    my -2
+</span></span><span style=display:flex><span>    echo $?
+</span></span><span style=display:flex><span>    my 123.123
+</span></span><span style=display:flex><span>    echo $?
+</span></span></code></pre></div><p>这里前两个可以正常输出，256因为溢出了所以输出不正常，负数和浮点数不支持。</p><h1 id=0x0b-test测试>0X0B test测试</h1><p>test测试可以测试各种数据，包括数字、字符串、文件。使用方法如下</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> test -e /etc/passwd <span style=color:#75715e>#判断是否存在这个文件</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>    	echo <span style=color:#e6db74>&#34;ok&#34;</span>  <span style=color:#75715e>#存在则输出ok</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>    	echo <span style=color:#e6db74>&#34;no&#34;</span>  <span style=color:#75715e>#不存在则输出no</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>fi</span>
+</span></span></code></pre></div><h2 id=针对数字的测试>针对数字的测试</h2><p>-eq 等于则为真
+-ne 不等于则为真
+-gt 大于则为真
+-ge 大于等于则为真
+-lt 小于则为真
+-le 小于等于则为真</p><h2 id=针对字符串的测试>针对字符串的测试</h2><p>= 等于则为真
+!= 不相等则为真
+-z 字符串 字符串的长度为零则为真
+-n 字符串 字符串的长度不为零则为真</p><h2 id=针对文件的测试>针对文件的测试</h2><p>-e 文件名 如果文件存在则为真
+-r 文件名 如果文件存在且可读则为真
+-w 文件名 如果文件存在且可写则为真
+-x 文件名 如果文件存在且可执行则为真
+-s 文件名 如果文件存在且至少有一个字符则为真
+-d 文件名 如果文件存在且为目录则为真
+-f 文件名 如果文件存在且为普通文件则为真
+-c 文件名 如果文件存在且为字符型特殊文件则为真
+-b 文件名 如果文件存在且为块特殊文件则为真</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2025-01-17</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/shell/>Shell</a>,&nbsp;<a href=/tags/linux/>Linux</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/python-oop/ class=prev rel=prev title="Python 之面向对象"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Python 之面向对象</a>
+<a href=/posts/openssh-key/ class=next rel=next title="OpenSSH 配置 免密码登陆 公钥和私钥 私钥签名">OpenSSH 配置 免密码登陆 公钥和私钥 私钥签名<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2019 - 2025</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Shawn</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><script type=text/javascript src=/lib/gitalk/gitalk.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/contrib/auto-render.min.js></script><script type=text/javascript src=/lib/katex/contrib/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/contrib/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{gitalk:{admin:[""],clientID:"",clientSecret:"",id:"2016-10-02T10:03:00Z",owner:"",repo:"",title:"Shell编程入门笔记  新手教程"}},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

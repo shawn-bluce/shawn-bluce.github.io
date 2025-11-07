@@ -1,0 +1,1311 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - Shawn's blog</title><link>https://blog.programmer.work/posts/</link><description>所有文章 | Shawn's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Fri, 20 Jun 2025 15:45:27 +0000</lastBuildDate><atom:link href="https://blog.programmer.work/posts/" rel="self" type="application/rss+xml"/><item><title>编写 Python 程序的 10 个典型错误</title><link>https://blog.programmer.work/posts/python-10-errors/</link><pubDate>Fri, 20 Jun 2025 15:45:27 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/python-10-errors/</guid><description><![CDATA[<h1 id="0x00-开头">0X00 开头</h1>
+<p>最近买了本书，叫做《100个Go语言典型错误》，发现这样的总结很有意思。决定自己也写一个，不过以我的水平写本书还是有点离谱了，但是写一篇博客还是没什么问题的，所以就有了这篇文章。</p>
+<h1 id="0x01-函数默认值传递空列表">0X01 函数默认值传递空列表</h1>
+<p>这是一个典型错误，很多很多的 Python 程序员都犯过这个错误。一般在定义一个函数且给它设置默认值的时候我们都会写成 <code>def foo(a=0, b=&quot;&quot;, c=None)</code> 这个样子，这种写法是完全没有问题的。但是有时候也会写成：<code>def foo(d=[])</code>，这就完犊子了～</p>
+<p>我们看下面这段代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(a<span style="color:#f92672">=</span>[]):
+</span></span><span style="display:flex;"><span>        a<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#39;x&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(a)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>        foo()
+</span></span></code></pre></div><p>你以为会输出 10 个 <code>['x']</code>？那就大错特错了，真正的输出是这样的：</p>
+<pre tabindex="0"><code>    [&#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+    [&#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;, &#39;x&#39;]
+</code></pre><p>为什么呢？因为函数在定义的时候就将空列表初始化了，并且记录下了引用，以后每次都会对同一个列表进行操作。另外不只是列表，字典作为默认值也会有这个问题的。</p>
+<h1 id="0x02-对闭包的无意识理解">0X02 对闭包的无意识理解</h1>
+<p>很多人对闭包的理解就是粗浅的「函数里定义函数」，当然这是没错的，但是缺少了一些东西。如果只是函数里定义函数的话，下面这段代码会发生什么？</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>():
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bar</span>():
+</span></span><span style="display:flex;"><span>            print(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> bar
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    foo()()
+</span></span></code></pre></div><p>没错，这段代码是会正确输出 <code>2</code> 的，因为闭包还有一个特性就是内部函数能访问外部函数中的变量，即使外部函数已经运行完毕了。</p>
+<h1 id="0x03-使用不合适的变量名">0X03 使用不合适的变量名</h1>
+<p>这一点虽然很简单，但确实很容易出现，比如用 <code>list</code> / <code>dict</code> / <code>str</code> 做变量名。因为 Python 中这 3 个名字是非常非常常用的<code>type/function</code>，所以万万不可用。</p>
+<h1 id="0x04-字符串拼接的性能问题">0X04 字符串拼接的性能问题</h1>
+<p>少量字符串拼接使用 <code>+</code> 当然没有任何问题，但是如果量很大的话就不建议使用 <code>+</code> 了，使用 <code>join</code> 会快非常多。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    COUNT <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 使用 + 的版本</span>
+</span></span><span style="display:flex;"><span>    start_time <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    result1 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(COUNT):
+</span></span><span style="display:flex;"><span>        result1 <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;x&#39;</span>
+</span></span><span style="display:flex;"><span>    end_time <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    plus_time <span style="color:#f92672">=</span> end_time <span style="color:#f92672">-</span> start_time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 使用 join 的版本</span>
+</span></span><span style="display:flex;"><span>    start_time <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    char_list <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(COUNT):
+</span></span><span style="display:flex;"><span>        char_list<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#39;x&#39;</span>)
+</span></span><span style="display:flex;"><span>    result2 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(char_list)
+</span></span><span style="display:flex;"><span>    end_time <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>    join_time <span style="color:#f92672">=</span> end_time <span style="color:#f92672">-</span> start_time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;+ 方法耗时: </span><span style="color:#e6db74">{</span>plus_time<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">秒&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;join 方法耗时: </span><span style="color:#e6db74">{</span>join_time<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">秒&#34;</span>)
+</span></span></code></pre></div><p>在我的电脑上运行是这样的：</p>
+<pre tabindex="0"><code>    + 方法耗时: 1.0472秒
+    join 方法耗时: 0.5272秒
+</code></pre><h1 id="0x05-错误使用字符串的-strip-方法">0X05 错误使用字符串的 strip 方法</h1>
+<p>学过 Python 的肯定都用过字符串的 <code>strip</code> 方法或者它衍生出来的 <code>lstrip</code> 和 <code>rstrip</code>，比如我们会用 <code>'hello'.rstrip('o')</code>来去掉字符串右侧的 <code>o</code>。</p>
+<p>也有些人会用下面这种方法去掉额外的字符：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    phone_num <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+8613588888888&#34;</span>
+</span></span><span style="display:flex;"><span>    phone_num <span style="color:#f92672">=</span> phone_num<span style="color:#f92672">.</span>strip(<span style="color:#e6db74">&#34;+86&#34;</span>)
+</span></span></code></pre></div><p>因为 <code>strip('o')</code> 可以去掉 <code>o</code>，就自然而然以为 <code>strip('+86')</code> 就是去掉 <code>+86</code> 了。但你实际运行起来就会发现 <code>phone_num</code> 就只剩下 <code>135</code> 了。因为 <code>strip('+86')</code>的意思并不是去掉两侧的 <code>+86</code> 而是去掉两侧的 <code>+</code>/<code>8</code>/<code>6</code>，凑巧这个手机号后面全是 <code>8</code> 所以就全没了 🤷‍♂️</p>
+<h1 id="0x06-认为-python-的多线程没有用">0X06 认为 Python 的多线程没有用</h1>
+<p>这是一个典型谣言了，很多人一旦听说 Python 有 GIL 之后就大张旗鼓的说：“Python 的多线程屁用没有”。但实际上真的是这样吗？并不是。</p>
+<p>Python 的多线程如果用在 CPU 密集型的计算任务上，那确实没什么用；但是如果用在 IO 密集型的任务上，那和真正意义上的多线程是没有显著差别的。所以严谨来说 Python 确实没有真正意义上的多线程，但也不能说 Python 的多线程没有用。</p>
+<h1 id="0x07-过分的一行流">0X07 过分的一行流</h1>
+<p>有些 Python 程序员推崇精简代码，使用各种列表生成式、字典生成式之类的，这当然是没问题，精简又好看，而且这是非常 Pythonic 的写法。但是有些人有些过分，强行把多行代码挤成一行，或者强行使用 Python 的高级语法。</p>
+<p>比如说 <code>a = {v: k for k, v in my_dic.items()}</code> 这种代码，其实挺好的，但是有些人会写这种东西：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    result <span style="color:#f92672">=</span> {<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;item_</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>: [x<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> [y<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)] <span style="color:#66d9ef">if</span> x <span style="color:#f92672">in</span> [z <span style="color:#66d9ef">for</span> z <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>) <span style="color:#66d9ef">if</span> z <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>]] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)}
+</span></span></code></pre></div><p>强吗？强，对语言没点理解是写不出来能跑的这种代码的。但是好吗？codereview 的时候可能会被同时打死。</p>
+<h1 id="0x08-手撸-csv-文件">0X08 手撸 csv 文件</h1>
+<p>是的没错，都 2025 年了还有人在手撸 csv 文件。赶紧了解一下 <code>csv</code> 库的用法吧，不要再去折磨那个逗号和转义符了。</p>
+<p>写入：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 学生信息数据</span>
+</span></span><span style="display:flex;"><span>    students <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>        [<span style="color:#e6db74">&#39;姓名&#39;</span>, <span style="color:#e6db74">&#39;年龄&#39;</span>, <span style="color:#e6db74">&#39;班级&#39;</span>, <span style="color:#e6db74">&#39;成绩&#39;</span>],
+</span></span><span style="display:flex;"><span>        [<span style="color:#e6db74">&#39;张三&#39;</span>, <span style="color:#ae81ff">18</span>, <span style="color:#e6db74">&#39;高一(1)班&#39;</span>, <span style="color:#ae81ff">85</span>],
+</span></span><span style="display:flex;"><span>        [<span style="color:#e6db74">&#39;李四&#39;</span>, <span style="color:#ae81ff">17</span>, <span style="color:#e6db74">&#39;高一(2)班&#39;</span>, <span style="color:#ae81ff">92</span>],
+</span></span><span style="display:flex;"><span>        [<span style="color:#e6db74">&#39;王五&#39;</span>, <span style="color:#ae81ff">18</span>, <span style="color:#e6db74">&#39;高一(1)班&#39;</span>, <span style="color:#ae81ff">78</span>],
+</span></span><span style="display:flex;"><span>        [<span style="color:#e6db74">&#39;赵六&#39;</span>, <span style="color:#ae81ff">17</span>, <span style="color:#e6db74">&#39;高一(3)班&#39;</span>, <span style="color:#ae81ff">88</span>]
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 写入CSV文件</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;students.csv&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>, newline<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>        writer <span style="color:#f92672">=</span> csv<span style="color:#f92672">.</span>writer(file)
+</span></span><span style="display:flex;"><span>        writer<span style="color:#f92672">.</span>writerows(students)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;学生信息已写入 students.csv 文件&#34;</span>)
+</span></span></code></pre></div><p>读取：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 读取CSV文件</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;students.csv&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>        reader <span style="color:#f92672">=</span> csv<span style="color:#f92672">.</span>reader(file)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;学生信息列表：&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> reader:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>row[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">&lt;8</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{</span>row[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">&lt;6</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{</span>row[<span style="color:#ae81ff">2</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">&lt;12</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{</span>row[<span style="color:#ae81ff">3</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 也可以使用字典方式读取</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">使用字典方式读取：&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;students.csv&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>        reader <span style="color:#f92672">=</span> csv<span style="color:#f92672">.</span>DictReader(file)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> reader:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;姓名: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;姓名&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, 年龄: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;年龄&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, 班级: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;班级&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, 成绩: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;成绩&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h1 id="0x09-文件硬读写">0X09 文件硬读写</h1>
+<p>我们有时候会用 <code>open('xxx', 'r').read()</code> 直接把一个文件读到内存里，如果文件比较小确实是可以这样干的，读到内存里直接当字符串处理就好。但是如果文件很大，就不要一直这么搞了，你 1G 的日志文件还通过这种方式读取，服务都要被卡死了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;xxx.log&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> f:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><p>这样我们的 f 就是一个类似生成器的东西了，每次只读一行，就不会再被这么初级的 IO 问题限制性能了。</p>
+<h1 id="0x0a-认为-python-字典是无序的">0X0A 认为 Python 字典是无序的</h1>
+<p>是的兄弟，2025年了，Python 的字典早就不是无序的了，甚至是 7 年前的 Python 3.7 发布的时候 dict 就不是无序的了。</p>
+<p><a href="https://docs.python.org/3/library/stdtypes.html#dict" target="_blank" rel="noopener noreffer ">Python 官方文档</a>贴在这里：</p>
+<blockquote>
+<p>Changed in version 3.7: Dictionary order is guaranteed to be insertion order. This behavior was an implementation detail of CPython from 3.6.</p>
+</blockquote>
+]]></description></item><item><title>一种简单的 Linux 内存不足抢救方案</title><link>https://blog.programmer.work/posts/simple-linux-memory-rescue/</link><pubDate>Tue, 15 Apr 2025 13:58:28 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/simple-linux-memory-rescue/</guid><description><![CDATA[<h1 id="0x00-正文">0X00 正文</h1>
+<p>前几天尝试用自己的服务器通过 docker 启一个新服务，没注意这个服务需要的内存比较大（我的服务器只有 2G 内存），导致 <code>docker compose up -d</code> 命令敲下去不到一分钟服务器直接卡死了&hellip;&hellip;</p>
+<p>当时还没意识到是内存不足导致的问题，以为是 CPU 卡住了，毕竟一般情况下服务刚启动的时候确实会占用比较多的资源。所以直接摆烂，等它一会儿好了。半个小时之后发现服务器还是卡死状态，ssh 也上不去，所以干脆去云平台重启。发现云平台的监控上已经看不到CPU/内存的占用率了，意味着装在服务器里的 agent 也已经完蛋了。而且，重启服务器也没有什么效果。</p>
+<p>好在云平台可以通过类似 IPMI 的方式直接接入到服务器的 console，所以可以通过 console 登陆。虽然每一步的操作都非常非常卡，敲一串命令要等很久才能回显。使用 <code>free -h</code> 检查了内存占用情况之后发现确实是内存瓶颈，并且系统没有配置交换分区，所以才出了下面的这个骚招：</p>
+<ol>
+<li>使用 <code>free -h</code> 确认当前内存使用情况，发现内存爆满且没有交换分区</li>
+<li>意识到 Linux 所谓的「万物皆文件」，决定在没有空闲分区的情况下生造一个交换分区出来</li>
+<li>使用 <code>dd if=/dev/zero of=SWAP_FILE bs=4k count=$((256*1024*4))</code> 创建一个 4G 大小的块文件</li>
+<li>使用 <code>mkswap SWAP_FILE</code> 将其格式化成 swap 分区</li>
+<li>使用 <code>swapon SWAP_FILE</code> 挂载交换分区</li>
+<li>系统活过来了</li>
+</ol>
+<blockquote>
+<p>⚠️ 注意：使用 <code>swapon</code> 只是临时挂载，重启会失效，所以需要通过常规手段增加内存（至少要增加交换分区）</p>
+</blockquote>
+<p><code>dd if=/dev/zero of=SWAP_FILE bs=4k count=$((256*1024*4))</code> 是什么意思？</p>
+<ol>
+<li><code>dd</code> 命令是一个硬盘层面的拷贝命令</li>
+<li><code>if=/dev/zero of=SWAP_FILE</code> 指的是 <code>input file</code> 是 <code>/dev/zero</code>（这是一个会源源不断输出二进制 0 的设备），<code>output file</code> 是 <code>SWAP_FILE</code></li>
+<li><code>bs=4k count=$((256*1024*1024))</code> 指的是 <code>block size</code> 为 <code>4k</code>，<code>count</code> 为 <code>256 * 1024 * 1024</code>，乘到一起就是 4G</li>
+</ol>
+]]></description></item><item><title>苹果里的虫子：macOS 的几个臭毛病</title><link>https://blog.programmer.work/posts/macos-bad-apple/</link><pubDate>Wed, 05 Mar 2025 15:30:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/macos-bad-apple/</guid><description><![CDATA[<h1 id="0x00-叠甲">0X00 叠甲</h1>
+<p>开局先叠甲，我到现在为止用过一台 Mac mini，一台 Intel 的 MacBook Pro 和一台 M2 Max 的 MacBook Pro，自费购买 MacBook 花费超过 3W 元，累计使用超过 5 年，是个不折不扣的 macOS 用户。我认可很多 MacBook 和 macOS 的设计理念，如果我现在只能保留一台电脑，那极大可能我会选择一台 MacBook Pro。</p>
+<p>😡 好了现在开始输出 😡</p>
+<h1 id="0x01-难用的包管理器">0X01 难用的包管理器</h1>
+<p>首先就是这个 <code>homebrew</code>，我在买 MacBook 之前看攻略的时候就看到很多人在吹 <code>homebrew</code> 有多好用，有多厉害，有多方便。他们的说辞一般是：一个命令就可以更新系统里很多的组件、一个命令就可以安装好开发环境、一个命令就可以XXXX。当时我作为一个 Archlinux 用户是有些懵逼的，但是看在这么多人吹捧的份上我也就相信了，心想着「这么多人都这样推荐，应该确实会很好用，如果能像 <code>pacman</code> 或者 <code>apt</code> 或者 <code>dnf</code> 这样的话那确实是很好的」。</p>
+<p>结果呢？这个 <code>homebrew</code> 不光是个第三方工具，而且镜像源的数量也显著少于各个 Linux 发型版本。好不容易把它配置好之后，发现 <code>brew update/upgrade</code> 速度都明显比 <code>pacman/apt/dnf</code> 慢，而且仓库里的工具也显著少于常见的 Linux 发型版本。</p>
+<p>我自己的体验（结合我自己的开发工作和环境）来说，Archlinux 使用的 <code>pacman</code> 属于独领风骚的， <code>apt</code> 和 <code>dnf</code> 则处在第二梯队，属于好用的，<code>brew</code> 则处于第三梯队，属于能用的。但确实不至于被拿出来吹。</p>
+<blockquote>
+<p>如果所有吹 <code>homebrew</code> 的人都是在拿 macOS 和 Windows 对比的话，那我无话可说。<code>homebrew</code> 虽然不怎么好用，但是确实比 Windows 上没有包管理器来的更好。</p>
+</blockquote>
+<h1 id="0x02-不区分大小写的文件系统">0X02 不区分大小写的文件系统</h1>
+<p>下面这段是我在 Linux 中的实验结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ mkdir test_dir
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_WORLD
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/HELLO_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/HELLO_WORLD
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ ls -l test_dir/
+</span></span><span style="display:flex;"><span>    total <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    -rw-r--r-- <span style="color:#ae81ff">1</span> shawn shawn <span style="color:#ae81ff">0</span> Mar  <span style="color:#ae81ff">6</span> 14:27 HELLO_WORLD
+</span></span><span style="display:flex;"><span>    -rw-r--r-- <span style="color:#ae81ff">1</span> shawn shawn <span style="color:#ae81ff">0</span> Mar  <span style="color:#ae81ff">6</span> 14:27 HELLO_world
+</span></span><span style="display:flex;"><span>    -rw-r--r-- <span style="color:#ae81ff">1</span> shawn shawn <span style="color:#ae81ff">0</span> Mar  <span style="color:#ae81ff">6</span> 14:27 hello_WORLD
+</span></span><span style="display:flex;"><span>    -rw-r--r-- <span style="color:#ae81ff">1</span> shawn shawn <span style="color:#ae81ff">0</span> Mar  <span style="color:#ae81ff">6</span> 14:27 hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$
+</span></span></code></pre></div><p>再下面这段是我在 macOS 中实验的结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ mkdir test_dir
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/hello_WORLD
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/HELLO_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/HELLO_WORLD
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ ls -l test_dir/
+</span></span><span style="display:flex;"><span>    .rw-r--r-- <span style="color:#ae81ff">0</span> shawn  <span style="color:#ae81ff">6</span> Mar 14:28 hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $
+</span></span></code></pre></div><p>是不是很惊喜，是不是很意外？嘴上说自己是 Unix，但是真正 Unix 会使用的 ext4 和 XFS 甚至是 ZFS 等文件系统都是严格区分大小写的（ZFS 可配置，默认区分大小写），结果到了 macOS 上就不分了。也就是说如果你在 Linux 上将 <code>hello.py</code> 和 <code>HELLO.py</code> 两个文件打包，再到 macOS 中解压，就会原地消失一个 🫠</p>
+<p>👇下面给大家表演一个「文件消失术」</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ ssh shawn@192.168.81.151
+</span></span><span style="display:flex;"><span>    Last login: Wed Mar  <span style="color:#ae81ff">5</span> 14:30:49 <span style="color:#ae81ff">2025</span> from 192.168.81.1
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ mkdir test_dir
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_WORLD
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/HELLO_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/HELLO_WORLD
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ tar zcvf test_dir.tgz test_dir/
+</span></span><span style="display:flex;"><span>    test_dir/
+</span></span><span style="display:flex;"><span>    test_dir/hello_WORLD
+</span></span><span style="display:flex;"><span>    test_dir/HELLO_WORLD
+</span></span><span style="display:flex;"><span>    test_dir/HELLO_world
+</span></span><span style="display:flex;"><span>    test_dir/hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$
+</span></span><span style="display:flex;"><span>    logout
+</span></span><span style="display:flex;"><span>    Connection to 192.168.81.151 closed.
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ scp shawn@192.168.81.151://home/shawn/test_dir.tgz .
+</span></span><span style="display:flex;"><span>    test_dir.tgz                    100%  <span style="color:#ae81ff">210</span>   215.9KB/s   00:00
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ tar zxvf test_dir.tgz
+</span></span><span style="display:flex;"><span>    x test_dir/
+</span></span><span style="display:flex;"><span>    x test_dir/hello_WORLD
+</span></span><span style="display:flex;"><span>    x test_dir/HELLO_WORLD
+</span></span><span style="display:flex;"><span>    x test_dir/HELLO_world
+</span></span><span style="display:flex;"><span>    x test_dir/hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ ls -l test_dir/
+</span></span><span style="display:flex;"><span>    .rw-r--r-- <span style="color:#ae81ff">0</span> shawn  <span style="color:#ae81ff">6</span> Mar 16:00 hello_world
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $
+</span></span></code></pre></div><h1 id="0x03-随地大小便">0X03 随地大小便</h1>
+<p>说到 macOS 的随地大小便问题，哪怕不是 macOS 用户应该也有很多见过 <code>.DS_Store</code> 这个文件的吧。这个文件简单来说是 macOS 的文件管理器也就是 Finder 来创建的，文件中主要保存的就是当前目录的排序方式、展示方式等内容。如果你直接对这个目录进行打包（无论是在 GUI 还是 CLI 中），就会把这个文件直接包进去。如果是到 Windows 上解压，就会莫名其妙多出来一个 <code>.DS_Store</code> 文件；如果是在 Linux 上解压就更恶心了，它存在但默认又看不见 🙈</p>
+<p>如果涉及到 git 仓库管理那就更愚蠢了，这个文件会随着日常使用经常产生变化，而且在多级目录下会出现大量的 <code>.DS_Store</code> 文件，只能通过 <code>.gitignore</code> 过滤掉，否则就会一直跟着你的代码库各种变动。</p>
+<blockquote>
+<p>刚刚尝试在公司的代码库里 <code>find . -name .DS_Store | wc -l</code> 搜了一下，发现了整整 100 个 <code>.DS_Store</code> 🤷‍♀️</p>
+</blockquote>
+<h1 id="0x04-功能缺失三方工具大行其道">0X04 功能缺失，三方工具大行其道</h1>
+<p>macOS 其实有很多常用功能并不完善，所以诞生了很多小工具来专门给苹果擦屁股（其实 iOS 也一样）。下面举几个例子</p>
+<h2 id="finder">Finder</h2>
+<p>Finder 是 macOS 中的文件管理器，我之前用了那么多年的 Windows，也用了几年的 Linux（Gnome、KDE、Xfce 都长期用过），从来没想过安装一个第三方文件管理器，因为他们都足够好用。只有到了 macOS 上之后，没多久我就开始探索第三方的文件管理器，先后尝试过 QSpace 和 ForkLift。为什么呢？当然就是单纯的 Finder 不好用啊 👎</p>
+<h2 id="topbar">Topbar</h2>
+<p>用过 Windows 的肯定都知道，打开的程序如果可以后台驻守的话会放在任务栏右侧，还可以通过系统设置让每个程序从固定显示、固定隐藏、条件显示三个状态里选一个。macOS 呢？完全没有，只要驻守在后台的程序全都在 Topbar 的右侧堆积着，你有三两个程序还好，十个八个的话就直接占据了一半的 Topbar，丑的很。重点是很多应用其实使用频率并不高，或者说都是通过快捷键调用的，从来不会在 Topbar 上去点，结果却要永久性占据一个位置。</p>
+<p>而且说到这个就来气，新的 MacBook 给搞了个刘海，笔记本电脑，搞了个刘海，我不理解。最气的是这个狗屁刘海只有硬件知道，软件是不知道的。这意味着什么？意味着 macOS 并不知道你看不到刘海底下的内容，也就意味着当你的程序开的多的时候就会被挤到刘海里，然后你看不到它，看不到也就点不到。厉害吧，这就是优雅的 Apple 🤷‍♀️</p>
+<p>那有什么办法可以让他们不长期驻守在那儿吗？比如说像 Windows 一样折叠起来？有的，你去搜一下就会看到很多人在推荐一个软件叫做 Bartender 的软件，它专职做这个工作。你开开心心把它下载下来发现：这个软件要 TMD 卖 $20，整整 TMD 20 dollars ！！！</p>
+<blockquote>
+<p>这时候就有果粉要说了：「你不知道别乱说，明明还有开源免费的 <a href="https://github.com/dwarvesf/hidden" target="_blank" rel="noopener noreffer ">hidden bar</a> 可以用呢」。啊确实，我就在用这个（反正不可能让我花 $20 隐藏一个图标） ，但是这东西不是苹果官方应该做的吗？？？</p>
+</blockquote>
+<h2 id="terminal">Terminal</h2>
+<p>接下来是 Terminal，很多果粉在说 「macOS 是最适合程序员的系统」，那么我作为一个程序员就只配用这么烂的一个 Terminal 吗？Linux 桌面环境的 GNOME Terminal 或者 Konsole 和 Xfce Treminal 都比 macOS 官方提供的好用太多了。</p>
+<p>不过好在 Terminal 没有太多收费的，很多都是开源项目，我这里推荐几个自己用过且好用的吧：</p>
+<ul>
+<li><a href="https://sw.kovidgoyal.net/kitty/" target="_blank" rel="noopener noreffer ">Kitty Terminal</a> 高性能，使用配置文件，功能完备</li>
+<li><a href="https://alacritty.org/" target="_blank" rel="noopener noreffer ">Alacritty</a> 高性能，使用配置文件，极简</li>
+<li><a href="https://iterm2.com/" target="_blank" rel="noopener noreffer ">iTerm 2</a> 传统、功能完备、性能说得过去</li>
+</ul>
+<h1 id="0x05-万恶的-command--q">0X05 万恶的 Command + Q</h1>
+<ul>
+<li>Windows 上切换不同窗口的快捷键是 Alt + Tab</li>
+<li>Linux 上切换不同窗口的快捷键是 Alt + Tab</li>
+<li>macOS 上切换窗口的快捷键是 Command + Tab</li>
+</ul>
+<p>看似非常和谐（macOS 的 Command 其实就是 Windows 的 Alt），但是 macOS 中有一个类似于 Windows 中 Alt + F4 的强制退出快捷键：Command + Q。熟悉键盘键位的小伙伴应该已经发现了，Q 和 Tab 是 TMD 挨着的！是 TMD 挨着的！哪怕是你再熟悉键盘，盲打再怎么熟练，也有可能手抖按错一个键吧，那么极有可能出现你想切换窗口时直接把当前窗口 Kill 掉的情况。</p>
+<p>我不理解为什么要把「关闭窗口」 和「切换窗口」两个快捷键搞的这么近，难道产品经理（或者说是乔布斯？）自己从来没有误触过吗？别的快捷键误触也就算了，但是把切换窗口误触成关闭窗口后果可是有点严重的啊。</p>
+<blockquote>
+<p>我不信哪个长期用 macOS 的没出现过切换窗口不小心把窗口关掉的情况，绝对不可能 ❌</p>
+</blockquote>
+<h1 id="0x06-源自心底的傲慢">0X06 源自心底的傲慢</h1>
+<p>我们都知道在文件管理器的「网络」目录里可以看到同一个局域网内的其他设备，那么我们来看一下 macOS 是怎么表现「其他」设备的。</p>
+<p></p>
+<p>没看清？放大看一下</p>
+<p></p>
+<p>是的你没看错，就是一个老式 CRT 显示器甚至还有些发黄了，运行着一个蓝屏了的 Windows 系统。那么 macOS 是如何展示自己的设备呢？</p>
+<p></p>
+<p>是的，不仅区分了 Mac mini，MacBook 和 iMac，甚至区分了不同的 MacBook，每一个都是那么的现代且美观。苹果你真的有必要这样吗？</p>
+]]></description></item><item><title>如何高质量地接入 AI</title><link>https://blog.programmer.work/posts/how-to-integrate-ai/</link><pubDate>Thu, 06 Feb 2025 14:20:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/how-to-integrate-ai/</guid><description><![CDATA[<h1 id="0x00-没有什么意义但我就是想写的前言">0X00 没有什么意义但我就是想写的前言</h1>
+<p>有一说一现在的大模型发展太快了，最开始我列这个大纲的时候是把 deepseek 作为「凑合能用但超级便宜」的一个国产替代品来介绍的，没想到过了个年它直接翻身了，现在甚至能打 GPT-4o。所以我决定现在立刻马上把这篇文章写完，否则没准又杀出来个什么模型，会导致我永远写不完了 🤣</p>
+<p>这篇文章的主要受众群体如下：</p>
+<ol>
+<li>知道最近 AI 很火，想用用看但是不知道怎么上手的朋友</li>
+<li>尝试用过一些大模型，但是觉得接入不方便或者价格高的朋友</li>
+<li>想全面接入 AI，让 AI 成为自己得力助手的朋友</li>
+</ol>
+<p>这篇文章会介绍这些内容：</p>
+<ol>
+<li>成品工具：只需要一个浏览器或者一个 APP 即可访问的最大众化的 AI 接入模式</li>
+<li>模型选择：列举常见模型的特点，根据你的需求选择合适的大模型</li>
+<li>API 接入：不方便接入原生 Claude/OpenAI API 时的优秀替代品</li>
+<li>三方工具：通过 API 接入后能大幅改善日常使用体验的一些工具</li>
+<li>本地部署：有关本地部署的一些个人看法</li>
+</ol>
+<p>那么废话少说，现在开始正文了</p>
+<h1 id="0x01-商业化成品工具">0X01 商业化成品工具</h1>
+<p>想要最快速的接入 AI 能力，那首选的自然是现成的商业化的 2C 产品了，所以我这里收集了几个我自己用过的比较好用的的商业化成品工具。</p>
+<blockquote>
+<p>注意这部分只讨论产品，不讨论模型，有关模型的讨论放在下面一个段落。</p>
+</blockquote>
+<h2 id="chatgpt">ChatGPT</h2>
+<p>首先，自然是目前大模型的领军人物 OpenAI 了，它的 ChatGPT 目前应该是全球范围内最知名的 AI 工具了。目前 ChatGPT 提供了多种模型可选，也提供了多模态模型和联网搜索功能，部分高级模型需要付费使用，费用一般是 $20/mon。</p>
+<blockquote>
+<p>在 PC/Mac/Android 上使用 ChatGPT 需要有正确的上网姿势，在 iPhone 上还需要一个海外 Apple ID。并且注册起来也比较麻烦。如果切实需要的话可以在网上自行搜索一下注册教程。</p>
+</blockquote>
+<ul>
+<li>访问方式：web、app、PC/Mac 客户端</li>
+<li>优势：APP 使用体验极佳、够聪明、多模态；</li>
+<li>劣势：访问难度高、价格贵；</li>
+</ul>
+<p>综合推荐等级：★★★★☆</p>
+<h2 id="claude">Claude</h2>
+<p>Claude 是追着 ChatGPT 打的另一个海外巨头，个人认为综合能力上略次于 ChatGPT 但不明显。不过同样的注册、访问都会有些麻烦。但是有一个上下文超长且比较便宜的模型（Claude-3.5-sonset-200k），可以让他阅读超长的 pdf、 MS office 等文档。同样的提供了更高级的付费模型，价格为 $20/mon。</p>
+<ul>
+<li>访问方式：web、app、PC/Mac 客户端</li>
+<li>优势：聪明、多模态、比 ChatGPT 访问轻松一些；</li>
+<li>劣势：访问难度依然较高、价格贵；</li>
+</ul>
+<p>综合推荐等级：★★★☆☆</p>
+<h2 id="豆包">豆包</h2>
+<p>豆包是字节跳动旗下的 AI 工具，目前我亲测下来说实话聪明程度明显弱于 ChatGPT/Claude，但是它强就强在免费和体验优良。首先它内置了很多个不同 prompt 的「人」，可以作为你的助手，这一点对于不会写 prompt 的新手来说很是实用。手机的 APP 还能通过语音对谈的方式和豆包交流，虽然 ChatGPT 也有这个功能，但是在国内使用豆包反应更快并且口语听起来舒服很多很多。macOS 上的客户端可以启用一些插件功能，实现划选文字进行翻译、解释等功能。</p>
+<ul>
+<li>访问方式：web、app、PC/Mac 客户端</li>
+<li>优势：多模态、接入容易、语音体验良好、内置 prompt、免费；</li>
+<li>劣势：不够聪明、进阶使用体验较差；</li>
+</ul>
+<p>综合推荐等级：★★★★☆</p>
+<blockquote>
+<p>建议所有人在手机上装一个豆包，毕竟是免费的，有事没事跟他硬聊几句都还是划算的。而且它也能联网，所以快速搜索一些确定有结果的问题也很好用。</p>
+</blockquote>
+<h2 id="deepseek">deepseek</h2>
+<p>deepseek 这几天可真是爆了（以至于我一直在用的超快的 API 突然变慢了 😮‍💨）。简单介绍一下 deepseek 也是国产的，他们最擅长使用超低的成本做相同的事，最近刷屏的新闻也正是他们用了 GPT-o1 大概 2% 的成本训练出来了几乎相同水平的 DeepSeek-R1 模型。目前来说 deepseek 的重心还是在技术上，所以他们的客户端/web依旧停留在「能用」的水平线上。</p>
+<ul>
+<li>访问方式：web、app</li>
+<li>优势：免费、多模态、接入容易、聪明；</li>
+<li>劣势：应用层做的不够好、使用人数激增导致响应变慢；</li>
+</ul>
+<p>综合推荐等级：★★★★☆</p>
+<h2 id="kimi">kimi</h2>
+<p>kimi 是比较早火起来的国产 AI，当时的主要卖点是联网搜索。</p>
+<ul>
+<li>访问方式：web、app</li>
+<li>优势：免费、多模态、接入容易、联网搜索能力强、app 体验好；</li>
+<li>劣势：不如 DeepSeek-R1 聪明；</li>
+</ul>
+<p>综合推荐等级：★★★☆☆</p>
+<h2 id="poe">POE</h2>
+<p><strong>POE：我们不生产模型，我们只是大模型的搬运工</strong></p>
+<p>POE 是一个集成了大量模型第三方应用，在这里可以付一份钱同时使用几乎所有的热门模型。例如你想同时使用 ChatGPT 和 Claude 的高级模型，觉得同时买两个会员太贵了，就可以同样花 $20 购买 POE 的会员，这样一来就可以同时访问他们了。但需要注意的是，POE 的逻辑是会员每月送你 1000000 「点数」，每次对话会根据模型的不同消耗不同的点数（一般都是够用的，我比较高强度使用都是够的）。这也是我目前唯一付了年费的 AI 订阅项。</p>
+<ul>
+<li>访问方式：web、app、PC/Mac 客户端</li>
+<li>优势：访问所有热门模型（包括文生图模型）</li>
+<li>劣势：付费、使用次数有限（尽管限制很宽松）</li>
+</ul>
+<p>综合推荐等级：★★★★☆</p>
+<h2 id="综合">综合</h2>
+<p>综合看下来，我可以做出下面的推荐：</p>
+<ul>
+<li>如果你只是想用最简单的方式体验一下AI，并且希望它足够简单易用，那就选豆包</li>
+<li>如果你想使用目前最强的免费 AI 模型，同时愿意学习 AI 的用法，那就选 deepseek</li>
+<li>如果你想接入世界先进的 AI 模型，那就考虑订阅 ChatGPT（ChatGPT 如果不订阅的话不如直接用 deepseek）</li>
+<li>如果你想体验更多热门模型，想要了解不同模型的区别和擅长的方向，也想要深入学习使用大模型，那建议订阅 POE</li>
+</ul>
+<h1 id="0x02-通过-api-接入">0X02 通过 API 接入</h1>
+<p>上面我们聊的都是点击即用的成熟的商业化产品，现在来讨论一下通过 API 来接入这些模型。</p>
+<blockquote>
+<p>提示：如果你听不懂 <code>API</code>、<code>base_url</code>、<code>API KEY</code>、<code>HTTP Method</code>、这几个词就意味着你暂时不适合下面的内容，继续阅读下去可能会感到有些蒙圈，这是正常现象 🤣</p>
+</blockquote>
+<p>首先我来介绍一下为什么我们需要通过 API 接入大模型，有如下几个优势：</p>
+<ul>
+<li>价格：例如 ChatGPT 的价格是 $20 每月，如果你只是每天对话个十次八次的，直接开通 Plus 会显得很亏，因为 ChatGPT Plus 是按月付费的。但是 API 则是按量付费，计费方式从每月固定额度变成了根据交互的 tokens 数量计算，在用量不大的情况下会更便宜；</li>
+<li>性能：虽然没有直接证据，但是我体感上各家的 2C 产品使用的服务器和 2B 的 API 使用的服务器并非同一组，手机 APP 访问已经在卡了但是通过 API 访问就还是比较快；</li>
+<li>定制：通过 API 访问可以自己调整更多的参数，例如影响记忆力和费用的 <code>max_tokens</code> 和影响输出的 <code>temperature</code> 等；</li>
+<li>体验：使用 API 访问即使只是使用最基础的对话功能，我们也有多个前端工具可以选择，不会像官方的客户端一样没有半点定制化空间；</li>
+<li>扩展：我们可以将 API KEY 配置到很多支持的工具上，让工具们获得 AI 的能力加持（例如 obsidian、Firefox/Chrome 等）；</li>
+</ul>
+<h2 id="模型选择">模型选择</h2>
+<p>目前通过 API 接入的话我个人只推荐 deepseek、GPT、Claude 这三个。下面是每个家族的代表和他们的能力（主观评价）和价格的对比。</p>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>能力（5分制）</th>
+          <th>上下文</th>
+          <th>输入价格（每百万 Tokens）</th>
+          <th>输出价格（每百万 Tokens）</th>
+          <th>备注</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>DeepSeek V3</td>
+          <td>3</td>
+          <td>64k</td>
+          <td>$0.27</td>
+          <td>$1.10</td>
+          <td>价格无敌，配置在浏览器扩展上用于翻译和总结非常合适</td>
+      </tr>
+      <tr>
+          <td>DeepSeek R1</td>
+          <td>4.5</td>
+          <td>64k</td>
+          <td>$0.55</td>
+          <td>2.19</td>
+          <td>性价比无敌，能力媲美贵它将近 30 倍的 GPT-o1</td>
+      </tr>
+      <tr>
+          <td>GPT-4o</td>
+          <td>3.5</td>
+          <td>128k</td>
+          <td>$2.5</td>
+          <td>$10</td>
+          <td>-&ndash;</td>
+      </tr>
+      <tr>
+          <td>GPT-o1</td>
+          <td>4.5</td>
+          <td>200k</td>
+          <td>$15</td>
+          <td>$60</td>
+          <td>-&ndash;</td>
+      </tr>
+      <tr>
+          <td>Claude-3.5-sonset</td>
+          <td>4</td>
+          <td>200k</td>
+          <td>$3</td>
+          <td>$15</td>
+          <td>-&ndash;</td>
+      </tr>
+  </tbody>
+</table>
+<p>目前我自己的体验下来，推荐如下：</p>
+<ul>
+<li>DeepSeek V3 价格最便宜，充 10 块钱可以用很久。适合将它配置到一些支持 AI 的工具上，用来总结文章、大段翻译等。虽然它不够聪明但是足够便宜，随便调用也不用心疼自己的钱包；</li>
+<li>DeepSeek R1 目前使用体验良好，足够聪明价格也是很便宜。如果不嫌弃它每次都要思考半天的话（其实这是它的优势项），可以作为主力 AI 模型使用，它理论上更擅长数学、编程等逻辑性强的工作；</li>
+<li>GPT-4o 是传统模型中很强的了，没有 o1 和 R1 的推理过程，反应比较迅速。价格虽然比较贵但多少能承受，也是主力 AI 模型的一个优秀备选；</li>
+<li>GPT-o1 应该是这些模型里理论最强的，但是这个价格嘛也很离谱。如果你在意它比 R1 强的那一点能力且不在意这 30 倍的价差，那 GPT-o1 是个不错的选择；</li>
+<li>Claude-3.5-sonset 最大的优势是 200k 的上下文，是目前热门模型中上下文窗口最大的一个。如果你经常有大上下文的需求那么 Claude-3.5-sonset 是一个优秀的选择；</li>
+</ul>
+<blockquote>
+<p>有关 tokens 和上下文：</p>
+<p>我们在和大模型交互的时候，我们自己说的文字和大模型返回的文字都会被分词，然后将分词之后的结果作为 token 计算。例如我给模型提供一个 10 万个汉字的文档，让他回答我的一个问题，AI 的回答大概是 1000 个汉字的话，大约会消耗掉 10 万个 tokens。</p>
+<p>上下文则是我们和模型对话时 AI 能处理的最大 tokens 数量。上面的例子一次对话就需要消耗 10 万个 tokens 也就是 100k 左右，也就意味着 DeepSeek V3/R1 都无法处理这个对话请求，但是 GPT-4o/o1 和 Claude-3.5-sonset 都能处理。</p>
+</blockquote>
+<h2 id="如何接入">如何接入</h2>
+<p>众所周知，接入 AWS 的 API 就需要 AWS 的账号，但是现在的 AI 接入方式多少有些不一样的地方。当然通过 OpenAI 官方接入 OpenAI 的模型是天经地义的，但是我们国内用户光是注册 OpenAI 和 Claude 的账号就已经很费劲了，后面付费还有一座大山拦路，着实是整不动。所以在官方接入的传统方式之外还可以通过转发站点实现 API 接入，这种接入方式不仅注册和付费更轻松，还会有些许优惠。这里介绍两个站点：<a href="https://burn.hair/" target="_blank" rel="noopener noreffer ">头顶冒火</a> 和 <a href="https://gpt302.saaslink.net/M8oaa5" target="_blank" rel="noopener noreffer ">302.ai</a>，这两个平台类似，都是类似于前面介绍的 POE 的平台，只不过这两个平台提供的是聚合的 API 服务，在这一处充值后能通过 API 访问平台支持的模型。</p>
+<p>如果你想通过 API 的方式接入 DeepSeek 的话就不需要再用上面的服务中转了，直接去官网注册账号然后支付宝微信付款用就行了。</p>
+<blockquote>
+<p>另外有个好消息，目前已知的绝大多数大模型的 API 都兼容 OpenAI 的 API 标准，也就意味着绝大多数能使用 OpenAI API 的工具都能通过修改 <code>base_ur</code>, <code>API KEY</code>, <code>model</code> 这三个参数的方式快速接入。</p>
+</blockquote>
+<h1 id="0x03-第三方工具">0X03 第三方工具</h1>
+<p>使用第三发工具的前提是通过 API 访问大模型，个人认为这才是当前大模型的完整使用方式。下面介绍几个自己真正用过的第三方工具：</p>
+<h2 id="glarity">glarity</h2>
+<p>这是一个浏览器扩展，配置好 API 之后它会有一个悬浮按钮在浏览器里，可以一键快速调用大模型对当前页面进行总结，也可以针对当前页面进行提问，还可以做到在尽力维持页面布局的情况下实现逐行翻译。强烈推荐所有可以通过 API 访问大模型的朋友安装试用。</p>
+<h2 id="chatgpt-next-web">ChatGPT-Next-Web</h2>
+<p>这是一个简单的聊天工具，不管是 DeepSeek 还是 ChatGPT 他们都有自己的页面，但是通过 API 访问的话总不能就在命令行里用吧。所以 ChatGPT-Next-Web 就出现了，它就是一个可以创建多个对话也能上传文件的前端工具，给它配好 API 就能像普通客户端一样使用 API 了。值得表扬的是这个开源项目可以部署在服务器上，通过浏览器访问，效果非常棒。也就意味着你可以自己开通 API 后把它部署在公网服务器上，配置一个密码，就能让自己和家人朋友一起用了。</p>
+<h2 id="obsidian">Obsidian</h2>
+<p>如果你也用 Obsidian 的话可以给你推荐一个名为 Text Generator 的插件，这个插件配置好之后可以在 Obsidian 中调用 API。可以实现的功能包括但不限于：选中大段文字让他检查错误、总结整篇笔记、生成某某的介绍等。虽然不如 Notion 的 Notion AI 集成度那么高，但是体验也还是不错的。</p>
+<h1 id="0x04-本地化部署">0X04 本地化部署</h1>
+<p>最后再聊一聊本地部署吧，最开始的时候我尝试过在 MacBook 上部署 Llama 3.1 的 7B 和 14B 模型测试。最近 DeepSeek R1 的突然爆火也开始出现了大量的本地部署的教程，给人一种在本地部署之后就不需要联网使用官方服务的感觉。</p>
+<p>我自己测试的硬件配置是一台 M2 Max 32G 的 MacBook Pro，按理说跑大模型的性能应该是超出大多数朋友的电脑的。就以最近我测试的 DeepSeek R1 为例，简单测试的结果如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>模型</th>
+          <th>效果</th>
+          <th>速度</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>DeepSeek R1 7B</td>
+          <td>一般</td>
+          <td>飞快</td>
+      </tr>
+      <tr>
+          <td>DeepSeek R1 14B</td>
+          <td>一半</td>
+          <td>飞快</td>
+      </tr>
+      <tr>
+          <td>DeepSeek R1 32B</td>
+          <td>可以非严肃环境使用</td>
+          <td>比较快</td>
+      </tr>
+      <tr>
+          <td>DeepSeek R1 70B</td>
+          <td>跑不动</td>
+          <td>跑不动</td>
+      </tr>
+  </tbody>
+</table>
+<p>并且即使我跑 32B 这样的模型，效果也并不够看。所以我自己的个人看法就是：</p>
+<ul>
+<li>如果你只能跑 7B 或者 14B 的模型，那可以用来学习、体验、图一乐</li>
+<li>如果你能跑 32B 的模型，那可以用来正经聊聊，但是能力依旧有限，不适合严肃环境使用</li>
+<li>如果你能跑 70B 的模型，那&hellip;&hellip;我没试过，不知道能力怎么样 🤣</li>
+<li>如果你能跑 671B 的模型，那请你联系我，我想和土豪做朋友</li>
+</ul>
+<p>如果要在本地部署的话，目前比较推荐的就只有 DeepSeek 和 Llama 了，并且在模型选择上基本 32B 就到头了，如果是自己本地跑跑玩玩的话建议从 7B 和 14B 中进行选择，最多最多试试 70B（如果是 Mac 的融合内存的话）。</p>
+<blockquote>
+<p>最后悄悄说一下，本地部署的话可以了解一下带有 <code>abliterated</code> 标签的模型，这才是本地部署模型最大的意义。</p>
+</blockquote>
+]]></description></item><item><title>2024 年度总结</title><link>https://blog.programmer.work/posts/2024-summary/</link><pubDate>Fri, 17 Jan 2025 14:04:45 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/2024-summary/</guid><description><![CDATA[<h1 id="0x00-碎碎念">0X00 碎碎念</h1>
+<p>数数看这已经是我的第六篇年度总结了，每当回过头去看之前的总结就感觉写这些也还挺有意义的。虽然写日记对我来说太困难了，但是写「年记」好像还行，甚至有点乐在其中 🤔</p>
+<p>廖凡_饺子_姜文.mp4</p>
+<p>说起来小学时候大家都不喜欢家庭作业里有日记这一项，因为要写好多字，而且都没什么可写的。我就不一样了，因为我小学时候的日记全文都是：今天去XXX玩了，很高兴/今天去XXX家写作业，很开心。 🤣</p>
+<p>回到正题。今年的生活完全被打乱了，比疫情还在的时候更乱，以至于我第一次 delay 了我的年度总结。哦不是，是完全没有去检查年初制定的计划到现在完成了多少（估计有个 30% 就谢天谢地了），具体是什么情况导致的我后面再说吧。这次给博客列的大纲就是零零散散不成体系，只能说尽力拼凑了一个年度总结出来，不管是长度还是质量肯定是不及去年和前年的万字长文了。那么就直接开始吧。</p>
+<h1 id="0x01-专业能力">0X01 专业能力</h1>
+<p>今年本来的计划是更多的去深入学习之前已经掌握的知识和技能，结果完全没深入哪里去。反倒是之前两年多次「下定决心」要学的 Go 在今年突然用在工作上了，感觉之前自己吭哧吭哧看了半天不如真正工作上用起来一个星期提升来得快。</p>
+<p>也正是这一点，让我对学习专业技能上有了一个新的想法：暂时用不上的知识和技能当然要学，只是不用那么纠结自己到底明白了多少（反正用不上的话也很快就忘记了），只需要做到「我知道有什么，我知道是什么」就行了，等真用到了再去根据自己的那一点点基础去学就好了。反正我的 Docker 和 MySQL 这些都是这样学来的。</p>
+<p>比如 Docker，最开始学的时候是在学校里，完全没有使用 docker 的需求，以至于甚至搞不清楚 docker 和虚拟机有什么区别，也不理解为什么 ubuntu/fedora 这些我常用的发行版本里面连个 vim 都没有，<code>systemctl</code> 也没法用。但好在最基础的用法（尤其是在工作环境里）你并不需要从零去完整的学一整个东西，都是在别人的基础之上进行操作的。</p>
+<blockquote>
+<p>⚠️ 并不是说专业能力不需要从头学起，只是说最开始的阶段没必要死扣那些细节，先用起来就行。但是如果你都用了很久 docker 了，还是说不出 docker 和虚拟机的核心区别，还是不清楚为什么 ubuntu 镜像里不带 systemd 和文本编辑器，那就不应该了。</p>
+</blockquote>
+<h1 id="0x02-出游">0X02 出游</h1>
+<h2 id="广州佛山">广州、佛山</h2>
+<p>这次本质上是一次出差，但是解决的确实一个非常简单的问题，不过又由于各种情况导致在佛山停留了一周之久。正好又赶上周末，所以可以算是半个旅行了。也正是这次过去出差也才知道，原来广州的地铁可以直接通到佛山的 🤯。</p>
+<p>作为一个博物馆爱好者，到了省会城市肯定会往省博跑，但是令我没想到的是诺大一个广东省博却没什么好看的东西 🥲。里里外外传下来都没看到什么让人「哇塞」、「卧槽」、「牛逼」的东西，反倒是看到了一个让我觉得「啊？」的东西：镇馆之宝&mdash;白切鸡 🤣。反倒是广州的「南越王博物馆」更有意思，推荐同样的博物馆爱好者过去看一看。</p>
+<p>广东省博-白切鸡</p>
+<p>虽然没去佛山博物馆，但是去了一趟祖庙看了黄飞鸿纪念馆和叶问堂。如果对那段人文历史比较感兴趣的朋友，可以去看一看，黄飞鸿纪念堂有高质量的舞狮表演，叶问堂有叶问用过的木人桩和八斩刀展示。</p>
+<p>佛山-舞狮叶问-八斩刀</p>
+<p>另外广东的吃的确实是不错，尤其是牛肉。印象很深的是去吃的一家潮汕牛肉。店门口有一个小黑板专门写了今天的牛肉是下午几点钟开始杀，几点钟送到店里的。肉质非常新鲜，配合清汤的锅底和各种酱料，感觉自己能吃好几盘 😋</p>
+<p>你说广州塔？那肯定是去了的，但是水平有限导致并不能拍出别人随手拍的大片，只能起到一个纪念作用。</p>
+<p>广州塔</p>
+<h2 id="兰州">兰州</h2>
+<p>兰州是因为去参加一对好朋友的婚礼（还兼职摄影摄像），所以时间比较紧张，没去玩很多地方。但是 <strong>兰州的羊肉是真的好吃！！！</strong> 玩的话就只去了水墨丹霞，地方不大但是好在去机场顺路，据说可以作为七彩丹霞的平替。</p>
+<p>铜奔马水墨丹霞水墨丹霞</p>
+<blockquote>
+<p>有一说一，这场婚礼是我目前为止参与程度最最最高的一场，从前一天晚上的场地探查到第二天一早的新娘化妆，再到接新娘，上婚车，一直到最后吃的核心席。还真是第一次如此高强度满满当当的参加一场婚礼。说到这儿再次祝他们百年好合 🎉</p>
+</blockquote>
+<h2 id="雅安">雅安</h2>
+<p>雅安离成都很近，这次是蹭了朋友的车过去的。当时找了一个在山上的观景台民宿（小木屋），过去放松了两天，感觉还不错。住宿环境和吃的都比较一般，但是推开房门就能看到非常漂亮的山景湖景，作为乏味生活的一点点调剂还是让人觉得豁然开朗。</p>
+<p>雅安某湖</p>
+<h2 id="芒市">芒市</h2>
+<p>去云南芒市的旅行完全是因为当时超级烦躁，就在携程上看特价机票，发现到芒市的往返机票两个人才不到两千，就直接冲了，反而是这次纯纯瞎跑的旅行却成了今年最舒服的一次。</p>
+<p>芒市大金塔</p>
+<p>我们就只去了芒市的金塔和银塔，然后剩下的时间就在小城里乱走乱逛，累了就回民宿躺着，体验还是不错。吃东西印象最深的就是打车去「芒杏村」吃的烧烤了（果然哪里的烧烤都比成都好吃），价格优惠味道很棒。</p>
+<p>如果有朋友也有兴趣去芒市的话，可以有两个小建议：金塔银塔距离很近，步行几分钟就能到，但是要分开收费（每张门票 40 元）。其中金塔重佛教，银塔重拍照，但是想要拍金塔的话反而是在银塔景区里更好拍。</p>
+<p>芒杏村烧烤</p>
+<p>另外一个建议就是「一定要去芒杏村吃烧烤」，虽然只吃了一家，但是滴滴师傅说周围的水平都差不多，而且非常好吃价格又便宜，强烈推荐。</p>
+<h2 id="米仓山">米仓山</h2>
+<p>米仓山是单纯去看彩林的，虽然没有隔壁光雾山知名但是风景却一点都不差。另外如果有成都朋友想去的话可以先坐高铁到汉中，然后再转车到米仓山。虽然米仓山在巴中，但是高铁到巴中再去米仓山反而耗时更久价格更贵。</p>
+<p>米仓山</p>
+<p>一个小攻略是可以提前一天晚上到米仓山景区门口，找地方住宿然后赶在景区开门的第一时间冲进去，这样玩的会舒服一些。而且景区门口吃饭的地方也很多，不用担心没有地方搞吃的。另外米仓山景区里有🚁直升机，只要 350 块！！！</p>
+<h1 id="0x03-年度游戏">0X03 年度游戏</h1>
+<p>让我们恭喜 宇宙机器人 获得 TGA 年度游戏大奖！！</p>
+<p>开个玩笑，宇宙机器人确实是个好游戏，但是它在另外几个作品面前真的不配拿奖啊。</p>
+<h2 id="黑神话悟空">黑神话：悟空🐒</h2>
+<p>这一切要始于 2020 年 8 月 20 日，那天我到公司听说 B 站有一个国产游戏的预告片，当时没太当回事。后面看了之后汗毛炸起，但是突然就冷静下来了，心想：不可能的，这绝对是诈骗，国内能做出这种游戏就见鬼了。但实际上也正是这一刻开始，就期待了起来，有哪个中国游戏玩家不想在游戏里扮演大圣呢？</p>
+<p>在此之后沉寂了很久，游科每到过年和 820 就都会放出一段新的预告宣传，随着时间推移心里的想法也早就发生了变化。从 2020 年的「我不相信能做出来」到 2024 年的「就算是一坨💩我也要尝尝咸淡」。</p>
+<p>直到今年夏天，一觉醒来看到手机的 PS APP 提醒我愿望单里的《黑神话：悟空》可以预购了，我一下就清醒了，从看到消息到豪华版预购成功没有一秒钟的思考。</p>
+<p>黑神话悟空</p>
+<p>提前把假请好，前一天晚上把沙发整理好，给 PS5 手柄充上电，把饮料放在冰箱里，做好一切准备。第二天一大早起来关窗帘、拿饮料、调大音响音量，坐在电视前面拿好手柄眼巴巴看着 PS5 上面的倒计时，然后第一时间进入游戏。巧的是，当天朋友圈里好多人都跟我一样「遇到了不可抗力」导致没办法上班 🤷‍♀️</p>
+<p>从早上十点游戏解禁，一直到晚上十二点打完虎先锋睡觉，中间几乎是没有任何休息时间。如果要用一句话来描述这个游戏，那只能是：「<strong>这是我二十年游戏生涯里，做梦都想玩到的游戏</strong> 」</p>
+<h2 id="小丑牌">小丑牌🤡</h2>
+<p>小丑牌是我玩过最好玩的卡牌游戏，推荐所有对卡牌或者 rouge like 游戏有兴趣的朋友上手！（不想说太多，三两句又说不清楚，所以干脆不说了。但是为了表示这个游戏真的很好玩，所以专门给他保留一个位置）</p>
+<h2 id="跑车浪漫旅-7gt7">跑车浪漫旅 7（GT7）🚗</h2>
+<p>为什么没有直接说 GT 7 而是特地强调了《跑车浪漫旅》的名字呢？因为这个名字翻译的真的太好了～在玩 GT7 之前我一度以为极限竞速地平线是最优秀的赛车游戏，不过现在起码在我心中「最佳赛车游戏」的头衔要易主了。</p>
+<p>您的浏览器不支持 HTML5 视频标签。</p>
+<p>游戏的驾驶手感超级棒，结合 PS5 的手柄让每一次油门刹车都倍感真实，甚至每次吃到路肩的时候是具体哪边吃了多少都能通过手柄精细化的震动感受到。制作人山内一典对车辆建模的变态追求让我在游戏过程中甚至区分不出真假（有 PS VR2 的加成），虽然车外的风景画质一般，但在驾驶高速赛车的时候也很难注意到风景就是了。</p>
+<p>以前我觉得赛车游戏就应该像极品飞车那样，爽快刺激；后来玩了极限竞速地平线之后觉得最佳的赛车游戏应该去除哪些过于花哨的东西，还是需要刹车和走线的，而不是乱撞和漂移；现在我已经开始觉得赛车游戏就应该用方向盘视角，就应该注意刹车点了。（坏了，我不会要入坑赛车模拟器了吧）</p>
+<h1 id="0x04-电影">0X04 电影</h1>
+<p>这几年的电影都是些什么歪瓜裂枣&hellip;&hellip;</p>
+<p>我以前晚上无聊的时候，时长掏出手机看看院线信息，然后晚上九点十点跑出去看个电影再回家。最近两年每次掏出手机看院线信息之后，都是叹口气然后关掉，真的是太烂了。</p>
+<p><em>曾经～我茫然前行～暗夜的路上～</em></p>
+<p>今年看过的华语电影只有两个说得过去的：《周处除三害》和《好东西》。前者其实只是一个合格的普通片子，但是之前大陆很少上这种暴力电影，这次就趁这机会去看了。后者则是一部女性视角的片子，但不是那种无脑打拳的电影，还是值得一看的。唯一问题就是里面的小孩儿，经常冒出来几句没有三四十年生活经验都总结不出来的金句，有点离谱了。</p>
+<h1 id="0x05-运动">0X05 运动</h1>
+<p>今年的运动之有前半年在坚持，后半年直接摆烂了。不过好在有两个里程碑式的运动成就：游泳算是学会了（蛙泳熟练，自由泳能游），自行车也骑了一个 170km 的小长途。</p>
+<p>明年在运动上要多多投入时间了，计划的是徒步、跑步、骑车这三项，但是详细的年度计划还没列，等过几天确定了再看吧～</p>
+<h1 id="0x06-ai">0X06 AI</h1>
+<p>AI 的进步真的太快了，今年我用 AI 的时间应该远远大于 2023 年了（花的钱也远远高于 2023 年）。这里点名表扬几个在本年度里表现优异的 AI 小弟。另外我正在筹划写一篇有关在国内如何快速接入高质量 AI 的博客，到时候会详细介绍这些内容。（大纲写完之后发现一篇根本写不完，应该会拆成两篇甚至三篇）。</p>
+<h1 id="0x07-读书">0X07 读书</h1>
+<p>今年读的书应该是近几年最少的，简单挑几本有印象值得推荐的来说说吧</p>
+<h2 id="拍出绝世佳作美姿光线">拍出绝世佳作/美姿/光线</h2>
+<p>被书名影响了的摄影书神作，虽然书名看起来有点像《21 天精通 C++》一样的东西，但内容质量非常之高，豆瓣评分三本都在 8.5 上下。第一本是写给纯新手的，从各个角度拆分讲解了如何拍出一张好看的照片，后面两本是专精于人像摄影的。如果有兴趣的话这一套书是非常值得看的。（别问现在水平咋样，问就是行走的监控摄像头）</p>
+<h2 id="如何屠龙">如何屠龙</h2>
+<p>这本书的名字和上面的完全相反，光看名字就感觉很有意思。但她实际上是一本借由剑与魔法来讲述欧洲中世纪的历史书，非常有趣，对中世纪历史或者剑与魔法背景游戏感兴趣的朋友可以买来读一读。</p>
+<p>如何屠龙</p>
+<p>我看这本书的时候总把自己带入到上古卷轴 5/巫师 3 的游戏背景里去，代入感直接拉满 🤣</p>
+<h2 id="克莱因壶">克莱因壶</h2>
+<p>这本书被称为：日本虚拟现实 VR 题材开山杰作， 超前《盗梦空间》20年。但毕竟它太老太老了（1989年发行），以至于看起来里面很多地方都略显古板，不过如果喜欢看科幻、推理、悬疑、游戏的话，倒是值得一单。字数不算很多，一晚上就能看完。</p>
+<blockquote>
+<p>说这本书古板当然不是批评，因为它作为一本科幻小说确实足够「古」了，而且在它之后也有很多这种类似设定的小说电影面试，在走他的路子，后来者无数才会显得「古」的。就类似于你现在第一次去看搏击俱乐部，八成会觉得「又是精神分裂，看都看麻了」，那是因为它开创了一个品类，后来者甚多导致的。</p>
+</blockquote>
+<h2 id="doom-启示录">DOOM 启示录</h2>
+<p>传奇程序员约翰卡马克和他的团队研发 DOOM 的故事。这本书读的我热血沸腾，而且时常觉得人与人的差距有时候比人与猪之间的差距还大。</p>
+<p>DOOM 启世录</p>
+<p>你说你不认识卡马克？他<strong>也就只是</strong> 创造了 FPS 游戏品类，开发了 DOOM、德军总部、Quake；开创了多人联机游戏；开创了 MOD 文化的一个<strong>普通程序员而已</strong> 。</p>
+<h1 id="0x08-其他">0X08 其他</h1>
+<p>依旧是把想要分享又不知道放在什么地方的一些东西放在这里了。</p>
+<h2 id="iphone-15-plus">iPhone 15 Plus</h2>
+<p><strong>垃圾苹果，60hz 刷新率 6G 内存的手机卖这么贵</strong> 。我其实没有被苹果所谓的绑架，只是单纯的觉得 iOS 虽然有很多很蠢的地方，但也有好多优势，让我想继续用 iOS。我甚至觉得 iPhone 如果只谈硬件那几乎就是一坨 🤷‍♀️</p>
+<p>从 iPhone 12 mini 这种邪门的手机，换到 iPhone 15 Plus 这种邪门的手机，我这种人估计是不多。因为我觉得标准版再小也小不过 mini，再加上之前被 mini 的续航折磨到自闭，干脆就换了 Plus 版。iPhone 本身没什么好聊的，能用。唯一想夸一下的就是 Plus 的续航，我在电池设置里把它改成「只充电到 80%」之后每天都能正常使用到晚上睡觉，续航确实非常够我用了。也正是电池变大，导致我这一整年使用下来电池健康居然是 99% 🤯</p>
+<h2 id="garmin-955">Garmin 955</h2>
+<p><strong>垃圾苹果，号称运动手表结果电池连 170km 骑行的时间都坚持不下来</strong> 。这个 Apple Watch 我是真绷不住了，所以把它出掉换了佳明的正经运动手表。功能上的确缺失了很多，但是那些缺失的功能我本来就没怎么用过&hellip;&hellip;反倒是佳明的运动检测准确度、续航时间、更轻的重量、更快捷的按键操作让我感知明显。</p>
+<h2 id="照片打印">照片打印</h2>
+<p>我自己家里买了个小的照片打印机，日常的照片临时打印一下感觉还不错。但是如果你有多张照片想打印的话，还是推荐淘宝找店家。自己的小打印机速度慢不说，价格还高，一张相纸差不多两块钱，效果还不如店里打印的。我自己在淘宝找店里打印的照片 100 张只要 88 还包邮，印刷质量还比我自己打印机出来的好不少。唯一的问题就是你要把照片发给店家，如果极度在意隐私的话就没办法了。</p>
+<h1 id="0x09-罪魁祸首">0X09 罪魁祸首</h1>
+<p>让我觉得今年生活被完全打乱的罪魁祸首可能就是上半年接的私活了。确实，靠下班之后的时间和周末的时间赚到了一点钱，但代价是什么呢？代驾就是工作日下班回家休息一会儿就要再干两三个小时的活，周末也要至少干几个小时。其实按数量说并没有多干特别多工作，但是体验上就差了很多。本来回家打打游戏想的是「好快乐」，回家学习就算是写写自己的小项目想的也是「我真棒」，即使回家躺平也是「好舒服」，但是干活就会有一种很不爽的感觉。到现在为止我已经工作了六年多了，之前从来没有过想要请假去放松一下的时候，但是接了这个活之后就时不时冒出这种想法。</p>
+<p>本来想的只是下班之后拿出一些时间来写写代码，赚点外快也挺好的。但是没想到的是客户隔三差五就会修改需求，而且他们自己都不清楚自己想做的到底是个什么东西，东改一改西改一改，整的人心力交瘁。最开始的时候我还在想「程序性能」「扩展性」「优雅」这些东西，到最后已经是「程序能跑就行」了。</p>
+<p>这样一想，公司里有销售、售前、项目经理、产品经理、研发 leader 等很多岗位的支持和各种规范化流程还是很有必要的。私活很难有这些东西，就会导致开发过程非常的不顺利。</p>
+<p>切实感受到了 <strong>钱难挣屎难吃</strong> 的前三个字（并不是很想感受后三个字）。</p>
+<h1 id="0x0a-一点小思考">0X0A 一点小思考</h1>
+<p>我之前下班到家总会在电脑前坐两三个小时，美其名曰「学习/读书」。确实，很多时候都是真的在学东西或者读一些书，但也正是这件事让我给自己上了一层无形的很大的压力。如果有一天我不想学不想看，就想玩游戏，那我大概率也会纠结着坐在那里用一种极低的效率去学习去读书，可能两个小时过去效果还不如平时二十分钟好。但这样做就会让我没有「负罪感」，因为我会告诉自己「我已经努力了，结果不好只是因为我状态不好，毕竟我都在这儿坐着看了两个小时了」；如果坐在沙发前玩一晚上游戏，虽然游戏是玩了，但是并不会快乐，一直会想着「本来应该去学习的，结果现在来打游戏了，果然我还是不太行」。</p>
+<p>但是今年的后半段因为想着「反正今年的年度计划也乱七八糟了，而且搞这个私活整的挺累，还赚到了一点点外快，那不如直接摆烂一下吧」，就直接摆烂了。每天回家休息会儿就要么玩 PS5 要么刷 B 站，突然感觉这样好快乐（明明这才是绝大多数人的生活）。</p>
+<p>也正是这个小经历让我决定在新的一年做出一些改变：默认情况下还是按之前的逻辑去学习和提升，但也不要过分要求自己「假装努力」，如果想玩想休息那就放宽心去就好了，<strong>少一些压力多一些快乐不是犯罪</strong> 。</p>
+<h1 id="0x0b-明年会更好吗">0X0B 明年会更好吗？</h1>
+<p>显然今年并不是很满意，而且一年下来不管是自己的专业技能、兴趣爱好还是日常生活都没有发生什么明显的变化。不过好在经过这一年的生活我已经慢慢懂得了如何进行自我调节，而且计划 2025 年会比 2024 年有<strong>多得多的变化</strong> 。借用官媒常用的一个词来说的话那就是<strong>稳中向好</strong> 🎉</p>
+<h2 id="期待的游戏">期待的游戏</h2>
+<p>另外 2025 年光是游戏就足够我期待的了。继村里第一个大学生直接上了清华之后，参与「明年高考」的学生也有一个看起来很有潜力的：《明末：渊虚之羽》。还有一个比较期待的是让我记住了一个并不符合我英语水平的单词的游戏： <em>Civilization VII</em> 。当然要说最期待的就是 <em>Unspeakable VI</em> 了，小学时候家里的电脑性能不够没法在迈阿密飙车，现在起码不会卡成 PPT 了 🤣。</p>
+<blockquote>
+<p>GTA 5 之后 12 年，GTA 6 来了；那么另一个 5 之后已经快 14 年了，6 呢？</p>
+</blockquote>
+<p>最后就是任天堂了，众所周知一款游戏机的生命周期基本上是七年。现在七年之期已到，你的新机器呢 😭 而且按理说一台新机的发布势必会伴随着护航大作的到来，之前给 switch 护航的就是旷野之息和马里奥奥德赛，我都不敢想这种级别的阵容再来一次能有多幸福 😭</p>
+<h2 id="期待的电影">期待的电影</h2>
+<p>比起游戏界的 2025 神仙打架，目前已知的 2025 电影几乎没什么能打的，自然也没什么期待。以前每年都要去个十次八次电影院，现在一年下来能去个三两趟都算是不少了 😮‍💨。</p>
+<p>唯一一个期待的就是 2024 年初备案的电影《英雄出少年》，据说已经杀青了，是姜文导演编剧的新片。不过这个阵容我是一点都看不懂：姜文、马丽、葛优、赵本山、雷佳音，据说还有胡歌、宋小宝。虽然阵容看不懂但不妨碍继续期待。</p>
+<h1 id="0x0c-总结的总结">0X0C 总结的总结</h1>
+<p>根据我一向的「好习惯」，一定是要给总结写一个总结的。但是我对今年的满意度真的很低，以至于没有什么太大的兴趣再总结一次了。但是明年也就是 2025 年，就要迎来我的 30 周岁生日了，向着 30 周岁发起冲锋吧！（突然中二起来了）</p>
+]]></description></item><item><title>2024 年的自建 NAS 不专业不完全手册</title><link>https://blog.programmer.work/posts/nas-build-2024/</link><pubDate>Tue, 02 Jul 2024 13:48:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/nas-build-2024/</guid><description><![CDATA[<h1 id="0x00-你需要一台-nas-吗">0X00 你需要一台 NAS 吗</h1>
+<p>不知怎么的，在移动互联网疯狂发展的今天，反而慢慢开始兴起了自建网络服务这种复古风潮。最近这些年身边的朋友同事越来越多聊到 NAS 了，甚至 B 站上出现了一小撮 NAS 区 UP 主（没错，你知道我说的是谁）。就更不说现在淘宝咸鱼上大量的 NAS 专用机箱，甚至是 3D 打印的定制化版本了。</p>
+<p>你真的需要一台 NAS 吗？NAS 说白了就是一块连着网的硬盘，速度比直接插电脑上还慢一些，如果你平日里需要访问数据的设备并不多，且拥有一个台式电脑，那不如先买两块硬盘插上去。通过文件共享功能将台式机转换成一个带有存储功能的兼职 NAS。</p>
+<p>如果你家里的多个手机、平板、电脑、电视都需要访问存储，或者你没有台式机可以扩容，那确实可以考虑搞一台 NAS。</p>
+<p></p>
+<p>我自己的需求是这样的：</p>
+<ul>
+<li>平时喜欢摄影，每次拍摄回来的照片少则 10G 多则 50G，日积月累已经有大几百 G 了，需要备份</li>
+<li>也喜欢拍一些视频，相机拍摄的码率都很高，随随便便 50G 100G 的，需要备份</li>
+<li>患有仓鼠症，喜欢囤一些高清电影电视剧来看，总共搞了有差不多 8T 了</li>
+<li>手机、平板、电视、电脑都需要访问上面的影视资源</li>
+</ul>
+<p>什么，你说你就是想要，不管需求？那就买呀，挑着贵的和好玩的买～</p>
+<h1 id="0x01-我的-nas-之路">0X01 我的 NAS 之路</h1>
+<p>最早的一台 NAS 是 2018 年买的 Synology DS118 性能烂到家了，也只有一个盘位，配了一块 4T 红盘，不过还是老老实实用了差不多 3 年。</p>
+<p>DS118 存储告急之后打算升级 NAS，觉得自己很少用得上群晖引以为豪的软件，再加上对自己的技术实力有一捏捏🤏的信心，所以开始尝试自组 NAS。硬件选择了奔腾 G6400 + 16G 内存，第一次使用了 OMV ，觉得它对 Linux 的改动很少，所以相对来说更玩得惯。不过用了没多久还是换成了 TrueNAS Core，这套平台就稳定运行了很久。</p>
+<blockquote>
+<p>当时买了 8T 的 HC320，买了没几天奇亚币就上天了，我的硬盘价格也跟着上天了。时隔一周，我 899 买的硬盘店家就卖 1899 了 🤷‍♂️</p>
+</blockquote>
+<p>因为 TrueNAS Core 是基于 BSD 的系统，后来看 TrueNAS SCALE（基于 Linux 的）稳定了之后就切到了 SCALE 版本，也顺势将 G6400 升级成了 i3-10100，内存也加到了 32G。</p>
+<p>升级之后的 NAS 一直稳定运行到了今年，突然有一天我觉得家里另外一台用作 homelab 的服务器开机时间太少了，然后我看着身边的一台性能「强劲」的 homelab 和一台性能「羸弱」的 NAS 陷入了沉思。沉思过后，从兜里掏出了一张「融合」：</p>
+<p></p>
+<h1 id="0x02-有点强的硬件配置">0X02 有点强的硬件配置</h1>
+<p>说是融合，其实就是选用了 homelab 的 CPU内存主板和原 NAS 的机箱硬盘，大概配置如下</p>
+<table>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Model</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>CPU</td>
+          <td>AMD Epyc 7551P 32C64T</td>
+      </tr>
+      <tr>
+          <td>主板</td>
+          <td>SuperMicro H11SSL-i</td>
+      </tr>
+      <tr>
+          <td>内存</td>
+          <td>DDR4 16G ECC * 4</td>
+      </tr>
+      <tr>
+          <td>HDD</td>
+          <td>HC320 8T * 3</td>
+      </tr>
+      <tr>
+          <td>HDD</td>
+          <td>红盘 4T * 1</td>
+      </tr>
+      <tr>
+          <td>HDD</td>
+          <td>银河 4T * 1</td>
+      </tr>
+      <tr>
+          <td>SSD</td>
+          <td>Intel 1.6T</td>
+      </tr>
+      <tr>
+          <td>网卡</td>
+          <td>Intel 2.5G</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>试问哪个程序员不想要一台 32 核 64 线程 64G 内存 近 30T 存储容量的 NAS 呢 🤣</p>
+<blockquote>
+<p>配置单疑点：真有必要上这种 CPU 吗？没有，完全没有，事实上是之前 i3-10100 应付我的需求也完全没有任何问题。我只是正好有这个，卖也不怎么值钱，不如装上。真有必要上 64G 内存吗？没有，完全没有，事实上之前 32G 内存 应付我的需求也完全没有任何问题。我只是&hellip;有点上头，所以上了 64G。真有必要搞这么多存储吗？没有，完全没有，事实上🤦‍♂️这个还是有的，或者说因人而异，毕竟我确实要存好多照片、视频和电影电视剧。听说 HC320 很拉？其实我没觉得，所谓炒豆子声确实存在一些，不过也只存在于读写的时候，但是 NAS 其实大多数时候磁盘是可以休眠的。另外我放在桌子下面使用完全不会在意，只要别放卧室就没有问题。你那个 1.6T 是不是有点扎眼？这是我在咸鱼上收的二手，当时放在 homelab 上用的，现在拿过来做缓存（缓存意味着丢了也问题不大），正经自己配置缓存的话一般 250G 就妥妥够用了。</p>
+</blockquote>
+<h1 id="0x03-硬件选择">0X03 硬件选择</h1>
+<p>我这个硬件配置其实也就图一乐，对大多数朋友的选购并不能起到多大的帮助作用。这一节来简单帮大家分析一下需求，选择自己需要的配置。</p>
+<h2 id="cpu">CPU</h2>
+<p>如果没有万兆传输需求，那 300 块钱买一个 G6400 或者同等水平的 CPU 就可以了，如果有万兆需求的话可能 CPU 性能上需要再上一档。</p>
+<p>另外挑选 CPU 的时候可以注意一下它的编解码性能，如果性能达标的话在 NAS 上做视频转码就舒服多了。</p>
+<h2 id="内存">内存</h2>
+<p>内存主要就是看大小，如果你不打算用 TrueNAS 且不打算跑好多个服务在 NAS 上的话，4G 或者 8G 内存就是够用的。如果打算用 TrueNAS 的话可以在预算范围内多购置一些内存，有关系统选择的内容我写在下面了。</p>
+<blockquote>
+<p>有必要 ECC 吗？可以，但没必要。随便买几根内存插上就行了，真想讲究的话就买同品牌同频率同型号的内存。</p>
+</blockquote>
+<h2 id="主板">主板</h2>
+<p>主板要在预算范围内选靠谱一些的，劣质主板的供电可能会有问题，这对于我们这种 7*24 运行的机器来说是很大的问题了。</p>
+<p>另外如果计划加的硬盘多的话要先看一下硬盘供电和 SATA 接口是不是够用，不够的话还要买 PCIE 转接卡。</p>
+<h2 id="电源">电源</h2>
+<p>电源更好选，我们选一个转换率达标的<strong>大牌</strong> 就好了，功率反而是最不重要的。另外我建议各位选购全模组电源，因为我们大概率是不会给 NAS 装显卡的，用上全模组电源就可以让机箱里少很大一坨线。</p>
+<p>现在我用的就是非模组电源，机箱里一大坨一大坨的供电线闲着用不上，徒增散热难度。</p>
+<h2 id="硬盘">硬盘</h2>
+<p>硬盘就在淘宝上找那几个口碑好的店去买就好了，既然组 NAS 了我建议还是 4T 起步，8T 10T 16T 最好。</p>
+<p>如果需要缓存盘的话，要考虑自己是否会上万兆，如果是万兆内网的话一定要上 nvme 的盘，否则 SATA 的 SSD 就可以用作缓存了。因为 SATA 3.0 的速度是 6 Gbps 要高于常见的千兆、2.5G 和 5G，但是不到万兆的 10G。</p>
+<h2 id="网络">网络</h2>
+<p>网络基本上有四个选择，大家可以根据自己的需求进行选择：</p>
+<ul>
+<li>Wi-Fi <strong>愚蠢之选</strong> ：速度慢且不稳定，NAS 系统对 Wi-Fi 的支持也不好，没有任何理由选择为 NAS 配置 Wi-Fi；</li>
+<li>千兆 <strong>新手之选</strong> ：不改动网络，不新增设备，125mb/s 的速度能满足几乎所有功能性需求；</li>
+<li>2.5G <strong>实用之选</strong> ：2.5G 的网卡和交换机都不算贵，能将内网速度提升一倍不止，性价比很高；</li>
+<li>万兆 <strong>高玩之选</strong> ：如果经常有大量数据传输的需求，那可以咬咬牙上万兆，100G 的数据也能一分多钟搞定，不过一般玩家就不太建议这么搞了，太贵；</li>
+</ul>
+<blockquote>
+<p>你说还有 40G ？散了散了，买不起了 🤷‍♂️</p>
+</blockquote>
+<h1 id="0x04-系统选择">0X04 系统选择</h1>
+<p>自组 NAS 的话基本上就下面这几种系统方案：</p>
+<ul>
+<li>TrueNAS Core <strong>稳如老狗</strong> ：企业级的 NAS 系统，基于 BSD，原生 ZFS，稳如老狗。不过没什么可玩性，如果是用作纯 NAS 的话可以考虑；</li>
+<li>TrueNAS SCALE <strong>稳中带皮</strong> ：同样的企业级 NAS 系统，基于 Linux，也很稳定，比 Core 版的可玩性强一些，带 Docker；</li>
+<li>OMV <strong>简单粗暴</strong> ：一个相对简单的系统，基于 Debian，没有深度用过，不过用户量也不是很大；</li>
+<li>WIndows Server <strong>熟悉的地方</strong> ：有些用户对 Windows 很熟悉，对 Linux 则一窍不通，那其实装个 Windows 开启文件共享也挺好的，还免了后续的折腾；</li>
+<li>Linux <strong>硬核之选</strong> ：如果你对自己的 Linux 技术有信心，是可以直接装 Linux 然后自己配置文件共享的，这样还更自由，只是 web 面板的缺失会导致修改配置和部署服务的麻烦程度直线提升；</li>
+<li>Unraid <strong>玩家之选</strong> ：Unraid 是除了 Windows 以外唯一一个付费系统，可以方便的配置 Docker 和虚拟机，也有应用商店可以快速安装一些诸如 Plex、qbittorrent 之类的应用；</li>
+</ul>
+<p>按个人使用经验来说，比较推荐 <strong>TrueNAS SCALE</strong> 和 <strong>Unraid</strong> 两个。</p>
+<h2 id="truenas-scale">TrueNAS SCALE</h2>
+<p>优势：</p>
+<ol>
+<li>开源且免费</li>
+<li>ZFS 很屌</li>
+<li>带有插件市场，方便安装插件</li>
+<li>支持在 NAS 上部署虚拟机</li>
+</ol>
+<p>劣势：</p>
+<ol>
+<li>上手难度较高</li>
+<li>ZFS 并不适合所有人</li>
+<li>ZFS 对内存要求较大</li>
+<li>插件市场并不很完善</li>
+</ol>
+<h2 id="unraid">Unraid</h2>
+<p>优势：</p>
+<ol>
+<li>阵列系统自由度高</li>
+<li>上手门槛低</li>
+<li>插件市场相比 TrueNAS 更完善</li>
+<li>中文化做的更好</li>
+<li>管理界面更加直观</li>
+<li>也能部署虚拟机</li>
+</ol>
+<p>劣势：</p>
+<ol>
+<li>要钱，现在还改成了订阅制（可以去咸鱼收老的激活码）</li>
+<li>对 ZFS 支持不佳</li>
+<li>在使用校验盘且没有缓存的情况下写入速度慢</li>
+</ol>
+<h1 id="0x05-阵列介绍unraid-only">0X05 阵列介绍（Unraid Only）</h1>
+<p>这里简单介绍一下 Unraid 的阵列，严格来说不叫阵列，应该是 Array。</p>
+<p></p>
+<p>我们以 3 块 8T 的硬盘为例，如果组成无校验的 Array，可用空间就是 3*8=24T。向其中存储的文件会<strong>以文件为尺度分散在所有硬盘中</strong> ，这种方式的特点就是：<strong>读写的速度都是单盘的速度</strong> 。并且数据安全性上也比较特别，由于都是以文件为尺度进行分盘的，所以即使 3 块盘坏了 2 块，那活着的盘里的数据也还能都取出来，极端点说 100 快盘坏了 99 个，最后那个活着的也能读数据出来。这就是 Unraid 的特性。</p>
+<p></p>
+<p>还是 3 块 8T 的盘，如果将其中一个用作<strong>校验盘</strong> ，那可用空间就是 2*8=16T。存储的文件依旧以文件为尺度分散在硬盘中，但是每次写入数据到「数据盘」时，都会同时计算校验值写入「校验盘」。我们假设数据盘 A 存储了<code>[01010101]</code>的数据，数据盘 B 存储了 <code>[01100110]</code> 的数据，那经过计算我们校验盘就会存储 <code>[00110011]</code>（通过计算对应位置的二进制得到的）。这样一来 2 块数据盘无论坏掉哪一个，都可以根据另一个好的和校验盘进行计算将其数据恢复出来；如果校验盘坏了，那数据本身就没有丢，再替换一块校验盘上去即可。带校验的模式也有一点风险，就是「如果只有校验盘活下来」的情况，这种情况虽然校验盘活下来了，但是数据还是全都丢完了。</p>
+<p>一般来说你都用 NAS 了，想必是对数据安全有一定要求的，所以建议 Unraid 配合校验盘一起使用，担心性能问题大不了再加一个缓存盘就是了。</p>
+<h1 id="0x06-阵列介绍truenas-only">0X06 阵列介绍（TrueNAS Only）</h1>
+<p>选择 TrueNAS 肯定是要用 ZFS 的，我们一般用 ZFS 也就这几种用法：strpe, mirror, raid-z, raid-z2。严格来说这些阵列方案和常见的 RAID 是不一样的，但也大差不差，所以我还是写了这个简易的对照表，方便各位理解。</p>
+<table>
+  <thead>
+      <tr>
+          <th>ZFS Name</th>
+          <th>RAID Name</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>strpe</td>
+          <td>raid-0</td>
+      </tr>
+      <tr>
+          <td>mirror</td>
+          <td>raid-1</td>
+      </tr>
+      <tr>
+          <td>raid-z</td>
+          <td>raid-5</td>
+      </tr>
+      <tr>
+          <td>raid-z2</td>
+          <td>raid-6</td>
+      </tr>
+  </tbody>
+</table>
+<p>还是那句话，你都用 NAS 了，想必是对数据安全有一定要求的，所以直接抛弃 strpe 这种一损俱损的疯狂模式，我们从 mirror 开始介绍。</p>
+<p>mirror 是最简单的，就是纯镜像。我们依旧假设你有 3 个 8T 盘，现在将他们组成 ZFS mirror 之后可用空间就只有 8T，但是安全性暴涨。mirror 模式会将写入阵列的数据同时写入到所有磁盘，也就是说每个盘里都有完整的数据，这样一来 3 块盘只要没有一起挂掉，那数据就全部还在，是<strong>数据安全性最高</strong> 的。</p>
+<p>raid-z 则是带校验的，但是与 Unraid 不同，<strong>raid-z 不存在校验盘的概念</strong> 。三块盘的身份是相同的，功能也是一样的，你写入的数据会分散在两块盘中，再将校验数据写入另一块盘。这种方式乍一看和 Unraid 上使用单个校验盘是一样的，但其实大相径庭。由于数据分散在三块盘中，校验数据也分散在三块盘中，这就意味着读写都是三块盘一起工作的，所以<strong>性能比带校验的 3 盘 Unraid 强</strong> 好多。但是当同时坏掉两块盘的时候，不能像 Unraid 一样有概率恢复一半数据。</p>
+<p>raid-z2 则是带两个校验的，通常只有硬盘数更多时（例如 5 块）才会考虑，原理同上。带两个校验盘就意味着整个阵列中可以坏掉随意两块盘。</p>
+<h1 id="0x07-装都装了-跑个服务吧">0X07 装都装了 跑个服务吧</h1>
+<p>如果你的 NAS 性能比较强，有多余的性能可以跑一些服务的话，我可以推荐一下我部署的服务：</p>
+<ul>
+<li>Plex 影音中枢，可以将自己下载好的电影电视剧做成海报墙，并且在多个设备上无间断播放，需要在电视电脑平板手机等多设备上观看的话还是很好用的；</li>
+<li>FileBrowser 文件管理器，虽然可以通过 SMB 协议挂载目录到手机电脑上，但偶尔不方便挂载的时候可以用它管理文件；</li>
+<li>cailbre-web 电子书管理器，类似于 Plex，不过它是针对电子书的，可以在线看书、管理、收藏；</li>
+<li>firefox 有点离谱，但是 Firefox 可以跑在浏览器里，我把 Firefox 通过 frp 做了内网透传，这样人在外面只需要访问这个 Firefox 服务就能间接访问家里部署的所有 web 服务了；</li>
+<li>frp 内网穿透，允许你通过自建的服务器转发流量到家中，实现远程访问家里 NAS 的功能；</li>
+<li>homeassistant 智能家居，还没深度使用，不过多介绍；</li>
+<li>netdata 性能监控，说实话没什么用，但是看着帅；</li>
+<li>qbittorrent BT 下载神器，没有介绍的必要；</li>
+<li>SpeedTest 测速工具，用来测试内网速度是否达标</li>
+</ul>
+<h1 id="0x08-冷静消费">0X08 冷静消费</h1>
+<p>一波分析后蠢蠢欲动？<strong>冷静，冷静，冷静</strong></p>
+<p>开搞之前先问自己几个问题：</p>
+<ol>
+<li>真的有那么多的文件要存储吗？</li>
+<li>真的有那么多的数据要备份吗？</li>
+<li>真的有那么多的设备要访问吗？</li>
+<li>电脑加硬盘的方案真的不行吗？</li>
+</ol>
+<p>如果真的都考虑清楚了，那就开搞吧～</p>
+<p>最后提醒一句<strong>数据无价，做好备份</strong></p>
+]]></description></item><item><title>假数据制造机：Python 中的 Faker 库</title><link>https://blog.programmer.work/posts/python-faker-library/</link><pubDate>Wed, 19 Jun 2024 14:05:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/python-faker-library/</guid><description><![CDATA[<h1 id="0x00-来骗来偷袭">0X00 来骗，来偷袭</h1>
+<p>这次来介绍一个来骗来偷袭的 Python 库：Faker。我们平时经常会跟数据库、跟 csv 这些东西打交道。尤其是当你设计一个数据库表的时候，开发和测试环境中只有空荡荡一个表，没有测试数据就很尴尬。</p>
+<p>Faker 就是设计来解决这种问题的，它可以快速生成各种你需要的假数据。安装和使用都非常简单：<code>pip install Faker</code> 就可以完成安装。</p>
+<blockquote>
+<p>这篇 mini 博客的目的是解决「不知道自己不知道」的问题，也就是说明有这么一个库可以做什么，然后介绍简单的用法；具体这个库的完整用法还是要去查看文档。</p>
+</blockquote>
+<p>这里给出一个简单的使用实例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#75715e">#!/usr/bin/env python3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">from</span> faker <span style="color:#f92672">import</span> Faker
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    faker <span style="color:#f92672">=</span> Faker(<span style="color:#e6db74">&#39;zh-cn&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(faker<span style="color:#f92672">.</span>name())
+</span></span><span style="display:flex;"><span>    print(faker<span style="color:#f92672">.</span>email())
+</span></span><span style="display:flex;"><span>    print(faker<span style="color:#f92672">.</span>ipv4())
+</span></span><span style="display:flex;"><span>    print(faker<span style="color:#f92672">.</span>ipv4_private())
+</span></span><span style="display:flex;"><span>    print(faker<span style="color:#f92672">.</span>ipv4_public())
+</span></span><span style="display:flex;"><span>    print(faker<span style="color:#f92672">.</span>city_name())
+</span></span></code></pre></div><p>简单示例</p>
+<pre tabindex="0"><code>OUTPUT:
+
+
+    李林
+    chao83@example.com
+    96.124.160.192
+    192.168.72.158
+    220.137.146.132
+    张家港
+</code></pre><p>这里仅仅有两条需要注意的：</p>
+<ol>
+<li>实例化 faker 的时候记得标记语言，默认是英文信息；</li>
+<li>实例化的 faker 每次调用都会生成新的假数据，只需要实例化一次即可；</li>
+</ol>
+<blockquote>
+<p>Faker 支持生成非常非常非常多数据类型，这里就不也没必要一个个介绍出来。分享一个我自己的用法：可以用 <code>dir(faker)</code> 的方式看它究竟有多少假数据类型可用，也可以在 <code>iPython</code> 中实例化一个 <code>faker</code> 出来然后通过 <code>faker.</code> TAB 的方式进行补全，比如你输入 <code>faker.ip</code> TAB 就可以看到<code>ipv4()/ipv4_network_class()/ipv4_private()/ipve_public()/ipv6()</code>这些。</p>
+</blockquote>
+<p>👇下面我让 GPT 生成了一段脚本，可以看到使用 Faker 创建假数据使用 AI 偷懒是多么的舒爽</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#75715e">#!/usr/bin/env python3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">from</span> faker <span style="color:#f92672">import</span> Faker
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Set up Faker with Chinese locale</span>
+</span></span><span style="display:flex;"><span>    fake <span style="color:#f92672">=</span> Faker(<span style="color:#e6db74">&#39;zh_CN&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Number of students to generate</span>
+</span></span><span style="display:flex;"><span>    num_students <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># List to store student data</span>
+</span></span><span style="display:flex;"><span>    students_data <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Generate data for 100 students</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(num_students):
+</span></span><span style="display:flex;"><span>        student <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;name&#34;</span>: fake<span style="color:#f92672">.</span>name(),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;age&#34;</span>: fake<span style="color:#f92672">.</span>random_int(min<span style="color:#f92672">=</span><span style="color:#ae81ff">18</span>, max<span style="color:#f92672">=</span><span style="color:#ae81ff">25</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;phone_number&#34;</span>: fake<span style="color:#f92672">.</span>phone_number(),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;email&#34;</span>: fake<span style="color:#f92672">.</span>email(),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;address&#34;</span>: fake<span style="color:#f92672">.</span>address(),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;student_id&#34;</span>: fake<span style="color:#f92672">.</span>random_number(digits<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>, fix_len<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        students_data<span style="color:#f92672">.</span>append(student)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Define the CSV file name</span>
+</span></span><span style="display:flex;"><span>    csv_file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;students_info.csv&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Define the CSV header</span>
+</span></span><span style="display:flex;"><span>    csv_columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">&#34;age&#34;</span>, <span style="color:#e6db74">&#34;phone_number&#34;</span>, <span style="color:#e6db74">&#34;email&#34;</span>, <span style="color:#e6db74">&#34;address&#34;</span>, <span style="color:#e6db74">&#34;student_id&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Write data to CSV file</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> open(csv_file, mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;w&#39;</span>, newline<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>) <span style="color:#66d9ef">as</span> csvfile:
+</span></span><span style="display:flex;"><span>            writer <span style="color:#f92672">=</span> csv<span style="color:#f92672">.</span>DictWriter(csvfile, fieldnames<span style="color:#f92672">=</span>csv_columns)
+</span></span><span style="display:flex;"><span>            writer<span style="color:#f92672">.</span>writeheader()
+</span></span><span style="display:flex;"><span>            writer<span style="color:#f92672">.</span>writerows(students_data)
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Data written to </span><span style="color:#e6db74">{</span>csv_file<span style="color:#e6db74">}</span><span style="color:#e6db74"> successfully.&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">IOError</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;I/O error occurred when writing to the CSV file.&#34;</span>)
+</span></span></code></pre></div><p>生成出来的文件如下，乍一看是不是还挺像那么回事的</p>
+<pre tabindex="0"><code>    name,age,phone_number,email,address,student_id
+    杨文,21,15651446876,xiangjing@example.net,天津市东莞县沈北新西宁街T座 528464,38652303
+    任莹,20,13151815142,ming06@example.org,澳门特别行政区海门县静安谭街E座 169654,62640223
+    马斌,22,15317418861,weiguiying@example.com,山西省西安市南溪海门路c座 632185,51262627
+    万龙,25,18675244909,pqiao@example.org,澳门特别行政区惠州县海港陈街u座 788331,12862421
+    唐莹,21,14524896623,wli@example.org,天津市马鞍山市黄浦拉萨街w座 346616,13890353
+    王秀芳,24,15093668582,jie32@example.net,辽宁省佛山县魏都何街x座 791424,75220986
+    李建平,21,18293878743,xiulanzhong@example.com,香港特别行政区彬市崇文北京街F座 134329,11422454
+    谢丽娟,19,13242202418,pqian@example.com,新疆维吾尔自治区香港县滨城南宁路w座 529098,18889078
+    薛婷,20,13807465629,zliang@example.net,北京市云市花溪刘街e座 773539,35816274
+    雷丽娟,18,18165303861,yong51@example.net,湖北省济南县孝南陈街J座 484354,27706654
+    朱秀兰,19,15036330967,caogang@example.com,台湾省佳县城北荆门街K座 131039,16335754
+    张丽丽,24,15032876465,hanxiuying@example.org,澳门特别行政区潜江市浔阳海口路j座 179700,60603103
+    赵桂兰,20,13009006486,minxie@example.com,四川省桂芝市海陵李街s座 535125,70265537
+    赵春梅,24,15251434633,xiaojie@example.org,北京市南昌市朝阳嘉禾街Q座 111575,84861999
+    蓝玉英,23,15006072574,xiuyingbai@example.net,辽宁省齐齐哈尔市东丽张路X座 952846,59067909
+    马超,22,15023489681,ishen@example.net,山东省广州市永川任路I座 246768,57163888
+    冯丽丽,19,18941560722,suyong@example.org,重庆市辉县怀柔大冶街n座 651829,48840449
+    张辉,22,15525627747,edu@example.org,内蒙古自治区南京市翔安林路Y座 828410,27849301
+    龙帅,20,13044861787,gangchen@example.com,福建省波县城北辽阳街B座 699463,93809855
+    王秀兰,23,15123952816,liyao@example.com,重庆市海燕市永川李路U座 589932,40837105
+    何秀云,22,13389508938,guojuan@example.org,宁夏回族自治区坤市华龙长沙街A座 448755,16331208
+    郑建,21,14773507926,na97@example.org,湖北省北镇市牧野邯郸街Q座 441383,52901105
+    黄桂香,20,15983226045,xia34@example.org,江西省长沙县西峰郑街v座 555389,38532397
+    雷桂花,21,15779091442,fli@example.org,青海省重庆县魏都金路r座 438666,25582281
+    洪伟,24,15034551309,bhu@example.org,甘肃省淑华市长寿沈阳街D座 781857,51371004
+    侯秀荣,20,15658144733,mindeng@example.org,河南省拉萨市兴山周路q座 690193,34181753
+    霍丽娟,23,14755592995,tianjie@example.org,湖北省沈阳市怀柔香港街E座 798600,59323935
+    李晶,21,14789714084,luomin@example.net,湖南省北京县牧野吴街m座 527079,20443595
+    何莹,20,15371237169,mwang@example.com,云南省北镇市涪城东莞路m座 835686,31431046
+    冯小红,20,13929478423,na46@example.net,安徽省春梅市华龙合山路x座 783485,42282144
+    王婷婷,25,18953524230,jieduan@example.net,江西省芳市城东马鞍山街H座 846377,89518293
+    萧秀荣,21,15764734584,uzhang@example.com,河南省嘉禾县普陀杨路m座 946236,60617348
+    卫利,22,13443120525,dujuan@example.com,宁夏回族自治区拉萨市兴山汤路U座 430226,19339491
+    陈凤兰,23,15701289189,xduan@example.com,吉林省永安市吉区陈街s座 321158,51780743
+    吴琳,18,14529375646,juanjia@example.com,陕西省佳县新城刘路H座 759718,89498195
+    叶波,24,18061561625,xialin@example.net,西藏自治区丽丽县友好潜江街s座 970715,75555133
+    赵建国,19,15825328065,yan22@example.org,青海省武汉市南长澳门路t座 428291,85520541
+    刘瑞,24,15266286662,wei75@example.com,甘肃省平县翔安潮州路E座 566121,33484433
+    李阳,18,15814354022,ohuang@example.com,陕西省艳市兴山柳州路W座 810774,77096319
+    乔志强,22,15310103951,tao51@example.com,澳门特别行政区林市锡山丁路X座 168869,12169760
+    吴想,22,13234314473,gang25@example.com,北京市海口县沙市宋街m座 592337,54436277
+    潘婷婷,22,18978526383,dliao@example.net,台湾省东莞县丰都胡街J座 709057,91807647
+    姚婷,21,18956219835,yuanjuan@example.com,香港特别行政区斌县孝南张街O座 130247,12811809
+    汪峰,22,13315098113,ufan@example.net,河北省建平市沈北新济南路m座 170271,49070156
+    李丹,23,13476665953,xiuyingxie@example.org,辽宁省大冶市吉区海门路J座 372191,70769981
+    刘辉,18,15140639015,yanfeng@example.net,湖南省香港县合川尹路C座 922526,19022713
+    赵雷,21,13090100149,chaoqian@example.net,北京市春梅县静安袁路W座 362649,43043458
+    胡莉,25,18974156576,wangang@example.org,江苏省彬县沙市蒋街H座 208132,25741533
+    冯欢,24,14777889865,yong75@example.org,陕西省太原县东城何街T座 632289,17757971
+    萧楠,18,14520094716,hzhu@example.org,天津市秀兰县翔安刘街E座 388636,12886631
+    万建平,19,15915290360,weima@example.org,新疆维吾尔自治区秀芳市城北贵阳路f座 220049,48199977
+    张杨,24,15633549143,xia00@example.org,贵州省马鞍山市浔阳曹路b座 183259,86763091
+    王伟,25,18102638719,pingzhou@example.com,云南省娟县高明太原路b座 241294,47232715
+    孙桂荣,24,13214329937,dingchao@example.com,浙江省柳州县上街贾路g座 637845,57010965
+    胡艳,25,14551404458,fengxiulan@example.net,宁夏回族自治区秀芳县朝阳辛集街Y座 373194,99124759
+    陈桂兰,22,15705819325,ama@example.com,宁夏回族自治区雷市锡山拉萨街T座 109340,60143910
+    傅帅,18,13037296868,xiuying11@example.net,山东省勇县浔阳西安街B座 734661,81970997
+    张斌,25,15919070157,mingmeng@example.net,四川省斌县翔安徐街P座 873821,45687729
+    吕军,21,15004718726,renjie@example.org,贵州省武汉县淄川郑州街c座 878856,95639249
+    刘建平,18,15325768175,pcao@example.net,湖南省潮州县魏都永安街C座 573040,90720683
+    汪桂芝,24,13320503412,zhan@example.com,黑龙江省长沙县白云武汉路D座 459772,65769168
+    罗玲,24,18084432364,axiong@example.com,海南省张家港市海陵羊路N座 678692,53135397
+    郝玉华,25,15038955596,shiyan@example.com,贵州省丽娟市沙市邱街j座 419562,95848846
+    庞玉英,22,13728364375,ping58@example.net,新疆维吾尔自治区彬市高明王街d座 648000,64832283
+    谢刚,20,13006216710,maoli@example.org,宁夏回族自治区武汉市静安高街N座 984048,66413173
+    黄秀梅,24,18219872373,zengguiying@example.com,河南省淑珍市白云哈尔滨路R座 365763,90582516
+    牟华,22,13473653213,gang06@example.net,四川省张家港市海陵张路W座 759909,96673716
+    王玉英,20,13267038755,guiyingqiu@example.net,西藏自治区沈阳县牧野拉萨路c座 477448,11364274
+    王玲,24,13609736441,exiang@example.org,香港特别行政区桂英市涪城姚街p座 415052,30258177
+    邢桂兰,25,13104159794,taogao@example.net,宁夏回族自治区柳州县龙潭刘路H座 233088,29134578
+    张亮,19,13946106449,bjiang@example.com,云南省辛集市清河李街i座 135971,78324297
+    胡秀芳,23,18713925682,tmao@example.net,宁夏回族自治区马鞍山县牧野吴路y座 268410,96802279
+    李洁,19,18765278454,xiangfang@example.com,福建省台北市长寿汕尾路o座 347366,85574490
+    蒋兵,24,13400202150,chao51@example.org,台湾省关岭市新城辽阳街B座 241442,90031700
+    张利,24,18090151698,qinyang@example.org,海南省重庆县清城辛集街P座 162853,15567649
+    柳瑜,23,15575643433,na47@example.org,西藏自治区合肥县江北黄街Z座 356756,48715558
+    袁建军,21,15243210479,songxia@example.org,山东省欣市花溪赵街L座 841242,51808908
+    王秀英,24,13353152189,syang@example.org,内蒙古自治区明市永川海门街N座 900031,11089589
+    徐峰,20,13931311017,pengyang@example.net,辽宁省合肥县友好林路v座 702291,39487119
+    傅建军,25,15568950307,leijuan@example.com,云南省晶市闵行李街w座 387061,58657816
+    温英,23,13600204215,gongli@example.net,云南省长沙县大兴重庆路A座 172765,79112040
+    王浩,24,18878254393,panyan@example.org,上海市亮市魏都孙路z座 173852,89935907
+    苏婷婷,25,15768731314,hdeng@example.org,湖南省博市高港台北路H座 384664,86207148
+    张晨,25,14574088802,chaoma@example.com,西藏自治区哈尔滨市大东任路T座 331900,36313643
+    朱鑫,25,14786084196,nazhong@example.net,内蒙古自治区文县秀英王路x座 316251,43000433
+    葛宁,21,13628124785,fyin@example.com,天津市涛市合川巢湖路I座 258119,13636102
+    欧建华,22,13474462477,gkang@example.net,黑龙江省梅市吉区李路Q座 346143,40699001
+    周淑英,22,15394468081,ming17@example.com,黑龙江省兴城县兴山张街x座 692324,66822153
+    樊凯,18,15961375610,rhu@example.com,江西省太原市合川澳门路S座 134314,47105810
+    杨莉,24,14535546194,li91@example.net,辽宁省旭县东城姚街U座 534685,47600036
+    宫玉珍,22,13536666673,xiaqiang@example.org,吉林省太原县山亭罗路g座 409209,61974123
+    顾鹏,25,18199286199,kongping@example.com,陕西省宁市浔阳贵阳路n座 403156,29450095
+    井芳,18,18600909935,azhu@example.com,江苏省嘉禾市清河张路g座 619941,69174743
+    宋玉华,20,18932355002,yjia@example.org,青海省澳门市海港程路U座 652351,57624414
+    张建平,22,18155187736,wangming@example.com,湖南省莉市淄川呼和浩特路A座 964393,80044659
+    姜斌,24,18803574186,tao82@example.org,山西省辛集市东城胡路v座 119458,25854974
+    陈颖,23,14517412603,luowei@example.org,云南省建华市魏都徐街D座 571366,43305147
+    李海燕,22,15193868140,yangzhao@example.org,湖北省石家庄市丰都台北路T座 551877,56451677
+    李桂荣,20,15616840094,taoguo@example.com,上海市拉萨市大东叶街d座 577821,31959883
+    张婷婷,22,13166077906,li41@example.com,西藏自治区永安市永川范路i座 943614,66647808
+</code></pre>]]></description></item><item><title>Linux 文本三剑客 grep/awk/sed 入门手册</title><link>https://blog.programmer.work/posts/linux-text-process/</link><pubDate>Thu, 21 Mar 2024 13:29:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/linux-text-process/</guid><description><![CDATA[<h1 id="0x00-前言">0X00 前言</h1>
+<p>不知道为什么，当三个好用的工具在一起的时候就会被称作：三剑客；四个好用的工具在一起的时候就会被叫做四大天王 🤔。</p>
+<p>算了，这不重要。</p>
+<p>这篇文章的目的是带不了解这三个工具的朋友们简单上手使用它们，默认各位是掌握了 Linux 的基本用法的，其中也会出现有关正则的内容。如果你不懂正则的话建议跳过正则的部分，并且看完这篇文章马上就去学。另外，不要因为正则看起来有点像通配符就按通配符的操作进行下去。</p>
+<h1 id="0x01-grep">0X01 grep</h1>
+<p>首先这三个工具中最常用的应该就是 <code>grep</code> 了，它用于从文件中搜索你感兴趣的内容。例如下面的例子就可以输出 <code>/etc/passwd</code> 文件中包含 <code>root</code> 的行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    grep root /etc/passwd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    &gt;&gt; output
+</span></span><span style="display:flex;"><span>    root:x:0:0::/root:/bin/bash
+</span></span></code></pre></div><p>也可以接多个文件，这样输出的时候就会以文件名开头了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    grep root /etc/passwd /etc/group
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    &gt;&gt; output
+</span></span><span style="display:flex;"><span>    /etc/passwd:root:x:0:0::/root:/bin/bash
+</span></span><span style="display:flex;"><span>    /etc/group:root:x:0:root
+</span></span></code></pre></div><p>下面介绍几个参数：</p>
+<ul>
+<li><code>-i</code> 忽略大小写</li>
+<li><code>-v</code> 显示不匹配的行（取反）</li>
+<li><code>-n</code> 增加行号显示</li>
+<li><code>-c</code> 显示总共多少行，而非具体内容</li>
+<li><code>-r</code> 递归查找所有文件</li>
+<li><code>-A</code> 也就是 after，即显示匹配行和它后面的 n 行</li>
+<li><code>-B</code> 也就是 before，显示匹配行和它后面的 n 行</li>
+<li><code>-C</code> 相当于 <code>-A</code> 和 <code>-B</code> 一起用，显示匹配行和它前后各 n 行</li>
+</ul>
+<p>简单列举一下使用方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#75715e"># 忽略大小写</span>
+</span></span><span style="display:flex;"><span>    grep -i ROOT /etc/passwd <span style="color:#75715e"># 可以匹配到 root 行</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 取反</span>
+</span></span><span style="display:flex;"><span>    grep -v root /etc/passwd <span style="color:#75715e"># 匹配到非 root 行</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 递归查找</span>
+</span></span><span style="display:flex;"><span>    grep -rn root /etc <span style="color:#75715e"># 查找 /etc 目录下所有文件，输出所有带有 root 的行</span>
+</span></span></code></pre></div><p>grep 命令默认情况下就可以使用正则表达式，下面的命令就可以匹配到 root 行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    grep <span style="color:#e6db74">&#34;r..t&#34;</span> /etc/passwd
+</span></span></code></pre></div><p>grep 很多时候是跟在管道符号后面的，例如 <code>curl -XGET http://xxx.xxx/info/ | grep KEYWORD</code> 这种。注意跟在管道符号后面时，grep 只能处理来自标准输入的内容，如果还需要处理标准错误的话需要手动将其重定向到标准输出中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    cat /etc/passwd | grep root
+</span></span></code></pre></div><h1 id="0x02-awk">0X02 awk</h1>
+<p>相比于 grep 处理的是行数据，awk 则主要用于处理列数据。grep 可以从 <code>/etc/passwd</code> 中找到包含 root 的这一行，但是如果你想找所有用户他们用的 shell 就不容易了。</p>
+<p>下面这个命令就可以在 <code>/etc/passwd</code> 中找到每个用户用的是哪个 shell 了。我们观察 <code>/etc/passwd</code> 这个文件可以看到里面每行都有多个字段，并且用 <code>:</code> 分割，第 7 列就是我们要的 shell。所以得到下面这个命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    cat /etc/passwd | awk -F <span style="color:#e6db74">&#39;:&#39;</span> <span style="color:#e6db74">&#39;{print $7}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    &gt;&gt; output
+</span></span><span style="display:flex;"><span>    /bin/bash
+</span></span><span style="display:flex;"><span>    /usr/bin/nologin
+</span></span><span style="display:flex;"><span>    /usr/bin/nologin
+</span></span><span style="display:flex;"><span>    ..............
+</span></span><span style="display:flex;"><span>    /usr/bin/nologin
+</span></span><span style="display:flex;"><span>    /usr/bin/nologin
+</span></span><span style="display:flex;"><span>    /usr/bin/git-shell
+</span></span></code></pre></div><p>先来分析一下这个命令，从 <code>awk -F ':' '{print $7}'</code> 开始。其中 <code>-F</code> 参数就是指定一个「分隔符」，后面的 <code>:</code> 就是分隔符本符，最后一个参数 <code>{print $7}</code> 表示输出第 7 列。其中 <code>{print $INDEX}</code> 可以理解成是一个固定的语法，也可以用 <code>{print $1,$7}</code> 的方式输出第 1 和第 7 列，且用逗号分割。</p>
+<p>程序中第一列不是 <code>$0</code> 虽然有些诡异，但它也没有被弃用，可以试试 <code>{print $0}</code> 是什么作用。</p>
+<blockquote>
+<p>这里的分隔符也是可以用正则的，只是一般来说这里用正则的时候比较少见。</p>
+</blockquote>
+<h1 id="0x03-sed">0X03 sed</h1>
+<p>sed 的定义是一个「流编辑器」，如果理解不了就把他当成一个连 vim 那种界面都没有的编辑器好了。</p>
+<p><strong>我们在开始之前先把<code>/etc/passwd</code> 复制一份到 <code>/data/passwd</code>，防止一会儿误伤操作系统</strong></p>
+<p>如果你用过 vim 的话，上手 sed 应该是比较容易的。我们先来看一个例子</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    sed <span style="color:#e6db74">&#34;s/root/Administrator/&#34;</span> /data/passwd
+</span></span></code></pre></div><p>这个例子就是将 <code>/data/passwd</code> 中的 root 换成 Administrator（好熟悉的用户名 🤣）。但是它只会修改每行的第一个 root，你可以观察一下你的输出是不是这样。如果你想替换的是所有的呢？知道的朋友肯定知道了：「只需要在替换命令后追加一个<code>g</code>」。是的，这就是典型的 vim 用法了。改过之后的命令应该是 <code>sed &quot;s/root/Administrator/g&quot; /data/passwd</code>。</p>
+<p>这时候你可能发现好像你每次改的内容都回显到标准输出了，并没有对文件生效。但是也不要心急去用重定向（你不信邪也可以试试，反正文件复制出来了没有什么风险），想让修改直接对文件生效需要给 sed 命令加上 <code>-i</code> 参数，最后的成品如下，这样一来就可以将文件中的 <code>root</code> 全数替换成 <code>Administrator</code> 了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    sed -i <span style="color:#e6db74">&#34;s/root/Administrator/g&#34;</span> /data/passwd
+</span></span></code></pre></div><p>如果你想删除某行，可以用 <code>sed &quot;/root/d&quot; /data/passwd</code> 的方式去删除。</p>
+<blockquote>
+<p>如果你不信邪去试了重定向，会发现文件变成空白的了。这是因为当你的命令中出现重定向时，会优先准备重定向，也就是说当 sed 运行起来的时候该文件已经是等待输入的空白文件了。</p>
+</blockquote>
+<blockquote>
+<p>也许你平时对 sed 并不感冒，但是当你需要处理一个很大的文本文件的时候，相信我，你一定会想起它的好的。</p>
+</blockquote>
+<h1 id="0x04-最后">0X04 最后</h1>
+<p>通常来说这些工具会和 <code>cat</code>、<code>tail</code> 等工具一起用，通过管道将他们联系起来。</p>
+<p>有关组合技的用法就太多了，CLI 最大的魅力可能就在于组合，不过还是需要各位在工作和学习中慢慢摸索～</p>
+]]></description></item><item><title>写给新手的 iptables 使用说明</title><link>https://blog.programmer.work/posts/iptables-for-beginner/</link><pubDate>Thu, 22 Feb 2024 13:08:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/iptables-for-beginner/</guid><description><![CDATA[<h1 id="0x00-基础知识">0X00 基础知识</h1>
+<p>常用 Linux 的各位估计都知道 <code>iptables</code>、<code>firewalld</code> 和 <code>ufw</code> 这三个工具吧，或者还知道 <code>netfilter</code> 这个内核组件。但是他们究竟是什么关系呢？从关系上来讲，可以将他们分成三层：最底层是 Linux 的安全框架 netfilter，上面是用来操作 netfilter 的 iptables，再上层是 firewalld 和 ufw。</p>
+<p></p>
+<p>其中 firewalld 一般会默认安装在 RHEL 和 CentOS 中，ufw 会默认安装在 Debian 和 Ubuntu 中。不过由于很多人还是习惯直接操作 iptables 所以这次的重点就是它了。很多人会说 iptables 是防火墙，这其实并不严谨，它的标准定义应该叫做 Packet Filter 也就是包过滤工具。而且事实上也是如此，它不仅能够实现防火墙的限制流量功能，还能提供 NAT 转发的能力。</p>
+<p>iptables 内部总共拥有 4 张表（table），又有多个链（chain），如下图所示。</p>
+<p></p>
+<p>既然是「写给新手的 iptables 使用说明」，自然是挑选最重要的一部分来介绍的，也就是 nat 和 filter 两张表。其中 filter 表应该是我们接触最多的表，它用于决定一个数据包的「命运」，比如你想将某些数据包拦截在外，或者堵住前往某地址的出口就可以用它实现。在使用 iptables 命令时不手动指定表的话就是在操作 filter 表。另一个 nat 表顾名思义就是用来配置 NAT（网络地址转换）的了。</p>
+<blockquote>
+<p>需要注意，严格来说本次只说明 <code>iptables</code> 和与之强相关的命令，也就是说<strong>只涉及 IPV4 的配置</strong> 。如果需要配置 IPV6 的规则，则需要使用 <code>ip6tables</code> 命令，虽说两个命令大差不差，但是这里还是以 IPV4 为主，也只考虑纯 IPV4 环境。</p>
+</blockquote>
+<p>在开始使用命令之前，先要给出一张图作为前置知识：注意看这张图（略复杂，不过前期看不明白也不影响基本的使用）。可以看到其实流量不是从一个表一个表走下去的，而是按照链的顺序在前进，并且不同的流量会走的路径也不完全一致。</p>
+<p></p>
+<p>另外再给出一些常用的命令，用来辅助后面的实验。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#75715e"># 查看 filter 表的所有规则（因为没指定表，所以是默认的 filter 表）</span>
+</span></span><span style="display:flex;"><span>    iptables -L
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 查看 nat 表的所有规则</span>
+</span></span><span style="display:flex;"><span>    iptables -t nat -L
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 删除 filter 表的所有规则</span>
+</span></span><span style="display:flex;"><span>    iptables -F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 删除 nat 表的所有规则</span>
+</span></span><span style="display:flex;"><span>    iptables -t nat -F
+</span></span></code></pre></div><blockquote>
+<p>实验环境：</p>
+<p>毕竟实践出真知，建议搞一台最好两台在同一网段的虚拟机进行试验。</p>
+</blockquote>
+<p><strong>注意</strong> ，接下来两个章节的的命令都是<strong>临时生效</strong> 的，所以如果玩砸了可以直接 <code>iptables -t nat/filter -F</code> 清空规则，或者重启虚拟机从头来过。具体如何将规则写入配置中使其持久化，可以查看章节 0X03 的内容。</p>
+<h1 id="0x01-filter-表">0X01 filter 表</h1>
+<p>既然 filter 表是最常见的，那就从它开始吧～ filter 表中有 <code>input</code>/<code>forward</code>/<code>output</code> 这三个 chain，顾名思义就是分别用来控制传入流量、数据包转发、传出流量的。如果你想控制哪些流量能来不能来，就去在 input 链上加规则；想做流量转发就去在 forward 链上加规则；想控制出口流量就去在 output 链上加规则。</p>
+<h2 id="放行-22-端口">放行 22 端口</h2>
+<p>我自己比较喜欢对着完整命令拆解其参数来学习它的用法，所以也就这样演示了，所以先来看命令吧。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    iptables -A INPUT -i eth0 -p tcp --dport <span style="color:#ae81ff">22</span> -m state --state NEW,ESTABLISHED -j ACCEPT
+</span></span><span style="display:flex;"><span>    iptables -A OUTPUT -o eth0 -p tcp --sport <span style="color:#ae81ff">22</span> -m state --state ESTABLISHED -j ACCEPT
+</span></span></code></pre></div><p>先看第一条命令，我们把它拆成几个部分来看</p>
+<ul>
+<li><code>iptables</code> 就不用多说了，就是这个工具本身；</li>
+<li><code>-A INPUT</code> 其中 <code>-A</code> 参数是 append 的意思，就是在 INPUT 链上追加规则；</li>
+<li><code>-i eth0</code> 其中 <code>-i</code> 是 in-interface 的意思，就是指定了从 eth0 来的流量（要注意<strong>来</strong> 字，是有方向的）；</li>
+<li><code>-p tcp</code> 很好理解，<code>-p</code> 就是 protocol，指定了 tcp 协议；</li>
+<li><code>--dport 22</code> 其中的 <code>-dport</code> 是 destination port 的缩写，也就是指定了目的端口是 22；</li>
+<li><code>-m state</code> 指的是匹配类型选择了「状态匹配」，与后面的 <code>--state</code> 配合使用；</li>
+<li><code>--state NEW,ESTABLISHED</code> 是与上面的 <code>-m state</code> 配合的参数，指的是匹配新建的连接和已经存在的连接；</li>
+<li><code>-j ACCEPT</code> 其中 <code>-j</code> 指的是跳转(jump)到具体操作，这里指的是 ACCEPT，也就是放行；</li>
+</ul>
+<p>所以第一句用人话来说就是：在 filter 表的 INPUT 链上新增一条规则，放行来自 eth0 且访问本地 22 端口的 tcp 流量（包括新建的和已经存在的连接）。看似很长，其实拆解完之后就简单很多了，而且很多时候我们并不需要在命令中加入 <code>-m state --state NEW,ESTABLISHED</code> 的参数。</p>
+<p>在第一个命令的基础上看第二行的命令就更简单了，只是将 INPUT 链换成了 OUTPUT 链，并且是将 <code>--dport</code> 改成了表示 source port 的 <code>--sport</code>。这样一来这句话的含义就是：在 filter 表个 OUTPUT 链上新增一条规则，放行从 eth0 的 22 端口出去的 tcp 流量。注意这里的 <code>-o eth0</code> 指的是从 eth0 口<strong>出去</strong> 的流量，与上面的 <code>-i eth0</code> 形成了对比，这里的 <code>-o</code> 是 out-interface 的意思。</p>
+<h2 id="检查配好的规则">检查配好的规则</h2>
+<p>我们执行完这两条命令之后查看一下 <code>iptables -L -n</code> 的输出，我这里是这样的</p>
+<pre tabindex="0"><code>    Chain INPUT (policy ACCEPT)
+    target     prot opt source               destination
+    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:22 state NEW,ESTABLISHED
+
+    Chain FORWARD (policy DROP)
+    target     prot opt source               destination
+
+    Chain OUTPUT (policy ACCEPT)
+    target     prot opt source               destination
+    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp spt:22 state ESTABLISHED
+</code></pre><blockquote>
+<p>这里解释一下 <code>-n</code> 参数，默认情况下 iptables 会去尝试解析规则中出现的 ip 对应的 hostname 和 port 对应的 servicename，我们为了更加直观的看到刚刚的结果（速度也会更快），就添加了 <code>-n</code> 的参数。它的作用就是让 iptables 不去解析 hostname 和 servicename，直接以数字化的形式（Numbric）展示出来。</p>
+</blockquote>
+<p>从输出中已经可以看到我们配置上去的这两条规则了。另外可能还注意到了 <code>Chain INPUT (policy ACCEPT)</code> 的这块，它的意思是说 INPUT 链的默认规则就是 ACCEPT，也就是说默认情况下所有的入站流量都是会被放行的，OUTPUT 链也是一样，这里就该介绍一下默认情况了。</p>
+<h2 id="默认规则">默认规则</h2>
+<p>可以使用 <code>iptables -P INPUT DROP</code> 命令来将入站流量的默认值设为 <code>DROP</code> 也就是抛弃（当然也可以将其改为 <code>ACCEPT</code> 了），这里的 <code>-P</code> 参数意思是 Policy。</p>
+<p>iptables 中的默认值意思是<strong>当一个数据包没有命中配置的任何一条规则时，采用的策略</strong> ，也就是一个兜底的选择。所以说如果你对服务器的安全性要求比较高，就可以将其出入站的默认值都设置为 DROP，然后再根据需求开放指定的 ip、port、protocol 等。</p>
+<h2 id="特定来源目的地以及端口">特定来源/目的地以及端口</h2>
+<p>下面再看两个命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    iptables -A INPUT -s 192.168.81.0/24 -p tcp --dport <span style="color:#ae81ff">2333</span> -j DROP
+</span></span><span style="display:flex;"><span>    iptables -A OUTPUT -d 192.168.81.0/24 -p tcp --dport <span style="color:#ae81ff">2333</span> -j DROP
+</span></span></code></pre></div><p>这里直接看这个新参数 <code>-s</code> 和 <code>-d</code> 吧，他们分别表示 source 和 destination，也就是来源和目的地。后面跟的不仅可以是一个标准的 ip 地址，也可以是 CIDR 的一段 IP 地址。通过上面两个命令，就拒绝了来自 192.168.81.0/24 且访问自己 2333 端口的 tcp 请求，也拒绝了访问 192.168.81.0/24 的 2333 的 tcp 请求。</p>
+<p>我们已经知道 <code>-p</code> 参数接受的是协议名称，这里再强调一下它只能接受「网络层协议」，比如你写一个 <code>-p http</code> 或者 <code>-p arp</code> 是不行的。他只能接受：<code>tcp/udp/udplite/icmp/icmpv6/esp/ah/stcp/mh</code> 这些参数，或者用 <code>all</code> 表示所有（其实不加 <code>-p</code> 参数就是指代所有）。</p>
+<h2 id="防止被-ping">防止被 ping</h2>
+<p>比如你想禁止别人 ping 自己，就可以用这样的一个命令来阻止：（ping 命令使用的是 ICMP 协议）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    iptables -A INPUT -p icmp -j DROP
+</span></span></code></pre></div><h2 id="关于-forward">关于 forward</h2>
+<p>只有当你的机器作为路由器工作的时候 forward 链才有配置的必要，绝大多数情况下是并不需要配置 forward 的。介于这篇博客是写给新手的，这里就不涉及路由器的配置了。</p>
+<h1 id="0x02-nat-表">0X02 nat 表</h1>
+<p>了解的人肯定了解 nat 是个什么东西，不过比起 filter 这个非常直观的名字来说还是需要简单介绍一下：</p>
+<blockquote>
+<p>网络地址转换（英语：Network Address Translation，缩写：NAT），又称IP动态伪装（英语：IP Masquerade），是一种在IP封包通过路由器或防火墙时重写来源或目的IP地址或端口的技术。这种技术普遍应用于有多台主机，但只通过一个公有IP地址访问网际网路的私有网络中。 &ndash; wikipedia</p>
+</blockquote>
+<p>一般来说操作 nat 表除了要做 SNAT（源地址转换） 和 DNAT（目的地址转换）之外，就是搞端口转发了，且真正去做 NAT 的需求又并不常见，所以针对 nat 表我们就只介绍有关转发的内容好了。</p>
+<h2 id="确认允许转发">确认允许转发</h2>
+<p>有些发型版本默认是不允许转发的，我们可以通过 <code>cat /proc/sys/net/ipv4/ip_forward</code> 检查当前是否允许 ip 转发。很明显，如果输出的是 <code>1</code> 就是允许，<code>0</code> 就是不允许了。修改它也很简单，直接把 0 或者 1 重定向写入进去就好了，比如 <code>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</code>。</p>
+<p><strong>细心的你可能发现了</strong> ，这个文件路径它包含 <code>ipv4</code> 这个字段，那它是不是只能修改 IPV4 的转发呢？确实。如果需要修改 IPV6 的转发则需要改动 <code>/proc/sys/net/ipv6/conf/ens33/forwarding</code> 这个文件。并且注意这个文件中的 <code>ens33</code>，它表示具体某个网口，需要按需修改。如果你想修改所有的网口，可以将它修改为 <code>all</code>。</p>
+<p><strong>细心的你可能还发现了</strong> ，这个文件路径它在 <code>/proc</code> 下面，貌似并不能持久化？确实。如果需要将转发的配置持久化的话需要修改 <code>/etc/sysctl.conf</code> 文件，找到对应的配置修改为下面的配置，再使用 <code>sysctl -p</code> 将其应用就可以了。</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">    net.ipv4.ip_forward = 1
+    net.ipv6.conf.all.forwarding = 1
+</code></pre><p>下面的例子都是在开放了转发之后进行的。</p>
+<h2 id="端口转发">端口转发</h2>
+<p>在我的<a href="__GHOST_URL__/2022/04/04/ssh/" rel="">另一篇博客</a>里提到了使用 ssh 命令建立隧道的方式实现转发，这里再利用 iptables 搞一下。假设你现在有 3 台机器，如下图：B 有两张网卡，接入两个子网，与 A 和 C 均相通，但由于 A 和 C 并不在同一子网内，所以两者无法沟通。现在你想让 A 顺利访问 C 部署在 2333 端口的服务应该怎么办呢？</p>
+<p></p>
+<p>从原理上说，既然 A 能访问 B，B 能访问 C，那只要你让 B 在其中负责转发（传话）就没有问题了。</p>
+<p>所以我们进行如下配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    sudo iptables -t nat -A PREROUTING -p tcp --dport <span style="color:#ae81ff">2333</span> -j DNAT --to-destination 192.168.2.103:2333
+</span></span><span style="display:flex;"><span>    sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+</span></span></code></pre></div><p>先来看第一行配置：</p>
+<ul>
+<li><code>-t nat</code> 是指定了操作 nat 表；</li>
+<li><code>-A PREROUTING</code> 是指定了在 PREROUTING 链中追加规则；</li>
+<li><code>-p tcp --dport 2333</code> 是指定了目的端口为 2333 的 tcp 流量；</li>
+<li><code>-j DNAT</code> 是指定了跳转到 DNAT（目标地址转换）操作；</li>
+<li><code>--to-destination 192.168.2.103:2333</code> 则是将目的地设置为 ip:port；</li>
+</ul>
+<p>再来看第二行配置：</p>
+<ul>
+<li><code>-A POSTROUTING</code> 是指在 POSTROUTING 链中追加规则（跟第一行不一样哈）；</li>
+<li><code>-j MASQUERADE</code> 实现伪装，也就是说将自己转发出去的数据包伪装成本就是自己发的；</li>
+</ul>
+<p>这样一来本来不通的 A 和 C 就通过 B 这个传话员成功通信了。</p>
+<blockquote>
+<p>如果你发现你配置好了之后并不能成功通信，需要检查 B 节点是否允许转发（上面说了怎么设置）。确认允许转发还不行的话，再检查自己 filter 表的 forward 链是否会允许你的这个数据包通过。检查就很简单，直接用 <code>iptables -L</code> 就可以，正常来说它输出的内容你一定能看懂。</p>
+</blockquote>
+<h1 id="0x03-配置文件与持久化">0X03 配置文件与持久化</h1>
+<p>开头的时候说过，这些命令的改动都是<strong>临时</strong> 的，那么如何让它持久化呢？一般有这两种方法：<code>iptables-save</code> + <code>iptables-restore</code> 或者单用 <code>iptables-persistent</code>。两种方法不分优劣，硬要说的话后一种方法比较「优雅」，但是大多数人还是用的前一种方法，所以建议跟他人协作的工作中还是使用第一种方法（除非你有办法说服别人用第二种）。</p>
+<h2 id="save--restore">save + restore</h2>
+<p><code>iptables-save</code> 和 <code>iptables-restore</code> 这两个命令是跟随 <code>iptables</code> 一起的，不用担心没有安装的问题。前者的功能就是输出当前 iptables 的配置（与 iptables 一般命令不同，这个命令默认就是所有 table 了），后者就是恢复 iptables 配置。</p>
+<p>我们可以使用 <code>iptables-save &gt; iptables_config</code> 来把当前生效的规则导出成文本文件，重启之后想要恢复之前的配置用 <code>iptables-restore &lt; iptables_config</code> 就可以了。不过按照习惯，大家会把这个配置文件放在 <code>/etc/iptables/rules.v4</code> 里（看名字也知道，IPV6 的配置一般文件名是 <code>rules.v6</code>）。</p>
+<p>接下来只需要写一个脚本让系统启动的时候自动导入这个配置就可以了。这里建议将脚本命名为 <code>/etc/network/if-pre-up.d/iptablesload</code>，因为 <code>/etc/network/if-pre-up.d/</code> 目录是一个比较特别的目录。看名字也能猜到，在网口被 up 之前会查找这个目录下的可执行文件，逐个执行一遍，这样一来就可以做到当网口 up 起来的时候 iptables 已经处于配置好的状态了。最后记得给脚本一个可执行权限，就 ok 了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#75715e">#!/bin/sh</span>
+</span></span><span style="display:flex;"><span>    iptables-restore &lt; /etc/iptables/rules.v4
+</span></span></code></pre></div><blockquote>
+<p>如果是使用的是 Debian 系的操作系统直接按上述操作就行，如果是 RHEL 系的话可能需要配置 systemd 的服务才行。或者使用下面这种更加优雅的方法～</p>
+</blockquote>
+<h2 id="iptables-persistent">iptables-persistent</h2>
+<p>这种方法看起来优雅很多，不过 <code>iptables-persistent</code> 并不会随 <code>iptables</code> 一起安装，所以需要额外安装一下。安装过程中它就会两次询问你 <code>Save current IPv4/6 rules?</code>，如果你回答了 Yes 那么当前系统中已经配置好的规则就会通通写入到 <code>/etc/iptables/</code> 中，并且命名为 <code>rules.v4</code> 和 <code>rules.v6</code>（没错，就是上面一种方式里提到的位置）。</p>
+<p>每次你手动改完了规则之后就可以使用 <code>netfilter-persistent save</code> 将规则写入到配置文件中，如果你把规则搞乱了也可以使用 <code>netfilter-persistent reload</code> 将配置文件重新套用。</p>
+<h1 id="0x04-其他">0X04 其他</h1>
+<h2 id="删除规则">删除规则</h2>
+<p>我们一直在说创建规则，那怎么删除规则呢？其实很简单，例如你用 <code>iptables -A INPUT -p tcp --dport 2333 -j DROP</code> 命令创建的入站规则，其中 <code>-A</code> 指的是追加一个规则，那你把它就它换成 <code>-D</code> 就是 Delete 了。所以用上面这个命令创建的规则可以用 <code>iptables -D INPUT -p tcp --dport 2333 -j DROP</code> 删除掉。</p>
+<h2 id="规则的匹配顺序">规则的匹配顺序</h2>
+<p>需要注意的一点是，规则匹配是按照顺序自上而下的，这里看一个 <code>iptables -L</code> 的输出：</p>
+<pre tabindex="0"><code>    Chain INPUT (policy ACCEPT)
+    target     prot opt source               destination
+    DROP       tcp  --  anywhere             anywhere             tcp dpt:2333
+    ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:2333
+
+    Chain FORWARD (policy ACCEPT)
+    target     prot opt source               destination
+
+    Chain OUTPUT (policy ACCEPT)
+    target     prot opt source               destination
+</code></pre><p>我们可以看到 INPUT 链上有两条针对 2333 端口的入站规则，第一条 DROP，第二条 ACCEPT。两条规则会按照顺序执行，所以说当遇到第一条 DROP 的时候连接就被 DROP 了，第二条的 ACCEPT 则永远走不到。</p>
+<h2 id="插入规则">插入规则</h2>
+<p>看了上面两个，你可能会想：既然 <code>-A</code> 是 append，且匹配有顺序，那肯定支持一个 <code>-I</code> 的 Insert 操作。确实！</p>
+<p>我们首先看这个命令 <code>iptables -L --line-numbers</code> 的输出：</p>
+<pre tabindex="0"><code>    Chain INPUT (policy ACCEPT)
+    num  target     prot opt source               destination
+    1    DROP       tcp  --  anywhere             anywhere             tcp dpt:2333
+    2    DROP       tcp  --  anywhere             anywhere             tcp dpt:2334
+    3    DROP       tcp  --  anywhere             anywhere             tcp dpt:2335
+    4    DROP       tcp  --  anywhere             anywhere             tcp dpt:2336
+
+    Chain FORWARD (policy ACCEPT)
+    num  target     prot opt source               destination
+
+    Chain OUTPUT (policy ACCEPT)
+    num  target     prot opt source               destination
+</code></pre><p>可以看到我配置了 4 条规则，分别是禁止 2333/2334/2335/2336 的 TCP 入站。现在我想允许这个 <code>123.123.123.123</code> 地址访问我的 2333 端口该怎么搞？最简单的就是在最前面插入一个规则。具体可以用这下面这条命令来在位置 1 的地方 Insert 一条规则（并且把其他规则挤下去）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    iptables -I INPUT <span style="color:#ae81ff">1</span> -s 123.123.123.123 -p tcp --dport <span style="color:#ae81ff">2333</span> -j ACCEPT
+</span></span></code></pre></div><p>再来看一下现在的配置，发现新规则已经被放在最前面了：</p>
+<pre tabindex="0"><code>    Chain INPUT (policy ACCEPT)
+    num  target     prot opt source               destination
+    1    ACCEPT     tcp  --  123.123.123.123      anywhere             tcp dpt:2333
+    2    DROP       tcp  --  anywhere             anywhere             tcp dpt:2333
+    3    DROP       tcp  --  anywhere             anywhere             tcp dpt:2334
+    4    DROP       tcp  --  anywhere             anywhere             tcp dpt:2335
+    5    DROP       tcp  --  anywhere             anywhere             tcp dpt:2336
+
+    Chain FORWARD (policy ACCEPT)
+    num  target     prot opt source               destination
+
+    Chain OUTPUT (policy ACCEPT)
+    num  target     prot opt source               destination
+</code></pre><h2 id="修改规则">修改规则</h2>
+<p>修改一条规则与插入规则没什么区别，只是将 <code>-I</code> 参数换成了 <code>-R</code> Replace 参数而已，后面的都完全一致。</p>
+]]></description></item><item><title>究竟什么是加密</title><link>https://blog.programmer.work/posts/what-is-encrypt/</link><pubDate>Sun, 04 Feb 2024 12:48:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/what-is-encrypt/</guid><description><![CDATA[<h1 id="0x00-什么不是加密">0X00 什么不是加密</h1>
+<p>首先要先明确一个问题：我们日常使用非常多的 md5、SHA-1、SHA-256 这些 <strong>通通都不是加密</strong> ，这些叫做<strong>摘要算法</strong> 。一串明文经过加密算法加密之后，是可以再次解密成明文的，但是摘要算法就不行了。</p>
+<p>拿最常见的摘要算法 md5 举例：针对任何一个合法输入，md5 都会给出一个固定长度为 128 bit（32 byte）的输出，例如 <code>md5(&quot;hello, world&quot;) -&gt; e4d7f1b4ed2e42d15898f4b27b019da4</code>。准确来说你是不能通过后面这串摘要值来反推之前的原文是什么的。因为严格来说这一串摘要值可以对应无限个不同的原文。那么摘要算法一般是拿来做什么用的呢？比较常见的是用来校验数据一致性，比如鸡太美同学编写了一个程序放到网上给大家下载使用，但是我们都知道文件传输过程中理论上可能会出错，所以他在上传之前就计算了程序的 md5 并且在传到服务器上之后再次计算 md5。如果两次计算的摘要值都是正确的，那就可以证明此次数据传输没有出现错误。接下来他把摘要值贴在了下载地址旁边，每个来下载程序的人也都可以在下载之后计算摘要值以保证下载没有出错。</p>
+<p>其实不只是防止文件传输出错，还能增加一定的安全性，比如在文件被偷换之后，可以通过计算摘要值来确定文件是不是自己想要的那个。</p>
+<blockquote>
+<p>摘要算法既然是对任意输入都输出一个固定长度的摘要值，那么自然就会出现「撞车」事故。换句话说就是：不同的输入内容得到了相同的摘要值。具体的可以去搜索md5碰撞来查看相关资料。</p>
+</blockquote>
+<p>更离谱的是 BASE64，它只是<strong>编码</strong> ，对编码稍稍了解且有一定敏感程度的人一眼就能看出一段文本是经过 BASE64 编码的。如果你拿它「加密」的话，别人一秒钟不到就「破解」了 🤣</p>
+<p>为什么说 BASE64 编码稍稍敏感一点的人就能看出来呢？因为 BASE64 编码过后，生成的内容是 26 个小写字母 + 26 个大写字母 + 10 个数字 + 加号 + 斜杠，总共是 64 个字符，所以被称为 BASE64。如果一大串文本全都是由混在一起的数字字母加号斜杠组成，尤其最后又追加了一两个等号的情况，那可以 99% 认为它是经过 BASE64 编码的了。</p>
+<p>比如下面这段文字，真的很难看不出来：</p>
+<pre tabindex="0"><code>    aGVsbG8sIHdvcmxkIQ==
+</code></pre><h1 id="0x01-有哪些常见的加密方式">0X01 有哪些常见的加密方式</h1>
+<p>那么我们真正常用的加密算法是哪些呢？AES、RSA、DES、3DES、ECC 等都是比较常见的加密算法。这些算法按照加解密的密钥来看可以分为对称加密和非对称加密，这里分别简单介绍一下两种加密的特点与区别。</p>
+<p>对称加密理解起来很简单，比如你在压缩的时候用 zip 命令设置了密码，那后面解压的时候还是要用相同的密码才可以。也就是说只有一个密钥，加密解密都用它，这种方式是我们日常使用最多的。</p>
+<p>非对称加密则会分成两个密钥，分别是「公钥」和「私钥」。通过公钥加密的内容，<strong>只能</strong> 通过私钥解密，通过私钥加密的内容也只能通过公钥解密。这样你生成一对密钥之后，将私钥保存好就可以把公钥公开出去了。别人想跟你加密通讯的话就用公钥加密内容发送给你，即使数据被别人拦截了，即使他有加密用的公钥，也无济于事。</p>
+<p>具体非对称加密是怎么实现的，最常见的就是「超大质数相乘」。质数我们都知道，两个超级大的数相乘计算他们的积对于计算机来说是非常简单的工作。但是给一个超级大的数让你去计算它是由哪两个质数相乘得到的，就比较麻烦了。</p>
+<blockquote>
+<p>过多解释就要涉及到数论的知识了，我比(ye)较(bu)懒(dong)，所以到此为止吧。</p>
+</blockquote>
+<table>
+  <thead>
+      <tr>
+          <th>特点</th>
+          <th>对称加密</th>
+          <th>非对称加密</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>密钥数量</td>
+          <td>单一密钥（加密和解密相同）</td>
+          <td>一对密钥（公钥加密，私钥解密）</td>
+      </tr>
+      <tr>
+          <td>速度</td>
+          <td>快</td>
+          <td>慢</td>
+      </tr>
+      <tr>
+          <td>安全性</td>
+          <td>较低（密钥共享风险）</td>
+          <td>较高（公钥可公开）</td>
+      </tr>
+      <tr>
+          <td>应用场景</td>
+          <td>数据量大的加密（如文件加密）</td>
+          <td>密钥交换，数字签名（如HTTPS）</td>
+      </tr>
+      <tr>
+          <td>密钥管理</td>
+          <td>较难（安全地共享和管理密钥）</td>
+          <td>较易（公钥可公开分享）</td>
+      </tr>
+      <tr>
+          <td>示例算法</td>
+          <td>AES, DES, 3DES</td>
+          <td>RSA, ECC</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>由于非对称加密是一个比较慢且消耗性能的操作，所以不少时候会选择用非对称加密的方式交换对称加密用的密钥，然后接下来用对称加密 🤣</p>
+</blockquote>
+<p>这里用一个非常常见的例子来说明非对称加密：ssh 协议通过 public key 登录。我们都知道用 ssh 登录服务器的时候输入用户名密码就可以，而且还可以配置免密登录，这里的免密登录其实就是利用了非对称加密实现的。</p>
+<h1 id="0x02-签名">0X02 签名？</h1>
+<p>与非对称加密一起讨论的还有<strong>签名</strong> ，那签名又是什么呢？现实生活中的签名是用来表示「这些内容是我所认同的」，比如你在合同最后签上名字这种操作。计算机中的签名也是这么个用法，当你将公钥公开出去之后，就可以通过私钥加密的方式来「签名」。虽然你的公钥所有人都有，也就意味着所有人都能解密来看内容，乍一看好像跟你直接不加密也没什么大差别。但是核心就在于「公钥能解密的内容一定得是由私钥加密的」，所以这样别人就没办法伪装成你对外发送消息了。</p>
+<p>签名的另一个用途是保障数据的一致性。假设 Alice 要给 Bob 发送一段数据，这段数据要在互联网上传输就意味着存在被篡改的可能。此时 Alice 将数据本体算一个摘要值例如 md5 出来，并将这个摘要值用私钥加密，最终追加到数据的结尾（这个就是签名），就可以了。这样一来即使这坨数据被人拦截并篡改了，篡改者也无法伪造签名，因为他没有 Alice 的私钥。最终这个数据传输给 Bob 的时候，如果 Bob 顺利通过 Alice 的公钥解密出了摘要值，再将原始数据自己算一遍摘要，如果两边对上了那就意味着数据没有被篡改。</p>
+]]></description></item></channel></rss>
