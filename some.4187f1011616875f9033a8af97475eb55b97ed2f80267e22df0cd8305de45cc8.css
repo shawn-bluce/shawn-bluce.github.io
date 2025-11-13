@@ -1,0 +1,15 @@
+.page-summary .content h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.page .single .content h1 {
+  font-size: 1.4em;
+  margin: 0.67em 0;
+}
+
+.home[data-home="posts"] .summary .single-title{
+  font-size: 1.6rem;
+  line-height: 140%;
+  margin: 0.4rem 0;
+}
