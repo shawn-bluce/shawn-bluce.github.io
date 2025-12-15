@@ -1,4 +1,69 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Shawn's blog</title><link>https://blog.programmer.work/</link><description>分享我的知识、经验、生活与感悟</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Fri, 20 Jun 2025 15:45:27 +0000</lastBuildDate><atom:link href="https://blog.programmer.work/index.xml" rel="self" type="application/rss+xml"/><item><title>编写 Python 程序的 10 个典型错误</title><link>https://blog.programmer.work/posts/python-10-errors/</link><pubDate>Fri, 20 Jun 2025 15:45:27 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/python-10-errors/</guid><description><![CDATA[<h1 id="0x00-开头">0X00 开头</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Shawn's blog</title><link>https://blog.programmer.work/</link><description>分享我的知识、经验、生活与感悟</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Mon, 15 Dec 2025 22:40:18 +0800</lastBuildDate><atom:link href="https://blog.programmer.work/index.xml" rel="self" type="application/rss+xml"/><item><title>BASE64 究竟是什么</title><link>https://blog.programmer.work/posts/base64-basic/</link><pubDate>Mon, 15 Dec 2025 22:40:18 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/base64-basic/</guid><description><![CDATA[<h1 id="0x00-前言">0X00 前言</h1>
+<p>为什么要写这么一篇文章？按理说大家工作了一段时间之后肯定有一个最基础的认知：md5 不是加密，base64 也不是。起码我最开始以为大家应该都知道，但是后面发现有些人对这两个东西的理解真的有很大的问题。所以才打算写这么一篇文章。</p>
+<p>事情的起因是这样的：</p>
+<pre tabindex="0"><code>甲：“你用 base64 加密一下”
+我：“base64 没有加密效果”
+甲：“你给 base64 前面加上 32 个随机字符，让他解不出来不就行了”
+我：“啊？？？”
+</code></pre><p>所以我接下来打算首先介绍一下 base64 究竟是怎么得到的（算法本身），再来说明白 base64 为什么不可以通过前面加 32 个随机字符来实现“加密”（随机长度也不行）。</p>
+<h1 id="0x01-常识性的知识">0X01 常识性的知识</h1>
+<p>首先我们明确一个事情，就是「编码」「加密」「哈希」之间的区别：</p>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>是否可逆</th>
+          <th>是否安全</th>
+          <th>典型</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>编码</td>
+          <td>是</td>
+          <td>否</td>
+          <td>base64</td>
+      </tr>
+      <tr>
+          <td>加密</td>
+          <td>是</td>
+          <td>是</td>
+          <td>AES</td>
+      </tr>
+      <tr>
+          <td>哈希</td>
+          <td>否</td>
+          <td>不总是</td>
+          <td>md5</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>编码，是将一段内容通过某种算法直接转换成另一段内容，<strong>只是形式发生了变化</strong>，在明确编码算法的情况下是可以轻松解码获得原始内容的</li>
+<li>加密，是将一段内容通过某种算法和 <strong>密码</strong> 将明文加密成密文，内容本身发生了变化，在明确加密算法的情况下没有密码也是无法解密的</li>
+<li>哈希，是将一段内容通过某种算法转换成<strong>固定长度</strong>的另一段内容，原始数据会丢失，理论上无论如何都不可能通过哈希后的数据反推出原文</li>
+</ul>
+<h1 id="0x02-base64-编码">0X02 base64 编码</h1>
+<p>在明确了什么是编码后，来自顶向下拆解一下这个 base64 编码吧。首先名字中的 64 指的就是编码后的每一位都有 64 种有效字符，也就是 a-z 的 26 个小写字母、A-Z 的 26 个大写字母、0-9 的 10 个数字和 <code>+/</code> 两个特殊字符，加一起正好是 64。</p>
+<p>显然 64 指的是 6bit 能容纳的最大长度了，所以 base64 的编码逻辑就是：把一个二进制的数据按 6bit 一组分成 N 组，得到 N 个 0-63 之间的数，然后根据下面这张表把每组的数字替换成字符。</p>
+<p></p>
+<p>如果我的原文是二进制的 <code>01101000 01100101 01101100 01101100 01101111</code>（这是 UTF-8 编码的 <code>hello</code>），那么可以拆分成 <code>011010</code>、<code>000110</code>、<code>010101</code>、<code>101100</code>、<code>011011</code>、<code>000110</code>、<code>1111</code>，进而对应的是<code>26</code>、<code>6</code>、<code>21</code>、<code>44</code>、<code>27</code>、<code>6</code>、<code>15</code>，再对照上面的表格得到的就是 <code>aGVsbGP</code>。这样一来，我们的 <code>hello</code> 字符串就顺利转成 base64 编码了。。。吗？</p>
+<p>并没有，因为最后一位的 <code>1111</code> 其实并不是严格对照上述表格查到的，所以我们应该给其尾部补二进制零，将其补充成 <code>111100</code> 对应索引 60，查表得到字符 <code>8</code>，将 <code>P</code> 替换得到 <code>aGVsbG8</code>。这样一来，我们的 <code>hello</code> 字符串就顺利转成 base64 编码了。。。吗？</p>
+<p>并没有，我们发现得到的编码后字符串长度是 7，并不能按 4byte 一组进行拆分，所以最后还需要补充一个 <code>=</code>，最后得到的 base64 编码是 <code>aGVsbG8=</code>。这样一来，我们的 <code>hello</code> 字符串就顺利转成 base64 编码了。。。吗？</p>
+<p>是的！不过为什么不能按 4byte 一组进行拆分就得在后面补 <code>=</code> 呢？因为解码器在后续解码的时候是按照编码后的字符串 4 个一组，将其转成 24bit 再分成 3 个 8bit 恢复成原始数据，所以在最后需要用 <code>=</code> 将 base64 的结果串补到 4 的整数倍长度。</p>
+<blockquote>
+<p>有些不严谨的 base64 解码器在后面没有 <code>=</code> 的时候也可能解得开，不过这是解码器的问题，不是标准的问题，就不过多探讨了。</p>
+</blockquote>
+<h1 id="0x02-为什么不能靠前缀加密">0X02 为什么不能靠前缀加密</h1>
+<p>如果你比较敏感，可能发现了 base64 的一个特征，它的编码过程是分段进行的，也就意味着如果一个 base64 编码的前半段出现了错乱，是不影响它后半段的正确解码的。再加上 base64 的特征十分明显，明显指数应该是和 md5 坐同一桌的，所以很多技术人员是可以一眼看出这段字符串是 base64 编码的。</p>
+<p>那么即使你在一段 base64 编码的前面追加了一段随机的内容，例如：<code>zxclkjgheiqlourytaGVsbG8=</code>，那我们现在尝试“破解”一下</p>
+<ol>
+<li>先用在线解码工具尝试解码，发现失败了</li>
+<li>发现长度是 25，不是 4 的整数倍，那就在最前面追加 3 个 <code>x</code> 让它变成 <code>xxxzxclkjgheiqlourytaGVsbG8=</code></li>
+<li>再次尝试解码，就已经看到最后的 <code>hello</code> 了</li>
+</ol>
+<p><strong>所以说，在 base64 编码得到的串前面追加所谓的随机字符串，是没有什么加密效果可言的</strong></p>
+]]></description></item><item><title>编写 Python 程序的 10 个典型错误</title><link>https://blog.programmer.work/posts/python-10-errors/</link><pubDate>Fri, 20 Jun 2025 15:45:27 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/python-10-errors/</guid><description><![CDATA[<h1 id="0x00-开头">0X00 开头</h1>
 <p>最近买了本书，叫做《100个Go语言典型错误》，发现这样的总结很有意思。决定自己也写一个，不过以我的水平写本书还是有点离谱了，但是写一篇博客还是没什么问题的，所以就有了这篇文章。</p>
 <h1 id="0x01-函数默认值传递空列表">0X01 函数默认值传递空列表</h1>
 <p>这是一个典型错误，很多很多的 Python 程序员都犯过这个错误。一般在定义一个函数且给它设置默认值的时候我们都会写成 <code>def foo(a=0, b=&quot;&quot;, c=None)</code> 这个样子，这种写法是完全没有问题的。但是有时候也会写成：<code>def foo(d=[])</code>，这就完犊子了～</p>
@@ -1241,71 +1306,4 @@
     num  target     prot opt source               destination
 </code></pre><h2 id="修改规则">修改规则</h2>
 <p>修改一条规则与插入规则没什么区别，只是将 <code>-I</code> 参数换成了 <code>-R</code> Replace 参数而已，后面的都完全一致。</p>
-]]></description></item><item><title>究竟什么是加密</title><link>https://blog.programmer.work/posts/what-is-encrypt/</link><pubDate>Sun, 04 Feb 2024 12:48:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/what-is-encrypt/</guid><description><![CDATA[<h1 id="0x00-什么不是加密">0X00 什么不是加密</h1>
-<p>首先要先明确一个问题：我们日常使用非常多的 md5、SHA-1、SHA-256 这些 <strong>通通都不是加密</strong> ，这些叫做<strong>摘要算法</strong> 。一串明文经过加密算法加密之后，是可以再次解密成明文的，但是摘要算法就不行了。</p>
-<p>拿最常见的摘要算法 md5 举例：针对任何一个合法输入，md5 都会给出一个固定长度为 128 bit（32 byte）的输出，例如 <code>md5(&quot;hello, world&quot;) -&gt; e4d7f1b4ed2e42d15898f4b27b019da4</code>。准确来说你是不能通过后面这串摘要值来反推之前的原文是什么的。因为严格来说这一串摘要值可以对应无限个不同的原文。那么摘要算法一般是拿来做什么用的呢？比较常见的是用来校验数据一致性，比如鸡太美同学编写了一个程序放到网上给大家下载使用，但是我们都知道文件传输过程中理论上可能会出错，所以他在上传之前就计算了程序的 md5 并且在传到服务器上之后再次计算 md5。如果两次计算的摘要值都是正确的，那就可以证明此次数据传输没有出现错误。接下来他把摘要值贴在了下载地址旁边，每个来下载程序的人也都可以在下载之后计算摘要值以保证下载没有出错。</p>
-<p>其实不只是防止文件传输出错，还能增加一定的安全性，比如在文件被偷换之后，可以通过计算摘要值来确定文件是不是自己想要的那个。</p>
-<blockquote>
-<p>摘要算法既然是对任意输入都输出一个固定长度的摘要值，那么自然就会出现「撞车」事故。换句话说就是：不同的输入内容得到了相同的摘要值。具体的可以去搜索md5碰撞来查看相关资料。</p>
-</blockquote>
-<p>更离谱的是 BASE64，它只是<strong>编码</strong> ，对编码稍稍了解且有一定敏感程度的人一眼就能看出一段文本是经过 BASE64 编码的。如果你拿它「加密」的话，别人一秒钟不到就「破解」了 🤣</p>
-<p>为什么说 BASE64 编码稍稍敏感一点的人就能看出来呢？因为 BASE64 编码过后，生成的内容是 26 个小写字母 + 26 个大写字母 + 10 个数字 + 加号 + 斜杠，总共是 64 个字符，所以被称为 BASE64。如果一大串文本全都是由混在一起的数字字母加号斜杠组成，尤其最后又追加了一两个等号的情况，那可以 99% 认为它是经过 BASE64 编码的了。</p>
-<p>比如下面这段文字，真的很难看不出来：</p>
-<pre tabindex="0"><code>    aGVsbG8sIHdvcmxkIQ==
-</code></pre><h1 id="0x01-有哪些常见的加密方式">0X01 有哪些常见的加密方式</h1>
-<p>那么我们真正常用的加密算法是哪些呢？AES、RSA、DES、3DES、ECC 等都是比较常见的加密算法。这些算法按照加解密的密钥来看可以分为对称加密和非对称加密，这里分别简单介绍一下两种加密的特点与区别。</p>
-<p>对称加密理解起来很简单，比如你在压缩的时候用 zip 命令设置了密码，那后面解压的时候还是要用相同的密码才可以。也就是说只有一个密钥，加密解密都用它，这种方式是我们日常使用最多的。</p>
-<p>非对称加密则会分成两个密钥，分别是「公钥」和「私钥」。通过公钥加密的内容，<strong>只能</strong> 通过私钥解密，通过私钥加密的内容也只能通过公钥解密。这样你生成一对密钥之后，将私钥保存好就可以把公钥公开出去了。别人想跟你加密通讯的话就用公钥加密内容发送给你，即使数据被别人拦截了，即使他有加密用的公钥，也无济于事。</p>
-<p>具体非对称加密是怎么实现的，最常见的就是「超大质数相乘」。质数我们都知道，两个超级大的数相乘计算他们的积对于计算机来说是非常简单的工作。但是给一个超级大的数让你去计算它是由哪两个质数相乘得到的，就比较麻烦了。</p>
-<blockquote>
-<p>过多解释就要涉及到数论的知识了，我比(ye)较(bu)懒(dong)，所以到此为止吧。</p>
-</blockquote>
-<table>
-  <thead>
-      <tr>
-          <th>特点</th>
-          <th>对称加密</th>
-          <th>非对称加密</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>密钥数量</td>
-          <td>单一密钥（加密和解密相同）</td>
-          <td>一对密钥（公钥加密，私钥解密）</td>
-      </tr>
-      <tr>
-          <td>速度</td>
-          <td>快</td>
-          <td>慢</td>
-      </tr>
-      <tr>
-          <td>安全性</td>
-          <td>较低（密钥共享风险）</td>
-          <td>较高（公钥可公开）</td>
-      </tr>
-      <tr>
-          <td>应用场景</td>
-          <td>数据量大的加密（如文件加密）</td>
-          <td>密钥交换，数字签名（如HTTPS）</td>
-      </tr>
-      <tr>
-          <td>密钥管理</td>
-          <td>较难（安全地共享和管理密钥）</td>
-          <td>较易（公钥可公开分享）</td>
-      </tr>
-      <tr>
-          <td>示例算法</td>
-          <td>AES, DES, 3DES</td>
-          <td>RSA, ECC</td>
-      </tr>
-  </tbody>
-</table>
-<blockquote>
-<p>由于非对称加密是一个比较慢且消耗性能的操作，所以不少时候会选择用非对称加密的方式交换对称加密用的密钥，然后接下来用对称加密 🤣</p>
-</blockquote>
-<p>这里用一个非常常见的例子来说明非对称加密：ssh 协议通过 public key 登录。我们都知道用 ssh 登录服务器的时候输入用户名密码就可以，而且还可以配置免密登录，这里的免密登录其实就是利用了非对称加密实现的。</p>
-<h1 id="0x02-签名">0X02 签名？</h1>
-<p>与非对称加密一起讨论的还有<strong>签名</strong> ，那签名又是什么呢？现实生活中的签名是用来表示「这些内容是我所认同的」，比如你在合同最后签上名字这种操作。计算机中的签名也是这么个用法，当你将公钥公开出去之后，就可以通过私钥加密的方式来「签名」。虽然你的公钥所有人都有，也就意味着所有人都能解密来看内容，乍一看好像跟你直接不加密也没什么大差别。但是核心就在于「公钥能解密的内容一定得是由私钥加密的」，所以这样别人就没办法伪装成你对外发送消息了。</p>
-<p>签名的另一个用途是保障数据的一致性。假设 Alice 要给 Bob 发送一段数据，这段数据要在互联网上传输就意味着存在被篡改的可能。此时 Alice 将数据本体算一个摘要值例如 md5 出来，并将这个摘要值用私钥加密，最终追加到数据的结尾（这个就是签名），就可以了。这样一来即使这坨数据被人拦截并篡改了，篡改者也无法伪造签名，因为他没有 Alice 的私钥。最终这个数据传输给 Bob 的时候，如果 Bob 顺利通过 Alice 的公钥解密出了摘要值，再将原始数据自己算一遍摘要，如果两边对上了那就意味着数据没有被篡改。</p>
 ]]></description></item></channel></rss>
