@@ -5,9 +5,9 @@
 <span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div></div><div class=content id=content><h1 id=0x00-就算只有一节我也要写标题>0X00 就算只有一节我也要写标题</h1><p>众所周知Dockerfile是构建Docker镜像的优良方式，而使用Dockerfile构建镜像最重要的就是为数不多的几个命令，而本次的主题<code>COPY</code>和<code>ADD</code>就是其中两个。我们知道这两个命令都是将文件搞到Docker镜像里用的，那究竟有没有区别，有什么区别呢？</p><p>首先我们看一下当前这个目录：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    λ  ~/Workstadion/learn_docker  ls
 </span></span><span style=display:flex><span>    Dockerfile  excited.tar
 </span></span></code></pre></div><p>我们有着么一个Dockerfile，可以看到是基于<code>fedora</code>的一个镜像，并且将目录下的<code>excited.tar</code>放进了创建好的<code>shawn</code>目录中</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=display:flex><span>    FROM fedora<span style=color:#960050;background-color:#1e0010>
-</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>    RUN mkdir shawn<span style=color:#960050;background-color:#1e0010>
-</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>    WORKDIR shawn<span style=color:#960050;background-color:#1e0010>
-</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>    COPY excited.tar .<span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span>    RUN mkdir shawn<span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span>    WORKDIR shawn<span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span>    COPY excited.tar .<span style=color:#960050;background-color:#1e0010>
 </span></span></span></code></pre></div><p>我们可以看到工作目录下已经存在了一个<code>excited.tar</code>了，也就意味着我们成功将这个文件搞进去了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    λ  ~/Workstadion/learn_docker  docker build . -t wtf ; docker rm learn_docker; docker run --name learn_docker -it wtf bash
 </span></span><span style=display:flex><span>    Sending build context to Docker daemon  23.04kB
 </span></span><span style=display:flex><span>    Step 1/4 : FROM fedora
@@ -27,9 +27,9 @@
 </span></span><span style=display:flex><span>    total <span style=color:#ae81ff>20</span>
 </span></span><span style=display:flex><span>    -rw-r--r-- <span style=color:#ae81ff>1</span> root root <span style=color:#ae81ff>20480</span> Sep <span style=color:#ae81ff>25</span> 14:15 excited.tar
 </span></span></code></pre></div><p>如果同样的操作用<code>ADD</code>呢？看上去是类似的操作实际上并不是</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=display:flex><span>    FROM fedora<span style=color:#960050;background-color:#1e0010>
-</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>    RUN mkdir shawn<span style=color:#960050;background-color:#1e0010>
-</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>    WORKDIR shawn<span style=color:#960050;background-color:#1e0010>
-</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010></span>    ADD excited.tar .<span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span>    RUN mkdir shawn<span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span>    WORKDIR shawn<span style=color:#960050;background-color:#1e0010>
+</span></span></span><span style=display:flex><span>    ADD excited.tar .<span style=color:#960050;background-color:#1e0010>
 </span></span></span></code></pre></div><p>我们进到容器里可以看到打包文件被拆解了（压缩文件也会被解压）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    λ  ~/Workstadion/learn_docker  docker build . -t wtf ; docker rm learn_docker; docker run --name learn_docker -it wtf bash
 </span></span><span style=display:flex><span>    Sending build context to Docker daemon  23.04kB
 </span></span><span style=display:flex><span>    Step 1/4 : FROM fedora

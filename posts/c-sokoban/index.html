@@ -15,66 +15,66 @@
 </span></span></span><span style=display:flex><span><span style=color:#75715e>     * ****************************************************************/</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;math.h&gt;</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdlib.h&gt;</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;termios.h&gt;//using getch()</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;unistd.h&gt;</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;assert.h&gt;</span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;math.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdlib.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;termios.h&gt;//using getch()</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;unistd.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;assert.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//this is constant
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define TRUE   1
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define FALSE  0
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define MAX    10
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define WALL   6
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define PLAYER 7
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define BOX    8
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define BLANK  5
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define DES    9
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define W      &#39;w&#39;
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define A      &#39;a&#39;
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define S      &#39;s&#39;
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>#define D      &#39;d&#39;
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define TRUE   1
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define FALSE  0
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define MAX    10
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define WALL   6
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define PLAYER 7
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define BOX    8
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define BLANK  5
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define DES    9
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define W      &#39;w&#39;
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define A      &#39;a&#39;
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define S      &#39;s&#39;
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#define D      &#39;d&#39;
+</span></span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//this is game map
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>int</span> map[MAX][MAX];
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> map[MAX][MAX];
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> ok <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//player
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>struct</span> player
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>struct</span> player
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> x;
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> y;
 </span></span><span style=display:flex><span>    }player;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//boxs
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>struct</span> box
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>struct</span> box
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> x;
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> y;
 </span></span><span style=display:flex><span>    }box_1, box_2, box_3;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//des
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>struct</span> des
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>struct</span> des
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> x;
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> y;
 </span></span><span style=display:flex><span>    }des_1, des_2, des_3;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//statement function
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initMap</span>();         <span style=color:#75715e>//init the map
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initPlayer</span>();      <span style=color:#75715e>//init the player
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initBox</span>();         <span style=color:#75715e>//init the boxs
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initDes</span>();         <span style=color:#75715e>//init the des
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printMap</span>();        <span style=color:#75715e>//print the map
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setMap</span>();          <span style=color:#75715e>//set the player, boxs, des
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>char</span> <span style=color:#a6e22e>getch</span>();           <span style=color:#75715e>//getch()
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goUP</span>();            <span style=color:#75715e>//go up
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goDown</span>();          <span style=color:#75715e>//go down
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goLeft</span>();          <span style=color:#75715e>//go left
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goRight</span>();         <span style=color:#75715e>//go right
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>int</span>  <span style=color:#a6e22e>computingSuccess</span>();<span style=color:#75715e>//computing how many box seccessd
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initMap</span>();         <span style=color:#75715e>//init the map
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initPlayer</span>();      <span style=color:#75715e>//init the player
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initBox</span>();         <span style=color:#75715e>//init the boxs
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initDes</span>();         <span style=color:#75715e>//init the des
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printMap</span>();        <span style=color:#75715e>//print the map
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setMap</span>();          <span style=color:#75715e>//set the player, boxs, des
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>char</span> <span style=color:#a6e22e>getch</span>();           <span style=color:#75715e>//getch()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goUP</span>();            <span style=color:#75715e>//go up
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goDown</span>();          <span style=color:#75715e>//go down
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goLeft</span>();          <span style=color:#75715e>//go left
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goRight</span>();         <span style=color:#75715e>//go right
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span>  <span style=color:#a6e22e>computingSuccess</span>();<span style=color:#75715e>//computing how many box seccessd
+</span></span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>char</span> ch;
@@ -82,17 +82,17 @@
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>system</span>(<span style=color:#e6db74>&#34;clear&#34;</span>);
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e>//init the game
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#a6e22e>initMap</span>();
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>initMap</span>();
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>initPlayer</span>();
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>initBox</span>();
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>setMap</span>();
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>printMap</span>();
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e>//control the boy
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#66d9ef>while</span> (ch <span style=color:#f92672>=</span> <span style=color:#a6e22e>getch</span>())
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>while</span> (ch <span style=color:#f92672>=</span> <span style=color:#a6e22e>getch</span>())
 </span></span><span style=display:flex><span>        {
 </span></span><span style=display:flex><span>            <span style=color:#66d9ef>switch</span>(ch)<span style=color:#75715e>//where is the boy move
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>            {
+</span></span></span><span style=display:flex><span>            {
 </span></span><span style=display:flex><span>                <span style=color:#66d9ef>case</span> W:
 </span></span><span style=display:flex><span>                    <span style=color:#a6e22e>goUP</span>();
 </span></span><span style=display:flex><span>                    <span style=color:#66d9ef>break</span>;
@@ -125,7 +125,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//getch()   by.YouGui   http://my.oschina.net/yougui/blog/111345
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>char</span> <span style=color:#a6e22e>getch</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>char</span> <span style=color:#a6e22e>getch</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> c <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>struct</span> termios org_opts, new_opts;
@@ -142,7 +142,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//init this map
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initMap</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initMap</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> i, j;
 </span></span><span style=display:flex><span>
@@ -167,7 +167,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//print map
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printMap</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>printMap</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>printf</span> (<span style=color:#e6db74>&#34;This is a game !</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
 </span></span><span style=display:flex><span>
@@ -192,14 +192,14 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//init the player
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initPlayer</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initPlayer</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        player.x <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;
 </span></span><span style=display:flex><span>        player.y <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//init the boxs
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initBox</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initBox</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        box_1.x <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;
 </span></span><span style=display:flex><span>        box_1.y <span style=color:#f92672>=</span> <span style=color:#ae81ff>6</span>;
@@ -212,7 +212,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//init the des
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initDes</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>initDes</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        des_1.x <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
 </span></span><span style=display:flex><span>        des_1.y <span style=color:#f92672>=</span> <span style=color:#ae81ff>7</span>;
@@ -225,12 +225,12 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//set map
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setMap</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>setMap</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> i, j;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e>//set blank
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#66d9ef>for</span> (i <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; i <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>8</span>; i<span style=color:#f92672>++</span>)
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (i <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; i <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>8</span>; i<span style=color:#f92672>++</span>)
 </span></span><span style=display:flex><span>        {
 </span></span><span style=display:flex><span>            map[i][<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> BLANK;
 </span></span><span style=display:flex><span>            map[i][<span style=color:#ae81ff>3</span>] <span style=color:#f92672>=</span> BLANK;
@@ -242,21 +242,21 @@
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e>//set des
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        map[des_1.x][des_1.y] <span style=color:#f92672>=</span> DES;
+</span></span></span><span style=display:flex><span>        map[des_1.x][des_1.y] <span style=color:#f92672>=</span> DES;
 </span></span><span style=display:flex><span>        map[des_2.x][des_2.y] <span style=color:#f92672>=</span> DES;
 </span></span><span style=display:flex><span>        map[des_3.x][des_3.y] <span style=color:#f92672>=</span> DES;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e>//set player
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        map[player.x][player.y] <span style=color:#f92672>=</span> PLAYER;
+</span></span></span><span style=display:flex><span>        map[player.x][player.y] <span style=color:#f92672>=</span> PLAYER;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e>//set box
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        map[box_1.x][box_1.y] <span style=color:#f92672>=</span> BOX;
+</span></span></span><span style=display:flex><span>        map[box_1.x][box_1.y] <span style=color:#f92672>=</span> BOX;
 </span></span><span style=display:flex><span>        map[box_2.x][box_2.y] <span style=color:#f92672>=</span> BOX;
 </span></span><span style=display:flex><span>        map[box_3.x][box_3.y] <span style=color:#f92672>=</span> BOX;
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//computing the success move the box to the des
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>computingSuccess</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>computingSuccess</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>int</span> num <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (map[des_1.x][des_1.y] <span style=color:#f92672>==</span> BOX)
@@ -274,7 +274,7 @@
 </span></span></span><span style=display:flex><span><span style=color:#75715e>     */</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//control the boy go up
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goUP</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goUP</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (map[player.x <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>][player.y] <span style=color:#f92672>==</span> BLANK <span style=color:#f92672>||</span>
 </span></span><span style=display:flex><span>            map[player.x <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>][player.y] <span style=color:#f92672>==</span> DES)
@@ -312,7 +312,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//control the boy go down
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goDown</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goDown</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (map[player.x <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>][player.y] <span style=color:#f92672>==</span> BLANK <span style=color:#f92672>||</span>
 </span></span><span style=display:flex><span>            map[player.x <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>][player.y] <span style=color:#f92672>==</span> DES)
@@ -347,7 +347,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//control the boy go left
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goLeft</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goLeft</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (map[player.x][player.y <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> BLANK <span style=color:#f92672>||</span>
 </span></span><span style=display:flex><span>            map[player.x][player.y <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> DES)
@@ -382,7 +382,7 @@
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>//control the boy go right
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goRight</span>()
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>goRight</span>()
 </span></span><span style=display:flex><span>    {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (map[player.x][player.y <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> BLANK <span style=color:#f92672>||</span>
 </span></span><span style=display:flex><span>            map[player.x][player.y <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> DES)
