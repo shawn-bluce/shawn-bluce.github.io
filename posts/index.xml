@@ -1,4 +1,26 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - Shawn's blog</title><link>https://blog.programmer.work/posts/</link><description>所有文章 | Shawn's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Sun, 21 Dec 2025 12:08:45 +0800</lastBuildDate><atom:link href="https://blog.programmer.work/posts/" rel="self" type="application/rss+xml"/><item><title>如何高质量的接入AI - Developer</title><link>https://blog.programmer.work/posts/how-to-integrate-ai-for-developer/</link><pubDate>Sun, 21 Dec 2025 12:08:45 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/how-to-integrate-ai-for-developer/</guid><description><![CDATA[<h1 id="0x00-intro">0X00 Intro</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - Shawn's blog</title><link>https://blog.programmer.work/posts/</link><description>所有文章 | Shawn's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Sat, 27 Dec 2025 23:52:26 +0800</lastBuildDate><atom:link href="https://blog.programmer.work/posts/" rel="self" type="application/rss+xml"/><item><title>2025 开发者 AI 扫盲：从 LLM 到 Agent</title><link>https://blog.programmer.work/posts/2025-ai-primer/</link><pubDate>Sat, 27 Dec 2025 23:52:26 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/2025-ai-primer/</guid><description><![CDATA[<h1 id="0x00-intro">0X00 Intro</h1>
+<p>现在是 2025 年末，所有人都在聊 AI，不管是一线科研人员还是开发者甚至是楼下卖瓜的大叔。但是在我的观察中，即便是很多开发者也其实对 AI 的了解也比较肤浅，仅限于使用成品的豆包、Deepseek 等产品，对时下热门的技术关键词并不了解。所以我自己重新整理了一下，假设目标用户是不懂什么是 LLM、Agent、MCP、Function Call 的我自己，写了一篇介绍文章。远远算不上由浅入深，但勉强可以做一个纯粹的介绍。</p>
+<h1 id="0x01-llm">0X01 LLM</h1>
+<p>首先 LLM 的意思是<strong>大语言模型（Large Language Model）</strong>，重点是<strong>语言</strong>和<strong>模型</strong>。所以我们搞清楚一个问题就是很多玩家自己部署的 Stable Diffusion 并非 LLM，因为它并不是<strong>语言</strong>模型。另外我们常用的 Deepseek 和豆包 App 也并非 LLM，因为它们并非语言<strong>模型</strong>。</p>
+<p>最常被人们接触到的其实都不是模型，而是在模型上构建的产品，例如：ChatGPT 和豆包。模型指的是给这些产品提供 AI 能力的诸如 <code>GPT-5.2</code>、<code>Claude Sonnet 4.5</code>、<code>GLM 4.7</code> 等。以 OpenAI 为例，我们在使用 ChatGPT 的 App 时能调整的参数极其有限，但是如果通过 API 来直接调用模型能力，那可以修改的参数会多达几十上百个，并且可以区分 System Prompts 和 User Prompts。</p>
+<p>总的来说 LLM 是本次 AI 浪潮中最重要也是最基石的存在。</p>
+<h1 id="0x02-function-call">0X02 Function Call</h1>
+<p>Function Call 的概念其实非常直观，本质上就是一个<strong>函数调用</strong>接口。我们在写代码时定义的函数通常是给程序内部逻辑调用的，而 Function Call 允许我们将这些函数注册给 LLM，让模型根据对话上下文自主决定是否触发某个函数以及传什么参数。</p>
+<p>不过在早期的工程实践中，虽然各家模型都支持 Function Call，但痛点非常明显：定义格式不统一。比如 OpenAI 用的是特定的 JSON Schema，其他模型可能又有各自的规范。这就导致你想写一个通用的“查天气工具”，需要针对每个模型单独适配一套接口，开发成本高，工具难以在不同模型间复用。</p>
+<h1 id="0x03-mcp">0X03 MCP</h1>
+<p>MCP (Model Context Protocol) 的出现就是为了终结这种“方言”乱象。它是由 Anthropic（开发 Claude 系列模型的公司） 提出的一个开放标准协议，统一规定了 AI 应用与外部数据源、工具之间如何交互。</p>
+<p>只要模型端和工具端都遵循 MCP 协议，它们就能无缝对接。简单类比，以前各家是各自搞一套私有 RPC 协议，现在 MCP 就像是 AI 界的 HTTP 或者 RESTful API 标准一样。它解决了连接器的标准化问题，让一个工具可以轻松地在不同的 AI 客户端（如 Claude Desktop、IDE 插件）中即插即用。</p>
+<h1 id="0x04-agent">0X04 Agent</h1>
+<p>Agent 就是现在比较流行的<strong>智能体</strong>，它的本质是一个<strong>程序</strong>。我自己听过的说法包括但不限于：</p>
+<ul>
+<li>“Agent 和大模型不一样，Agent 能直接操作你的电脑”</li>
+<li>“Agent 比大模型厉害多了，肯定是大语言模型的替代品”</li>
+<li>“Agent 就是个骗人的噱头，没什么用，泡沫迟早要爆炸”</li>
+</ul>
+<p>其实都不太对劲，因为 Agent 是一个至少集成了 LLM 和 MCP/Function Call 的集合体程序。如果逐一反驳的话，Agent 确实和大模型不一样毕竟你不能说汽车和发动机一样，但 Agent 能否操作电脑也是看它具体集成了哪些 MCP/Function Call；其次 Agent 比大模型厉害就更是无稽之谈了，因为 LLM 是 Agent 的一部分，总不能说汽车比发动机强吧；说 Agent 是骗人的噱头的其实也不至于，Agent 只是 LLM 发展的一个方向而已。</p>
+<p>最近我正在使用的 Claude Code 其实就是一个 Agent，给没有用过的朋友简单介绍一下 Claude Code 的使用流程</p>
+<p>在目录中打开 Claude Code（是一个 CLI 工具），发送：“检查这个代码仓库，并向我介绍它”。 此时 Claude Code 会理解我的意图，然后调用系统的 <code>find</code>、<code>cat</code>、<code>tree</code> 等命令尽可能的获取这个项目的信息，比如目录结构、入口位置甚至是 <code>README.md</code>。在它获取到信息之后会继续传输给 LLM，让 LLM 来理解并输出内容。如果我继续下发指令：“为这个项目新增一个 XX 功能”，那 Claude Code 会继续先把我的内容发送给 LLM 然后列出一个 TODO List，再根据 todo 的内容一项一项执行，中间就会涉及到创建编辑文件、执行测试代码、甚至是安装依赖的三方库等。</p>
+]]></description></item><item><title>如何高质量的接入AI - Developer</title><link>https://blog.programmer.work/posts/how-to-integrate-ai-for-developer/</link><pubDate>Sun, 21 Dec 2025 12:08:45 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/how-to-integrate-ai-for-developer/</guid><description><![CDATA[<h1 id="0x00-intro">0X00 Intro</h1>
 <p>今年年初的时候，写过一篇名为<a href="/posts/how-to-integrate-ai/" rel="">如何高质量地接入AI</a>的文章，现在十个月过去了，经过这一年的探索和总结，现在我已经找到了一个非常适合开发者的 AI 接入方案（至少非常适合我自己），现在打算在这里跟大家做一个简单的分享。</p>
 <p>我个人使用这些 LLM 的经历主要是分成三个阶段：</p>
 <ol>
@@ -1208,80 +1230,4 @@ server {
     李海燕,22,15193868140,yangzhao@example.org,湖北省石家庄市丰都台北路T座 551877,56451677
     李桂荣,20,15616840094,taoguo@example.com,上海市拉萨市大东叶街d座 577821,31959883
     张婷婷,22,13166077906,li41@example.com,西藏自治区永安市永川范路i座 943614,66647808
-</code></pre>]]></description></item><item><title>Linux 文本三剑客 grep/awk/sed 入门手册</title><link>https://blog.programmer.work/posts/linux-text-process/</link><pubDate>Thu, 21 Mar 2024 13:29:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/linux-text-process/</guid><description><![CDATA[<h1 id="0x00-前言">0X00 前言</h1>
-<p>不知道为什么，当三个好用的工具在一起的时候就会被称作：三剑客；四个好用的工具在一起的时候就会被叫做四大天王 🤔。</p>
-<p>算了，这不重要。</p>
-<p>这篇文章的目的是带不了解这三个工具的朋友们简单上手使用它们，默认各位是掌握了 Linux 的基本用法的，其中也会出现有关正则的内容。如果你不懂正则的话建议跳过正则的部分，并且看完这篇文章马上就去学。另外，不要因为正则看起来有点像通配符就按通配符的操作进行下去。</p>
-<h1 id="0x01-grep">0X01 grep</h1>
-<p>首先这三个工具中最常用的应该就是 <code>grep</code> 了，它用于从文件中搜索你感兴趣的内容。例如下面的例子就可以输出 <code>/etc/passwd</code> 文件中包含 <code>root</code> 的行</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    grep root /etc/passwd
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    &gt;&gt; output
-</span></span><span style="display:flex;"><span>    root:x:0:0::/root:/bin/bash
-</span></span></code></pre></div><p>也可以接多个文件，这样输出的时候就会以文件名开头了</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    grep root /etc/passwd /etc/group
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    &gt;&gt; output
-</span></span><span style="display:flex;"><span>    /etc/passwd:root:x:0:0::/root:/bin/bash
-</span></span><span style="display:flex;"><span>    /etc/group:root:x:0:root
-</span></span></code></pre></div><p>下面介绍几个参数：</p>
-<ul>
-<li><code>-i</code> 忽略大小写</li>
-<li><code>-v</code> 显示不匹配的行（取反）</li>
-<li><code>-n</code> 增加行号显示</li>
-<li><code>-c</code> 显示总共多少行，而非具体内容</li>
-<li><code>-r</code> 递归查找所有文件</li>
-<li><code>-A</code> 也就是 after，即显示匹配行和它后面的 n 行</li>
-<li><code>-B</code> 也就是 before，显示匹配行和它后面的 n 行</li>
-<li><code>-C</code> 相当于 <code>-A</code> 和 <code>-B</code> 一起用，显示匹配行和它前后各 n 行</li>
-</ul>
-<p>简单列举一下使用方法</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#75715e"># 忽略大小写</span>
-</span></span><span style="display:flex;"><span>    grep -i ROOT /etc/passwd <span style="color:#75715e"># 可以匹配到 root 行</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 取反</span>
-</span></span><span style="display:flex;"><span>    grep -v root /etc/passwd <span style="color:#75715e"># 匹配到非 root 行</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 递归查找</span>
-</span></span><span style="display:flex;"><span>    grep -rn root /etc <span style="color:#75715e"># 查找 /etc 目录下所有文件，输出所有带有 root 的行</span>
-</span></span></code></pre></div><p>grep 命令默认情况下就可以使用正则表达式，下面的命令就可以匹配到 root 行</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    grep <span style="color:#e6db74">&#34;r..t&#34;</span> /etc/passwd
-</span></span></code></pre></div><p>grep 很多时候是跟在管道符号后面的，例如 <code>curl -XGET http://xxx.xxx/info/ | grep KEYWORD</code> 这种。注意跟在管道符号后面时，grep 只能处理来自标准输入的内容，如果还需要处理标准错误的话需要手动将其重定向到标准输出中。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    cat /etc/passwd | grep root
-</span></span></code></pre></div><h1 id="0x02-awk">0X02 awk</h1>
-<p>相比于 grep 处理的是行数据，awk 则主要用于处理列数据。grep 可以从 <code>/etc/passwd</code> 中找到包含 root 的这一行，但是如果你想找所有用户他们用的 shell 就不容易了。</p>
-<p>下面这个命令就可以在 <code>/etc/passwd</code> 中找到每个用户用的是哪个 shell 了。我们观察 <code>/etc/passwd</code> 这个文件可以看到里面每行都有多个字段，并且用 <code>:</code> 分割，第 7 列就是我们要的 shell。所以得到下面这个命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    cat /etc/passwd | awk -F <span style="color:#e6db74">&#39;:&#39;</span> <span style="color:#e6db74">&#39;{print $7}&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    &gt;&gt; output
-</span></span><span style="display:flex;"><span>    /bin/bash
-</span></span><span style="display:flex;"><span>    /usr/bin/nologin
-</span></span><span style="display:flex;"><span>    /usr/bin/nologin
-</span></span><span style="display:flex;"><span>    ..............
-</span></span><span style="display:flex;"><span>    /usr/bin/nologin
-</span></span><span style="display:flex;"><span>    /usr/bin/nologin
-</span></span><span style="display:flex;"><span>    /usr/bin/git-shell
-</span></span></code></pre></div><p>先来分析一下这个命令，从 <code>awk -F ':' '{print $7}'</code> 开始。其中 <code>-F</code> 参数就是指定一个「分隔符」，后面的 <code>:</code> 就是分隔符本符，最后一个参数 <code>{print $7}</code> 表示输出第 7 列。其中 <code>{print $INDEX}</code> 可以理解成是一个固定的语法，也可以用 <code>{print $1,$7}</code> 的方式输出第 1 和第 7 列，且用逗号分割。</p>
-<p>程序中第一列不是 <code>$0</code> 虽然有些诡异，但它也没有被弃用，可以试试 <code>{print $0}</code> 是什么作用。</p>
-<blockquote>
-<p>这里的分隔符也是可以用正则的，只是一般来说这里用正则的时候比较少见。</p>
-</blockquote>
-<h1 id="0x03-sed">0X03 sed</h1>
-<p>sed 的定义是一个「流编辑器」，如果理解不了就把他当成一个连 vim 那种界面都没有的编辑器好了。</p>
-<p><strong>我们在开始之前先把<code>/etc/passwd</code> 复制一份到 <code>/data/passwd</code>，防止一会儿误伤操作系统</strong></p>
-<p>如果你用过 vim 的话，上手 sed 应该是比较容易的。我们先来看一个例子</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    sed <span style="color:#e6db74">&#34;s/root/Administrator/&#34;</span> /data/passwd
-</span></span></code></pre></div><p>这个例子就是将 <code>/data/passwd</code> 中的 root 换成 Administrator（好熟悉的用户名 🤣）。但是它只会修改每行的第一个 root，你可以观察一下你的输出是不是这样。如果你想替换的是所有的呢？知道的朋友肯定知道了：「只需要在替换命令后追加一个<code>g</code>」。是的，这就是典型的 vim 用法了。改过之后的命令应该是 <code>sed &quot;s/root/Administrator/g&quot; /data/passwd</code>。</p>
-<p>这时候你可能发现好像你每次改的内容都回显到标准输出了，并没有对文件生效。但是也不要心急去用重定向（你不信邪也可以试试，反正文件复制出来了没有什么风险），想让修改直接对文件生效需要给 sed 命令加上 <code>-i</code> 参数，最后的成品如下，这样一来就可以将文件中的 <code>root</code> 全数替换成 <code>Administrator</code> 了。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    sed -i <span style="color:#e6db74">&#34;s/root/Administrator/g&#34;</span> /data/passwd
-</span></span></code></pre></div><p>如果你想删除某行，可以用 <code>sed &quot;/root/d&quot; /data/passwd</code> 的方式去删除。</p>
-<blockquote>
-<p>如果你不信邪去试了重定向，会发现文件变成空白的了。这是因为当你的命令中出现重定向时，会优先准备重定向，也就是说当 sed 运行起来的时候该文件已经是等待输入的空白文件了。</p>
-</blockquote>
-<blockquote>
-<p>也许你平时对 sed 并不感冒，但是当你需要处理一个很大的文本文件的时候，相信我，你一定会想起它的好的。</p>
-</blockquote>
-<h1 id="0x04-最后">0X04 最后</h1>
-<p>通常来说这些工具会和 <code>cat</code>、<code>tail</code> 等工具一起用，通过管道将他们联系起来。</p>
-<p>有关组合技的用法就太多了，CLI 最大的魅力可能就在于组合，不过还是需要各位在工作和学习中慢慢摸索～</p>
-]]></description></item></channel></rss>
+</code></pre>]]></description></item></channel></rss>
