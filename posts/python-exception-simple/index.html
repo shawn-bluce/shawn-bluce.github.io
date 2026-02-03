@@ -4,7 +4,7 @@
 <i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="Shawn's blog">Shawn's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
 <i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Python 异常处理 捕获异常</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://blog.programmer.work title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Shawn</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2016-10-27>2016-10-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 1474 字&nbsp;
 <i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static data-kept=true><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div></div><div class=content id=content><h1 id=0x00-什么是异常>0X00 什么是异常</h1><p>程序在运行出错的时候就会抛出异常，异常时在正确的代码里发生的，不是代码出现了错误。下面就是一个异常</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div></div><div class=content id=content><h1 id=0x00-什么是异常>0X00 什么是异常</h1><p>程序在运行出错的时候就会抛出异常，异常时在正确的代码里发生的，不是代码出现了错误。下面就是一个异常</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#coding=utf-8</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    num_1 <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>
@@ -14,11 +14,11 @@
 </span></span><span style=display:flex><span>    <span style=color:#75715e># 那么我们来看Python是如何处理这个问题的</span>
 </span></span><span style=display:flex><span>    num_3 <span style=color:#f92672>=</span> num_1 <span style=color:#f92672>/</span> num_2
 </span></span><span style=display:flex><span>    print num_3
-</span></span></code></pre></div><p>运行这个程序就会报出下面的错误，错误提示说在<code>hello.py</code>这个文件的第6行，出现了一个错误<code>integer division or modulo by zero</code>也就是说Python解释器发现你试图除以0或者试图用0取模。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    Traceback (most recent call last):
+</span></span></code></pre></div><p>运行这个程序就会报出下面的错误，错误提示说在<code>hello.py</code>这个文件的第6行，出现了一个错误<code>integer division or modulo by zero</code>也就是说Python解释器发现你试图除以0或者试图用0取模。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    Traceback (most recent call last):
 </span></span><span style=display:flex><span>      File <span style=color:#e6db74>&#34;./hello.py&#34;</span>, line <span style=color:#ae81ff>6</span>, <span style=color:#f92672>in</span> <span style=color:#f92672>&lt;</span>module<span style=color:#f92672>&gt;</span>
 </span></span><span style=display:flex><span>        num_3 <span style=color:#f92672>=</span> num_1 <span style=color:#f92672>/</span> num_2
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>ZeroDivisionError</span>: integer division <span style=color:#f92672>or</span> modulo by zero
-</span></span></code></pre></div><p>这里提示的<code>ZeroDivisionError</code>就是一个异常，我们可以在后面捕获这个异常，然后进行一些处理。如果不捕获这个异常的话，程序运行到这里，异常就会直接抛出到用户界面，中断程序的运行。</p><h1 id=0x01-自己放出一个异常>0X01 自己放出一个异常</h1><p>我们可以用<code>raise</code>抛出一个自己的异常，这样我们可以在调试程序的时候判断到底出了什么错误，通过抛出的异常信息就可以判断。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+</span></span></code></pre></div><p>这里提示的<code>ZeroDivisionError</code>就是一个异常，我们可以在后面捕获这个异常，然后进行一些处理。如果不捕获这个异常的话，程序运行到这里，异常就会直接抛出到用户界面，中断程序的运行。</p><h1 id=0x01-自己放出一个异常>0X01 自己放出一个异常</h1><p>我们可以用<code>raise</code>抛出一个自己的异常，这样我们可以在调试程序的时候判断到底出了什么错误，通过抛出的异常信息就可以判断。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#coding=utf-8</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    name <span style=color:#f92672>=</span> raw_input(<span style=color:#e6db74>&#39;name: &#39;</span>)
@@ -31,7 +31,7 @@
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    print <span style=color:#e6db74>&#39;name is &#39;</span> <span style=color:#f92672>+</span> name
 </span></span><span style=display:flex><span>    print <span style=color:#e6db74>&#39;age is &#39;</span> <span style=color:#f92672>+</span> str(age)
-</span></span></code></pre></div><p>上面这段代码只是简单地输入name和age两个变量，合法的话就输出出来。我们这里运行一下试试</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#f92672>[</span>root@iZ28jaak5nnZ ~<span style=color:#f92672>]</span><span style=color:#75715e># ./hello.py</span>
+</span></span></code></pre></div><p>上面这段代码只是简单地输入name和age两个变量，合法的话就输出出来。我们这里运行一下试试</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#f92672>[</span>root@iZ28jaak5nnZ ~<span style=color:#f92672>]</span><span style=color:#75715e># ./hello.py</span>
 </span></span><span style=display:flex><span>    name: shawn     <span style=color:#75715e>#合法输入的话，就可以顺利输出</span>
 </span></span><span style=display:flex><span>    age : <span style=color:#ae81ff>20</span>
 </span></span><span style=display:flex><span>    name is shawn
@@ -49,7 +49,7 @@
 </span></span><span style=display:flex><span>      File <span style=color:#e6db74>&#34;./hello.py&#34;</span>, line 10, in &lt;module&gt;
 </span></span><span style=display:flex><span>        raise Exception<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;age too little&#39;</span><span style=color:#f92672>)</span>
 </span></span><span style=display:flex><span>    Exception: age too little
-</span></span></code></pre></div><p>我们可以用这种方式在自己的代码中抛出异常，用来做中间值检测，防止中间的数据出现意外导致一些不可思议的后果。</p><h1 id=0x02-捕获异常>0X02 捕获异常</h1><p>我们在代码中不管是解释器自己抛出的异常还是你手动抛出的异常，都可以手动的捕获到这个异常，并做出相应的处理。这样就可以提高代码的健壮性。在Python使用<code>try...except...else</code>来捕获处理异常。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span></code></pre></div><p>我们可以用这种方式在自己的代码中抛出异常，用来做中间值检测，防止中间的数据出现意外导致一些不可思议的后果。</p><h1 id=0x02-捕获异常>0X02 捕获异常</h1><p>我们在代码中不管是解释器自己抛出的异常还是你手动抛出的异常，都可以手动的捕获到这个异常，并做出相应的处理。这样就可以提高代码的健壮性。在Python使用<code>try...except...else</code>来捕获处理异常。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
 </span></span><span style=display:flex><span>        <span style=color:#75715e># 这里执行一些可能会抛出异常的代码</span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> (ExceptionA, ExceptionB, ExceptionC):   <span style=color:#75715e># 一个except可以捕获好多个异常</span>
 </span></span><span style=display:flex><span>        <span style=color:#75715e># 当抛出ABC三种异常的时候，执行这里的代码，执行完之后跳出try...except并继续执行代码</span>
@@ -64,7 +64,7 @@
 </span></span><span style=display:flex><span>        <span style=color:#75715e># 当没有异常抛出的时候执行这里的代码</span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>finally</span>:
 </span></span><span style=display:flex><span>        <span style=color:#75715e># 不管代码有没有抛出异常，都会执行这里的代码</span>
-</span></span></code></pre></div><p>下面有一个样例，还是除0异常的样例，当除数是0的时候就抛出异常并捕获，然后处理这个异常（提示并重新输入），直到没有除0异常才计算成功并退出程序</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+</span></span></code></pre></div><p>下面有一个样例，还是除0异常的样例，当除数是0的时候就抛出异常并捕获，然后处理这个异常（提示并重新输入），直到没有除0异常才计算成功并退出程序</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#coding=utf-8</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
@@ -79,7 +79,7 @@
 </span></span><span style=display:flex><span>    	<span style=color:#66d9ef>else</span>:
 </span></span><span style=display:flex><span>    		print num_3
 </span></span><span style=display:flex><span>    		exit()
-</span></span></code></pre></div><p>下面有一个运行样例</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    [root<span style=color:#a6e22e>@iZ28jaak5nnZ</span> <span style=color:#f92672>~</span>]<span style=color:#75715e># ./hello.py</span>
+</span></span></code></pre></div><p>下面有一个运行样例</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    [root<span style=color:#a6e22e>@iZ28jaak5nnZ</span> <span style=color:#f92672>~</span>]<span style=color:#75715e># ./hello.py</span>
 </span></span><span style=display:flex><span>    num1: <span style=color:#ae81ff>9</span>
 </span></span><span style=display:flex><span>    num2: <span style=color:#ae81ff>0</span>
 </span></span><span style=display:flex><span>    num_1 <span style=color:#f92672>is</span> <span style=color:#ae81ff>0</span> <span style=color:#960050;background-color:#1e0010>!!!</span>
@@ -92,7 +92,7 @@
 </span></span><span style=display:flex><span>    num1: <span style=color:#ae81ff>4</span>
 </span></span><span style=display:flex><span>    num2: <span style=color:#ae81ff>2</span>
 </span></span><span style=display:flex><span>    <span style=color:#ae81ff>2</span>
-</span></span></code></pre></div><p>当然我们也可以将异常处理完了之后继续抛出，只要你需要。下面的代码和上面的是完全一样的，就只有12行的地方从continue换成了raise，意思就是抛出异常</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+</span></span></code></pre></div><p>当然我们也可以将异常处理完了之后继续抛出，只要你需要。下面的代码和上面的是完全一样的，就只有12行的地方从continue换成了raise，意思就是抛出异常</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#coding=utf-8</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
@@ -107,7 +107,7 @@
 </span></span><span style=display:flex><span>    	<span style=color:#66d9ef>else</span>:
 </span></span><span style=display:flex><span>    		print num_3
 </span></span><span style=display:flex><span>    		exit()
-</span></span></code></pre></div><p>运行的样例就是下面这样的，执行下去之后会执行except中的处理代码，但是由于raise的存在还是会抛出这个异常</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>    [root<span style=color:#a6e22e>@iZ28jaak5nnZ</span> <span style=color:#f92672>~</span>]<span style=color:#75715e># ./hello.py</span>
+</span></span></code></pre></div><p>运行的样例就是下面这样的，执行下去之后会执行except中的处理代码，但是由于raise的存在还是会抛出这个异常</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>    [root<span style=color:#a6e22e>@iZ28jaak5nnZ</span> <span style=color:#f92672>~</span>]<span style=color:#75715e># ./hello.py</span>
 </span></span><span style=display:flex><span>    num1: <span style=color:#ae81ff>123</span>
 </span></span><span style=display:flex><span>    num2: <span style=color:#ae81ff>0</span>
 </span></span><span style=display:flex><span>    num_1 <span style=color:#f92672>is</span> <span style=color:#ae81ff>0</span> <span style=color:#960050;background-color:#1e0010>!!!</span>     <span style=color:#75715e># 这里就是except处的处理代码</span>

@@ -14,7 +14,7 @@
 每个文件会保存指向自己的链接数，当只想自己的链接数为0的时候，那么这块数据就抛弃掉了。</p><h1 id=0x05-文件系统>0X05 文件系统</h1><h2 id=日志结构文件系统>日志结构文件系统</h2><p>因为现在的CPU运算能力和磁盘容量、内存容量等都有了非常大的进步，所以在不实际访问磁盘只在高速缓存上就能访问到很多需要的数据，所以根据这种情况，就出现了日志结构文件系统(Log-structred File System)。这种文件系统将文件操作结构化成日志。在这种文件系统中每次将数据读写缓存到内存，然后定时定量地将数据从内存写入磁盘。</p><h2 id=日志文件系统>日志文件系统</h2><p>日志文件系统比日志结构文件系统有更强的鲁棒性（Roubst 也就是健壮性）。在这种文件系统中进行文件操作时，先记录下要干什么，然后再开始操作。这样不管什么时候出了错误，都可以根据日志来恢复操作。比如在Unix中删除一个文件分成三个步骤：1.在目录中删除文件 2.释放i-Node到空间i-Node节点池 3.强磁盘块归还到操作系统。 如果完成了第一步，就死机了，那么由于日志的存在就可以在知道这个操作究竟要干什么，在恢复开机的时候就可以继续完成这次操作。当所有的任务项都完成了的时候就删除这个日志。</p><h2 id=虚拟文件系统>虚拟文件系统</h2><p>在Windows里用的是多根目录的方式，也就是有多个根目录，比如C盘D盘E盘等，但是在Linux中我们使用的是单根目录形式，如果要同时使用几种文件系统比如：根目录使用XFS、/home使用ext4、/usr目录使用ext3、那么久需要使用一种叫做虚拟文件系统的技术。两个不同的文件系统之间需要连接的话需要使用VFS（虚拟文件系统）接口来将两个文件系统连起来。使用这种虚拟文件系统的技术就可以让同一个根目录下面挂载有不同文件系统的设备。</p><h1 id=0x06-磁盘分块>0X06 磁盘分块</h1><p>已知文件在磁盘里是按照块存储的，那么每个块分配多大就成为了一个问题。因为在磁盘底层，每个文件占用的块都是整数，比如我一个块是1kb，那么我有一个2.5kb的文件也要占用3个块，甚至是1字节的文件也要占用1kb，每个块中剩余的部分是不能存储其他文件的。从这方面看来分块越大就越浪费空间，块越小磁盘空间利用率越高。那么我们把块都分成最小，这样就行了吗？显然没有这么简单。因为磁盘在读写数据的时候是按照块来的，所以分的块越大读写的速度越快，因为磁盘里的总块数少，块越小越慢。总结下来是这样：随着块大小的提升，磁盘读写效率会提高，但是空间利用率会降低。统计所得，分块大小为4kb最容易获得最佳性能。</p><h1 id=0x07-缓冲区>0X07 缓冲区</h1><p>现在的文件系统都支持缓冲区写入。缓冲区写入对应的另一种是‘同步写入’。缓冲区写入：程序生成的或者用户的数据首先写入到内存中，当达到一定时间或者一定量的时候一次性写入磁盘；同步写入：将程序和用户产生的数据实时写入磁盘里。下面对比一下这两种的优缺点</p><p><strong>同步写入优点</strong> ：数据实时同步，出现数据丢失的可能性很小
 <strong>同步写入缺点</strong> ：由于数据产生很慢，所以磁盘利用率不高，且长期占据磁盘
 <strong>缓冲写入优点</strong> ：数据首先写入比磁盘快得多的内存中，再统一写入磁盘只会短时间占用磁盘，且占用磁盘时利用率高
-<strong>缓冲写入缺点</strong> ：当数据在缓冲区没有写入磁盘时系统发生异常或者崩溃，数据非常容易丢失</p><p>这里有两段Python的代码，展示了缓冲区写入和同步写入的速度差异，首先是使用同步写入方式写入</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+<strong>缓冲写入缺点</strong> ：当数据在缓冲区没有写入磁盘时系统发生异常或者崩溃，数据非常容易丢失</p><p>这里有两段Python的代码，展示了缓冲区写入和同步写入的速度差异，首先是使用同步写入方式写入</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#coding=utf-8</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    from time import ctime
@@ -30,7 +30,7 @@
 </span></span><span style=display:flex><span>    print end_time
 </span></span></code></pre></div><p>运行结果是这样的，我们看到写入300W行&rsquo;hello,world&rsquo;用了8秒，最后生成的数据量是37.1MB</p><pre tabindex=0><code>    Thu Nov 17 11:12:21 2016
     Thu Nov 17 11:12:29 2016
-</code></pre><p>然后使用Python默认大小的缓冲区试试：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
+</code></pre><p>然后使用Python默认大小的缓冲区试试：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>    <span style=color:#75715e>#!/usr/bin/python</span>
 </span></span><span style=display:flex><span>    <span style=color:#75715e>#coding=utf-8</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    from time import ctime

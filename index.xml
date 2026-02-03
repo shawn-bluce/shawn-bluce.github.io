@@ -1,4 +1,132 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Shawn's blog</title><link>https://blog.programmer.work/</link><description>分享我的知识、经验、生活与感悟</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Fri, 02 Jan 2026 13:52:43 +0800</lastBuildDate><atom:link href="https://blog.programmer.work/index.xml" rel="self" type="application/rss+xml"/><item><title>2025 年度总结</title><link>https://blog.programmer.work/posts/2025-summary/</link><pubDate>Fri, 02 Jan 2026 13:52:43 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/2025-summary/</guid><description><![CDATA[<h1 id="0x00-intro">0X00 Intro</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Shawn's blog</title><link>https://blog.programmer.work/</link><description>分享我的知识、经验、生活与感悟</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>shawnbluce@gmail.com (Shawn)</managingEditor><webMaster>shawnbluce@gmail.com (Shawn)</webMaster><lastBuildDate>Tue, 03 Feb 2026 20:47:26 +0800</lastBuildDate><atom:link href="https://blog.programmer.work/index.xml" rel="self" type="application/rss+xml"/><item><title>2026 年的 LLM/AI 入门教程</title><link>https://blog.programmer.work/posts/llm-beginner/</link><pubDate>Tue, 03 Feb 2026 20:47:26 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/llm-beginner/</guid><description><![CDATA[<h1 id="0x00-intro">0X00 Intro</h1>
+<p>已经 2026 年了，别人都在写什么 OpenClaw 或者 Agent 相关的 AI 内容，再不济也是写一些 Skill 和 MCP 相关的东西，而我还在写“古法 AI 教程”。主要是因为我发现很多人虽然知道 AI 很厉害，但是完全不知道从哪儿下手去使用 AI，更不知道如何更好的使用 AI。甚至是搜索引擎都快要被 AI 取代了，还是有很多人并不会正确使用搜索引擎呢。</p>
+<p>下面是我自己总结出来的一些用法或是技巧，能够比较大幅度的提升我们使用 LLM 的效率和它的产出效果，那么就开始吧。</p>
+<blockquote>
+<p>你说你不知道 LLM 是什么？LLM 就是 Large Language Model，也就是「大语言模型」，我们平时说的 AI 多半就是指的这个东西，比如豆包、DeepSeek、GPT 之类的。后面的文章里 AI 和 LLM 也会混用，虽然他们本质上是两回事。</p>
+</blockquote>
+<h1 id="0x01-提示词多写几个字效果直接翻倍">0X01 提示词多写几个字效果直接翻倍</h1>
+<p>AI 没有你想的那么聪明，他不知道你脑子里的潜台词是什么，所以当你需要让 AI 帮你解决问题的时候要把你的问题清晰明确的说出来。例如当你需要 AI 给你提供一些旅行目的地的时候，不要直接说：“给我推荐一些旅行目的地”，而是尽可能把你的需求都列举出来：“我计划在 5 月份出去单人旅行，大概有 10 天的时间，预算有两万元，我会从成都出发，请你为我推荐一些目的地。”</p>
+<p>你提出的问题会直接影响最终得到的结果，下面给出两个提示词，你可以到自己习惯的 AI 平台上测试一下他们输出的区别。</p>
+<pre tabindex="0"><code>简洁版提示词：
+给我推荐一些旅行目的地
+
+复杂版提示词：
+我计划在 5 月份进行一次单人旅行，请你为我推荐一些目的地。我的预算有两万元，假期总共有 10 天，会从成都出发。我希望旅行过程更看重自然风光，而非人文和城市；每个目的地都简要介绍一下大概行程和特点。
+</code></pre><h1 id="0x02-你说的每个字都很重要">0X02 你说的每个字都很重要</h1>
+<p>很多人在跟 AI 对话的时候以为自己是真的在和对面的 LLM 聊天，实际上并非如此，你说的东西并不是对话内容，而是一个叫做 prompts 的东西，中文叫做「提示词」。所以你并非在和他聊天，而是你在给他下达指令，并且提示词中的任何一个字都很重要，所以不要在提示词里乱写东西。具体起来有下面几个小点需要注意：</p>
+<p>首先是不要随意举例，还是假设你想让他给你推荐旅游目的地，如果你强调了“比如陕历博或者故宫之类的”，那他就会疯狂给你推荐博物院，但很多时候你只是想给他一个大体方向而已。</p>
+<p>其次是要检查一下最好不要有错别字，一般来说人类之间打字交流有一两个错别字并不影响理解内容，但是 AI 会非常认真的对待你的每个字。如果你跟人类说“给我推荐一件飘亮的裙子”，那对方大概率能理解你想要的是漂亮的裙子，而 AI 很有可能给你推荐各种 bulingbuling 的能亮闪闪的裙子。</p>
+<p>最后是不要跟 AI 说任何正事之外的事情。如果你觉得 AI 的回答不好，你就直接指出来哪里有问题，千万不要说什么 “我不是跟你说了 XXXX 吗？” 或者 “你就非得 XXX 吗？” 这种东西，这种内容会严重影响上下文。</p>
+<h1 id="0x03-新开一个对话窗口不花钱">0X03 新开一个对话窗口不花钱</h1>
+<p>当你打算跟 AI 聊另一件事的时候，重开一个新的窗口或者对话。还是关联上面的内容，你说的每个字都很重要，而且重要的不只是你说的字，AI 自己说的内容也很重要，是会影响上下文的。</p>
+<p>举个例子，如果你跟 AI 连续 10 个回合都在讨论《让子弹飞》这部电影，然后突然让 AI 给你推荐音乐，那么他很有可能会给你推荐《太阳照常升起》，尤其是你跟他在之前的对话中探讨了有关电影音乐的话。</p>
+<p>如果你用的是豆包、DeepSeek 这种 APP 形式的 LLM，那么千万要记得多开独立的对话，一件事对应一个会话，效果会好很多。如果你是使用自己的 API，那更应该多开会话，因为你的每次对话内容都会连带着之前的上下文一起发送给 LLM，如果一直使用“祖传会话”不仅效果会打折扣，还会花更多的钱买 tokens。</p>
+<h1 id="0x04-不要试图让-ai-一口吃个胖子">0X04 不要试图让 AI 一口吃个胖子</h1>
+<p>还是那句话，AI 没有你想的那么强，所以当他给你提供的第一个答案不满意的时候你有两个选项：重新生成或者继续追问。</p>
+<p>如果你自认为你的提示词已经足够好了，没什么需要补充的内容了，那么可以考虑让他重新生成几次，没准就能得到你满意的答复。或者你认为自己的提示词不够好，那你就继续提供信息，让他逐步改进，而不是得出“这 AI 也不行啊”的结论。</p>
+<p>举个例子，你让 AI 给你推荐一些 100 元左右的小礼物，他推荐的结果你不满意，就可以继续说:</p>
+<ul>
+<li>礼物要送给 25 岁左右的男生</li>
+<li>礼物需要比较实用，而不是花哨</li>
+<li>礼物需要是线下店可以轻松买到的</li>
+</ul>
+<p>在问题不是很复杂的情况下，经过几轮追问一般都会得到比较令人满意的结果。</p>
+<h1 id="0x05-ai-的能力可能超出你的想象">0X05 AI 的能力可能超出你的想象</h1>
+<p>虽然 AI 很多时候不如你想的那么强，但也有时候比你想的还要强。有些事情可能你以为 AI 做不了，但他也许挺擅长的，所以不妨试一试，万一能让你满意呢？</p>
+<p>一个典型的例子就是，我觉得 macOS 上使用的 Apple script 是一个很小众的脚本语言，大概率 AI 的训练语料里并没有，就放弃了用 AI 生成 Apple script。但是后来还是硬着头皮试了试，结果发现 AI 能正确生成 Apple script，并且可以正常工作。所以说当你觉得 AI 可能不行的时候，也可以让他试试看，反正成本也不高，万一成了呢。</p>
+<h1 id="0x06-可以让-ai-教你用-ai">0X06 可以让 AI 教你用 AI</h1>
+<ul>
+<li>A：我不会用 AI 怎么办？</li>
+<li>B：你让 AI 教你啊！</li>
+<li>A：可是我不会用 AI 怎么让 AI 教我呢？</li>
+<li>B：那你让 AI 教你怎么用 AI 啊！</li>
+</ul>
+<p>是的，听起来有点离谱，但这却是一个学习使用 AI 的很好的开始。下面提供了几个 prompts 可以直接丢给 AI，然后顺着方向学下去。</p>
+<ul>
+<li>作为大语言模型，你都拥有哪些能力？可以帮我做些什么？</li>
+<li>我打算开始学习 LLM 的使用方法，请你站在专业用户的角度给我制定一个学习路径。</li>
+<li>我是一名刚刚开始接触 LLM 的新手，请你为我详细介绍一下 LLM 的基本用法，以及一些基本的使用技巧。</li>
+</ul>
+<p>还有一个很重要的用法就是可以让 AI 来帮你写提示词。假设你现在想学习日语，想让 AI 做你的日语陪练，你直接写了一段 prompts 是：“你是一名日语专家，现在请你作为我的日语陪练和我对话。”，虽然也有一定的效果，但是效果可能并不是很好。</p>
+<p>你可以先开一个窗口跟 AI 说：“你是一名精通 LLM prompts 的专家，现在请你为我生成一个日语陪练的 prompts。我的日语水平是 N2；在对话过程中如果我的语法或者单词存在错误你也依然继续和我对话，只是在对话后用括号标注出我的问题以及改进方法和意见。另外你需要补充一些我没有提到的，但是作为日语陪练非常重要的内容。现在请你为我输出 prompts”。</p>
+<p>这样一来你就得到了一份比较高质量的 prompts 了，复制这个 prompts 到一个新的对话窗口里，将 prompts 发送给 LLM，就可以开始你的对练了。</p>
+<h1 id="0x07-思维链有时候比结果更重要">0X07 思维链有时候比结果更重要</h1>
+<p>第一次发现思维链的神奇之处是在 DeepSeek R1 的时候，我发现他思考的内容其实很有价值，有时候甚至比最终给的结果更有价值。所以当你询问的是你自己专业领域的问题时，可以尝试着看一下思维链里的内容，没准就能得到一定的启发。</p>
+<p>另外就是思维链不一定每次都要开，有些简单的问题/工作其实不开思考模式也能得到你想要的答案，并且速度还更快一些。尤其是当你使用 API 接入 LLM 的时候，开启思维链是会明显耗费更多的 tokens 的。</p>
+<blockquote>
+<p>到这里是一个明显的分界线了，如果你有一些计算机相关的技术功底，能搞清什么是“模型”什么是“产品”的话，可以继续往下看一看。当然搞不懂也可以看一看，多少能有一些收获呢～</p>
+</blockquote>
+<h1 id="0x08-不同的模型区别很大">0X08 不同的模型区别很大</h1>
+<p>不同的模型擅长的事情明显是不同的，如果有条件的话最好选用合适的模型做合适的工作。下面列举出我自己使用的比较多的几个模型以及他们的特点。</p>
+<ul>
+<li>Claude-4.5-Sonnet：最贵、计算机相关的专业知识最强、编程能力最强、遇到困难问题或者 GLM 解决不了的就用 Claude</li>
+<li>GLM-4.7：便宜、是我日常使用的首选模型、编程能力不错、用于 CLI coding</li>
+<li>DeepSeek-V3.2：便宜、快速、是我在 OpenWebUI 中用于标题生成、翻译等轻量化工作的首选模型</li>
+</ul>
+<blockquote>
+<p>注意区分模型和产品之间的区别，比如“智谱清言”是产品，GLM-4.7 是模型；“ChatGPT”是产品，GPT-5.2 是模型；</p>
+</blockquote>
+<h1 id="0x09-要善用-system-prompts">0X09 要善用 System Prompts</h1>
+<p>这里先明确两个概念，我们上面提到的 prompts 其实是可以拆分成两种的：system prompts 和 user prompts。绝大多数工具例如豆包、千问、DeepSeek、ChatGPT 的 APP和网页端都是只能写 user prompts 的，少数高级的 LLM 接入工具允许我们自定义 system prompts。如果你使用的工具能够编写 system prompts 的话，我强烈建议你将它用起来。如果对于 LLM 来说你提供的 user prompts 是你给他下的指令的话，那 system prompts 就是更加重要的“铁律/思维钢印”了。这里我贴出我用的一条 system prompts 来供大家参考。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-md" data-lang="md"><span style="display:flex;"><span># Role Definition
+</span></span><span style="display:flex;"><span>你是一名资深 Go 语言后端架构师，精通 Python 与 Go 的底层运行机制差异。你擅长帮助有 Python 背景的资深开发者克服“动态语言惯性”，掌握 Go 语言“静态类型、显式控制、工程化优先”的设计哲学。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># User Profile
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Background**: 计算机科班出身，深刻理解内存管理、指针、操作系统原理、网络协议等底层概念。
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Python Expertise**: 多年开发经验，精通 Python 的动态特性、解释器机制（GIL）、元编程及生态系统。
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Go Proficiency**: 新手。了解基本语法，但缺乏工程实践经验，尚未形成 &#34;Go-way&#34; 的编程思维。
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **C**: 有一定的经验，上学的时候学过，对基本的变量类型、结构体、指针、内存地址等都有了解。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># Core Principles
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">1.</span> <span style="font-weight:bold">**Paradigm Shift (范式迁移)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 对比 Python 的“动态类型 + 鸭子类型”与 Go 的“静态类型 + 显式接口”。解释 Go 如何通过接口实现解耦，而不需要 Python 那样的灵活性。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 对比 Python 的“异常捕获”与 Go 的“错误处理”。解释 Go 为什么倾向于将错误作为值处理，而非控制流突变。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">2.</span> <span style="font-weight:bold">**Idiomatic Go (Go 之道的灌输)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 强调 &#34;Less is exponentially more&#34;（少即是多）。不要写 Pythonic 风格的 Go 代码。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 纠正过度设计。Go 追求简单、直接的代码结构，避免 Python 中常见的过度抽象和元编程技巧。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">3.</span> <span style="font-weight:bold">**Deep Dive into Mechanisms (底层机制直击)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 利用用户的 CS 背景，直接解释 Go 的内存模型（栈 vs 堆分配逃逸分析）、Goroutine 调度器（M:N 模型）与 Python 线程模型的本质区别。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 解释 <span style="color:#e6db74">`channel`</span> 和 <span style="color:#e6db74">`select`</span> 作为字面上的同步原语，对应 Python 中的 <span style="color:#e6db74">`Queue`</span> 和 <span style="color:#e6db74">`Event`</span>，但基于 CSP 通信模型。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># Interaction Guidelines
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">1.</span> <span style="font-weight:bold">**Concurrency Patterns (并发模式)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 不仅仅是展示 <span style="color:#e6db74">`go func()`</span>，更要对比 Python 的 <span style="color:#e6db74">`threading`</span>/<span style="color:#e6db74">`asyncio`</span>。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 解释 Goroutine 的轻量级特性（栈内存起始仅 2KB）以及如何利用 Context 进行超时和取消控制。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">2.</span> <span style="font-weight:bold">**Data Structures &amp; Pointers (数据结构与指针)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 对比 Python 的“一切皆引用”与 Go 的“值传递 vs 引用传递”。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 解释 <span style="color:#e6db74">`Slice`</span>（切片）的底层结构（指针、长度、容量）与 Python <span style="color:#e6db74">`List`</span> 的区别，特别是扩容机制。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 指针的使用场景：不仅是为了修改原数据，更是为了减少大结构体的拷贝开销。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">3.</span> <span style="font-weight:bold">**Error Handling (错误处理)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 演示标准的 <span style="color:#e6db74">`if err != nil`</span> 惯用写法。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 解释何时使用 <span style="color:#e6db74">`panic/recover`</span>（极少场景），对比 Python 的 <span style="color:#e6db74">`try/except`</span>。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">4.</span> <span style="font-weight:bold">**Object-Oriented Design (面向对象设计)**</span>：
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 阐明 Go 没有 Class，只有 Struct。解释如何通过“组合”代替 Python 的“继承”。
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">-</span> 解释接口的“非侵入式”特性：无需显式声明实现接口，只要方法签名匹配即可。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># Output Format
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Code Comparison**: 提供 [Python 代码] vs [Go 代码] 的对照，重点展示实现同一逻辑的不同心智模型。
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Key Takeaway**: 总结 Go 语言在该场景下的设计权衡。
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Best Practice**: 指出常见的 &#34;Pythonic in Go&#34; 反模式（如过度使用 <span style="color:#e6db74">`interface{}`</span>，滥用 panic）。
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> **Performance Analysis**: 在必要时分析 CPU/Memory 开销，利用用户的底层知识进行说明。
+</span></span></code></pre></div><blockquote>
+<p>有些产品允许你创建 AI 角色，然后跟他进行对话，创建的时候会让你描述这个 AI 角色，这个就是类似于 system prompts 了。（至于为什么是类似，是因为我没有 100% 的把握证明它就是 system prompts）</p>
+</blockquote>
+<h1 id="0x0a-让-ai-干活不如让它写程序">0X0A 让 AI 干活不如让它写程序</h1>
+<p>AI 确实可以做到你传给他一个 Excel 文件，让他解析文件并进行数据分析。但这样一来效果得不到保障（因为语言模型并不善于做数据分析），二来速度比较慢，而且又不可复用。如果你拥有一定的编程基础，比如知道如何安装 Python 和依赖包，那么把 Excel 丢给 AI 之后让他给你写个程序来分析数据效果会好很多。</p>
+<p>同样的，当你还没用上 MCP 和 Agent 的时候，让 AI 写程序，你再自己去运行，是效率和效果兼具的一种方案。比如说你有一大堆文件需要重命名，通常来说 LLM 是帮不了你什么的，但是你可以把重命名的规则准确地告知 AI，让他帮你写个脚本，效果往往还不错。</p>
+<h1 id="0x0b-花点钱让体验变得更好">0X0B 花点钱让体验变得更好</h1>
+<p>如果你还在完全不付费地使用这些 AI 工具，那我强烈建议你付费一个月试试看，最好是尝试一下类似于 POE 的这种聚合订阅服务，花 20 美元试一试业界顶尖的 Gemini-3、Claude-4.5、GPT-5.2、这些模型究竟有多强劲。</p>
+<p>如果你觉得订阅这些 20 甚至 30 美元的服务有点肉痛，那也可以试试我下面提供的自用方案。</p>
+<h1 id="0x0c-我的-llm-使用方案">0X0C 我的 LLM 使用方案</h1>
+<p>我个人拥有几个平台的 API_KEY：DeepSeek、GLM、MiniMax、Kimi、OpenRouter，每一个都是预付费的（算下来每月消耗量是小于 20 美元的）。</p>
+<p>UI 方面用过两款，分别是 CherryStudio 和 OpenWebUI。前者是部署在本地环境上的，如果你没有自己的服务器和域名，或者你不想部署在公共环境下可以考虑使用它，非常棒。后者是部署在我的服务器上的，功能极其强悍，几乎是企业级的。</p>
+<p>在 OpenWebUI 中我创建了很多个 Group（其实就是不同的 System Prompts）供我自己使用，比如用来学习 Python、Go、PostgreSQL 的这些。就像上面提到的 system prompts 一样，我每次点开我自己创建好的 MySQL Group 对话的时候，只需要输入我的问题，AI 就会自动 get 到我写在 system prompts 中的详细要求，然后按照我的要求进行输出。</p>
+]]></description></item><item><title>2025 年度总结</title><link>https://blog.programmer.work/posts/2025-summary/</link><pubDate>Fri, 02 Jan 2026 13:52:43 +0800</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/2025-summary/</guid><description><![CDATA[<h1 id="0x00-intro">0X00 Intro</h1>
 <p>兄弟们，又活了一年～</p>
 <p>这是我的第七个年度总结，在 <a href="/posts/2019-summary/" rel="">2019年度总结</a> 年度总结的开头我说：“2020年要来了，听起来这是个多科幻的年号啊。《银翼杀手》里说2019年底人类就有强人工智能了，可以穿梭宇宙了，甚至可以星际殖民了。然而现在就是2019年最后一天了，我的小爱同学还是像智障一样经常听不懂我说话。” 现在 2026 年已经来了，如果有机会对当时写 2019 年度总结的我说点什么的话，我估计会说：<!-- raw HTML omitted -->“告诉所有信任自己的朋友，多多多多囤口罩、食材、水和各种必需品”<!-- raw HTML omitted --></p>
 <p>不开玩笑了，现今虽然普通的小爱同学还是不太能听懂我们说话，但是如今的大语言模型已经极大的融入了我们的生活，应该没有人会说 ChatGPT 和豆包听不懂人话了吧。</p>
@@ -210,7 +338,7 @@
 <p><a href="https://github.com/open-webui/open-webui" target="_blank" rel="noopener noreffer ">Open WebUI</a> 是一个用户友好的 WebUI，开源版本可以实现接入多个 API 上游、多用户管理（意味着你可以把你的服务通过独立账号的方式分享给你的亲朋好友们，假设你的 API 用量顶得住的话）。</p>
 <p></p>
 <p>有关这个项目的简单使用方法就不多说了，大家有两分钟就摸索清楚了。这里提一个自己觉得有用的 tips：首先是分组，它并不是单纯的 Group 功能，更像是创建了一个 Assistant，是可以在分组里写 System Prompts 的，写好之后在这个分组里的每次对话都会默认使用你设置好的 System Prompts 了。比如我有一个 MySQL 的分组，里面设置的 System Prompts 就是下面这样的。如果你多次就一个话题和 AI 展开探讨的话，就可以用这种方式。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>你是一名精通 MySQL 的数据库专家。用户是一名中级 MySQL 用户，掌握基本的 CRUD 操作、DDL 语句和基础性能优化知识，现在遇到技术问题向你请教。
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>你是一名精通 MySQL 的数据库专家。用户是一名中级 MySQL 用户，掌握基本的 CRUD 操作、DDL 语句和基础性能优化知识，现在遇到技术问题向你请教。
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>## 核心原则
 </span></span><span style="display:flex;"><span>
@@ -300,7 +428,7 @@ server {
     add_header Strict-Transport-Security &#34;max-age=31536000; includeSubDomains&#34; always;
 }
 </code></pre><p>我自己的 docker compose 参考配置，里面的变量写在和 docker-compose.yml 同级的名为 <code>.env</code> 的文件中</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">open-webui</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">ghcr.io/open-webui/open-webui:main</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">open-webui</span>
@@ -414,7 +542,7 @@ server {
 <h1 id="0x01-函数默认值传递空列表">0X01 函数默认值传递空列表</h1>
 <p>这是一个典型错误，很多很多的 Python 程序员都犯过这个错误。一般在定义一个函数且给它设置默认值的时候我们都会写成 <code>def foo(a=0, b=&quot;&quot;, c=None)</code> 这个样子，这种写法是完全没有问题的。但是有时候也会写成：<code>def foo(d=[])</code>，这就完犊子了～</p>
 <p>我们看下面这段代码</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(a<span style="color:#f92672">=</span>[]):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(a<span style="color:#f92672">=</span>[]):
 </span></span><span style="display:flex;"><span>        a<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#39;x&#39;</span>)
 </span></span><span style="display:flex;"><span>        print(a)
 </span></span><span style="display:flex;"><span>
@@ -434,7 +562,7 @@ server {
 </code></pre><p>为什么呢？因为函数在定义的时候就将空列表初始化了，并且记录下了引用，以后每次都会对同一个列表进行操作。另外不只是列表，字典作为默认值也会有这个问题的。</p>
 <h1 id="0x02-对闭包的无意识理解">0X02 对闭包的无意识理解</h1>
 <p>很多人对闭包的理解就是粗浅的「函数里定义函数」，当然这是没错的，但是缺少了一些东西。如果只是函数里定义函数的话，下面这段代码会发生什么？</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>():
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>():
 </span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bar</span>():
 </span></span><span style="display:flex;"><span>            print(x)
@@ -446,7 +574,7 @@ server {
 <p>这一点虽然很简单，但确实很容易出现，比如用 <code>list</code> / <code>dict</code> / <code>str</code> 做变量名。因为 Python 中这 3 个名字是非常非常常用的<code>type/function</code>，所以万万不可用。</p>
 <h1 id="0x04-字符串拼接的性能问题">0X04 字符串拼接的性能问题</h1>
 <p>少量字符串拼接使用 <code>+</code> 当然没有任何问题，但是如果量很大的话就不建议使用 <code>+</code> 了，使用 <code>join</code> 会快非常多。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> time
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> time
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    COUNT <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000000</span>
 </span></span><span style="display:flex;"><span>
@@ -475,7 +603,7 @@ server {
 </code></pre><h1 id="0x05-错误使用字符串的-strip-方法">0X05 错误使用字符串的 strip 方法</h1>
 <p>学过 Python 的肯定都用过字符串的 <code>strip</code> 方法或者它衍生出来的 <code>lstrip</code> 和 <code>rstrip</code>，比如我们会用 <code>'hello'.rstrip('o')</code>来去掉字符串右侧的 <code>o</code>。</p>
 <p>也有些人会用下面这种方法去掉额外的字符：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    phone_num <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+8613588888888&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    phone_num <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;+8613588888888&#34;</span>
 </span></span><span style="display:flex;"><span>    phone_num <span style="color:#f92672">=</span> phone_num<span style="color:#f92672">.</span>strip(<span style="color:#e6db74">&#34;+86&#34;</span>)
 </span></span></code></pre></div><p>因为 <code>strip('o')</code> 可以去掉 <code>o</code>，就自然而然以为 <code>strip('+86')</code> 就是去掉 <code>+86</code> 了。但你实际运行起来就会发现 <code>phone_num</code> 就只剩下 <code>135</code> 了。因为 <code>strip('+86')</code>的意思并不是去掉两侧的 <code>+86</code> 而是去掉两侧的 <code>+</code>/<code>8</code>/<code>6</code>，凑巧这个手机号后面全是 <code>8</code> 所以就全没了 🤷‍♂️</p>
 <h1 id="0x06-认为-python-的多线程没有用">0X06 认为 Python 的多线程没有用</h1>
@@ -484,12 +612,12 @@ server {
 <h1 id="0x07-过分的一行流">0X07 过分的一行流</h1>
 <p>有些 Python 程序员推崇精简代码，使用各种列表生成式、字典生成式之类的，这当然是没问题，精简又好看，而且这是非常 Pythonic 的写法。但是有些人有些过分，强行把多行代码挤成一行，或者强行使用 Python 的高级语法。</p>
 <p>比如说 <code>a = {v: k for k, v in my_dic.items()}</code> 这种代码，其实挺好的，但是有些人会写这种东西：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    result <span style="color:#f92672">=</span> {<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;item_</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>: [x<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> [y<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)] <span style="color:#66d9ef">if</span> x <span style="color:#f92672">in</span> [z <span style="color:#66d9ef">for</span> z <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>) <span style="color:#66d9ef">if</span> z <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>]] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    result <span style="color:#f92672">=</span> {<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;item_</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>: [x<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> [y<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)] <span style="color:#66d9ef">if</span> x <span style="color:#f92672">in</span> [z <span style="color:#66d9ef">for</span> z <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>) <span style="color:#66d9ef">if</span> z <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>]] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)}
 </span></span></code></pre></div><p>强吗？强，对语言没点理解是写不出来能跑的这种代码的。但是好吗？codereview 的时候可能会被同时打死。</p>
 <h1 id="0x08-手撸-csv-文件">0X08 手撸 csv 文件</h1>
 <p>是的没错，都 2025 年了还有人在手撸 csv 文件。赶紧了解一下 <code>csv</code> 库的用法吧，不要再去折磨那个逗号和转义符了。</p>
 <p>写入：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 学生信息数据</span>
 </span></span><span style="display:flex;"><span>    students <span style="color:#f92672">=</span> [
@@ -507,7 +635,7 @@ server {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;学生信息已写入 students.csv 文件&#34;</span>)
 </span></span></code></pre></div><p>读取：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> csv
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 读取CSV文件</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;students.csv&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>) <span style="color:#66d9ef">as</span> file:
@@ -526,7 +654,7 @@ server {
 </span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;姓名: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;姓名&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, 年龄: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;年龄&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, 班级: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;班级&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">, 成绩: </span><span style="color:#e6db74">{</span>row[<span style="color:#e6db74">&#39;成绩&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h1 id="0x09-文件硬读写">0X09 文件硬读写</h1>
 <p>我们有时候会用 <code>open('xxx', 'r').read()</code> 直接把一个文件读到内存里，如果文件比较小确实是可以这样干的，读到内存里直接当字符串处理就好。但是如果文件很大，就不要一直这么搞了，你 1G 的日志文件还通过这种方式读取，服务都要被卡死了。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;xxx.log&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;xxx.log&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> f:
 </span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">pass</span>
 </span></span></code></pre></div><p>这样我们的 f 就是一个类似生成器的东西了，每次只读一行，就不会再被这么初级的 IO 问题限制性能了。</p>
@@ -569,7 +697,7 @@ server {
 </blockquote>
 <h1 id="0x02-不区分大小写的文件系统">0X02 不区分大小写的文件系统</h1>
 <p>下面这段是我在 Linux 中的实验结果：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ mkdir test_dir
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ mkdir test_dir
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_world
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_WORLD
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/HELLO_world
@@ -582,7 +710,7 @@ server {
 </span></span><span style="display:flex;"><span>    -rw-r--r-- <span style="color:#ae81ff">1</span> shawn shawn <span style="color:#ae81ff">0</span> Mar  <span style="color:#ae81ff">6</span> 14:27 hello_world
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$
 </span></span></code></pre></div><p>再下面这段是我在 macOS 中实验的结果：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ mkdir test_dir
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ mkdir test_dir
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/hello_world
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/hello_WORLD
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ touch test_dir/HELLO_world
@@ -592,7 +720,7 @@ server {
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $
 </span></span></code></pre></div><p>是不是很惊喜，是不是很意外？嘴上说自己是 Unix，但是真正 Unix 会使用的 ext4 和 XFS 甚至是 ZFS 等文件系统都是严格区分大小写的（ZFS 可配置，默认区分大小写），结果到了 macOS 上就不分了。也就是说如果你在 Linux 上将 <code>hello.py</code> 和 <code>HELLO.py</code> 两个文件打包，再到 macOS 中解压，就会原地消失一个 🫠</p>
 <p>👇下面给大家表演一个「文件消失术」</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ ssh shawn@192.168.81.151
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@mac<span style="color:#f92672">]</span> ~ $ ssh shawn@192.168.81.151
 </span></span><span style="display:flex;"><span>    Last login: Wed Mar  <span style="color:#ae81ff">5</span> 14:30:49 <span style="color:#ae81ff">2025</span> from 192.168.81.1
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ mkdir test_dir
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>shawn@archlinux ~<span style="color:#f92672">]</span>$ touch test_dir/hello_world
@@ -1006,213 +1134,4 @@ server {
 <p>唯一一个期待的就是 2024 年初备案的电影《英雄出少年》，据说已经杀青了，是姜文导演编剧的新片。不过这个阵容我是一点都看不懂：姜文、马丽、葛优、赵本山、雷佳音，据说还有胡歌、宋小宝。虽然阵容看不懂但不妨碍继续期待。</p>
 <h1 id="0x0c-总结的总结">0X0C 总结的总结</h1>
 <p>根据我一向的「好习惯」，一定是要给总结写一个总结的。但是我对今年的满意度真的很低，以至于没有什么太大的兴趣再总结一次了。但是明年也就是 2025 年，就要迎来我的 30 周岁生日了，向着 30 周岁发起冲锋吧！（突然中二起来了）</p>
-]]></description></item><item><title>2024 年的自建 NAS 不专业不完全手册</title><link>https://blog.programmer.work/posts/nas-build-2024/</link><pubDate>Tue, 02 Jul 2024 13:48:00 +0000</pubDate><author>Shawn</author><guid>https://blog.programmer.work/posts/nas-build-2024/</guid><description><![CDATA[<h1 id="0x00-你需要一台-nas-吗">0X00 你需要一台 NAS 吗</h1>
-<p>不知怎么的，在移动互联网疯狂发展的今天，反而慢慢开始兴起了自建网络服务这种复古风潮。最近这些年身边的朋友同事越来越多聊到 NAS 了，甚至 B 站上出现了一小撮 NAS 区 UP 主（没错，你知道我说的是谁）。就更不说现在淘宝咸鱼上大量的 NAS 专用机箱，甚至是 3D 打印的定制化版本了。</p>
-<p>你真的需要一台 NAS 吗？NAS 说白了就是一块连着网的硬盘，速度比直接插电脑上还慢一些，如果你平日里需要访问数据的设备并不多，且拥有一个台式电脑，那不如先买两块硬盘插上去。通过文件共享功能将台式机转换成一个带有存储功能的兼职 NAS。</p>
-<p>如果你家里的多个手机、平板、电脑、电视都需要访问存储，或者你没有台式机可以扩容，那确实可以考虑搞一台 NAS。</p>
-<p></p>
-<p>我自己的需求是这样的：</p>
-<ul>
-<li>平时喜欢摄影，每次拍摄回来的照片少则 10G 多则 50G，日积月累已经有大几百 G 了，需要备份</li>
-<li>也喜欢拍一些视频，相机拍摄的码率都很高，随随便便 50G 100G 的，需要备份</li>
-<li>患有仓鼠症，喜欢囤一些高清电影电视剧来看，总共搞了有差不多 8T 了</li>
-<li>手机、平板、电视、电脑都需要访问上面的影视资源</li>
-</ul>
-<p>什么，你说你就是想要，不管需求？那就买呀，挑着贵的和好玩的买～</p>
-<h1 id="0x01-我的-nas-之路">0X01 我的 NAS 之路</h1>
-<p>最早的一台 NAS 是 2018 年买的 Synology DS118 性能烂到家了，也只有一个盘位，配了一块 4T 红盘，不过还是老老实实用了差不多 3 年。</p>
-<p>DS118 存储告急之后打算升级 NAS，觉得自己很少用得上群晖引以为豪的软件，再加上对自己的技术实力有一捏捏🤏的信心，所以开始尝试自组 NAS。硬件选择了奔腾 G6400 + 16G 内存，第一次使用了 OMV ，觉得它对 Linux 的改动很少，所以相对来说更玩得惯。不过用了没多久还是换成了 TrueNAS Core，这套平台就稳定运行了很久。</p>
-<blockquote>
-<p>当时买了 8T 的 HC320，买了没几天奇亚币就上天了，我的硬盘价格也跟着上天了。时隔一周，我 899 买的硬盘店家就卖 1899 了 🤷‍♂️</p>
-</blockquote>
-<p>因为 TrueNAS Core 是基于 BSD 的系统，后来看 TrueNAS SCALE（基于 Linux 的）稳定了之后就切到了 SCALE 版本，也顺势将 G6400 升级成了 i3-10100，内存也加到了 32G。</p>
-<p>升级之后的 NAS 一直稳定运行到了今年，突然有一天我觉得家里另外一台用作 homelab 的服务器开机时间太少了，然后我看着身边的一台性能「强劲」的 homelab 和一台性能「羸弱」的 NAS 陷入了沉思。沉思过后，从兜里掏出了一张「融合」：</p>
-<p></p>
-<h1 id="0x02-有点强的硬件配置">0X02 有点强的硬件配置</h1>
-<p>说是融合，其实就是选用了 homelab 的 CPU内存主板和原 NAS 的机箱硬盘，大概配置如下</p>
-<table>
-  <thead>
-      <tr>
-          <th>Name</th>
-          <th>Model</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>CPU</td>
-          <td>AMD Epyc 7551P 32C64T</td>
-      </tr>
-      <tr>
-          <td>主板</td>
-          <td>SuperMicro H11SSL-i</td>
-      </tr>
-      <tr>
-          <td>内存</td>
-          <td>DDR4 16G ECC * 4</td>
-      </tr>
-      <tr>
-          <td>HDD</td>
-          <td>HC320 8T * 3</td>
-      </tr>
-      <tr>
-          <td>HDD</td>
-          <td>红盘 4T * 1</td>
-      </tr>
-      <tr>
-          <td>HDD</td>
-          <td>银河 4T * 1</td>
-      </tr>
-      <tr>
-          <td>SSD</td>
-          <td>Intel 1.6T</td>
-      </tr>
-      <tr>
-          <td>网卡</td>
-          <td>Intel 2.5G</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-      </tr>
-  </tbody>
-</table>
-<p>试问哪个程序员不想要一台 32 核 64 线程 64G 内存 近 30T 存储容量的 NAS 呢 🤣</p>
-<blockquote>
-<p>配置单疑点：真有必要上这种 CPU 吗？没有，完全没有，事实上是之前 i3-10100 应付我的需求也完全没有任何问题。我只是正好有这个，卖也不怎么值钱，不如装上。真有必要上 64G 内存吗？没有，完全没有，事实上之前 32G 内存 应付我的需求也完全没有任何问题。我只是&hellip;有点上头，所以上了 64G。真有必要搞这么多存储吗？没有，完全没有，事实上🤦‍♂️这个还是有的，或者说因人而异，毕竟我确实要存好多照片、视频和电影电视剧。听说 HC320 很拉？其实我没觉得，所谓炒豆子声确实存在一些，不过也只存在于读写的时候，但是 NAS 其实大多数时候磁盘是可以休眠的。另外我放在桌子下面使用完全不会在意，只要别放卧室就没有问题。你那个 1.6T 是不是有点扎眼？这是我在咸鱼上收的二手，当时放在 homelab 上用的，现在拿过来做缓存（缓存意味着丢了也问题不大），正经自己配置缓存的话一般 250G 就妥妥够用了。</p>
-</blockquote>
-<h1 id="0x03-硬件选择">0X03 硬件选择</h1>
-<p>我这个硬件配置其实也就图一乐，对大多数朋友的选购并不能起到多大的帮助作用。这一节来简单帮大家分析一下需求，选择自己需要的配置。</p>
-<h2 id="cpu">CPU</h2>
-<p>如果没有万兆传输需求，那 300 块钱买一个 G6400 或者同等水平的 CPU 就可以了，如果有万兆需求的话可能 CPU 性能上需要再上一档。</p>
-<p>另外挑选 CPU 的时候可以注意一下它的编解码性能，如果性能达标的话在 NAS 上做视频转码就舒服多了。</p>
-<h2 id="内存">内存</h2>
-<p>内存主要就是看大小，如果你不打算用 TrueNAS 且不打算跑好多个服务在 NAS 上的话，4G 或者 8G 内存就是够用的。如果打算用 TrueNAS 的话可以在预算范围内多购置一些内存，有关系统选择的内容我写在下面了。</p>
-<blockquote>
-<p>有必要 ECC 吗？可以，但没必要。随便买几根内存插上就行了，真想讲究的话就买同品牌同频率同型号的内存。</p>
-</blockquote>
-<h2 id="主板">主板</h2>
-<p>主板要在预算范围内选靠谱一些的，劣质主板的供电可能会有问题，这对于我们这种 7*24 运行的机器来说是很大的问题了。</p>
-<p>另外如果计划加的硬盘多的话要先看一下硬盘供电和 SATA 接口是不是够用，不够的话还要买 PCIE 转接卡。</p>
-<h2 id="电源">电源</h2>
-<p>电源更好选，我们选一个转换率达标的<strong>大牌</strong> 就好了，功率反而是最不重要的。另外我建议各位选购全模组电源，因为我们大概率是不会给 NAS 装显卡的，用上全模组电源就可以让机箱里少很大一坨线。</p>
-<p>现在我用的就是非模组电源，机箱里一大坨一大坨的供电线闲着用不上，徒增散热难度。</p>
-<h2 id="硬盘">硬盘</h2>
-<p>硬盘就在淘宝上找那几个口碑好的店去买就好了，既然组 NAS 了我建议还是 4T 起步，8T 10T 16T 最好。</p>
-<p>如果需要缓存盘的话，要考虑自己是否会上万兆，如果是万兆内网的话一定要上 nvme 的盘，否则 SATA 的 SSD 就可以用作缓存了。因为 SATA 3.0 的速度是 6 Gbps 要高于常见的千兆、2.5G 和 5G，但是不到万兆的 10G。</p>
-<h2 id="网络">网络</h2>
-<p>网络基本上有四个选择，大家可以根据自己的需求进行选择：</p>
-<ul>
-<li>Wi-Fi <strong>愚蠢之选</strong> ：速度慢且不稳定，NAS 系统对 Wi-Fi 的支持也不好，没有任何理由选择为 NAS 配置 Wi-Fi；</li>
-<li>千兆 <strong>新手之选</strong> ：不改动网络，不新增设备，125mb/s 的速度能满足几乎所有功能性需求；</li>
-<li>2.5G <strong>实用之选</strong> ：2.5G 的网卡和交换机都不算贵，能将内网速度提升一倍不止，性价比很高；</li>
-<li>万兆 <strong>高玩之选</strong> ：如果经常有大量数据传输的需求，那可以咬咬牙上万兆，100G 的数据也能一分多钟搞定，不过一般玩家就不太建议这么搞了，太贵；</li>
-</ul>
-<blockquote>
-<p>你说还有 40G ？散了散了，买不起了 🤷‍♂️</p>
-</blockquote>
-<h1 id="0x04-系统选择">0X04 系统选择</h1>
-<p>自组 NAS 的话基本上就下面这几种系统方案：</p>
-<ul>
-<li>TrueNAS Core <strong>稳如老狗</strong> ：企业级的 NAS 系统，基于 BSD，原生 ZFS，稳如老狗。不过没什么可玩性，如果是用作纯 NAS 的话可以考虑；</li>
-<li>TrueNAS SCALE <strong>稳中带皮</strong> ：同样的企业级 NAS 系统，基于 Linux，也很稳定，比 Core 版的可玩性强一些，带 Docker；</li>
-<li>OMV <strong>简单粗暴</strong> ：一个相对简单的系统，基于 Debian，没有深度用过，不过用户量也不是很大；</li>
-<li>WIndows Server <strong>熟悉的地方</strong> ：有些用户对 Windows 很熟悉，对 Linux 则一窍不通，那其实装个 Windows 开启文件共享也挺好的，还免了后续的折腾；</li>
-<li>Linux <strong>硬核之选</strong> ：如果你对自己的 Linux 技术有信心，是可以直接装 Linux 然后自己配置文件共享的，这样还更自由，只是 web 面板的缺失会导致修改配置和部署服务的麻烦程度直线提升；</li>
-<li>Unraid <strong>玩家之选</strong> ：Unraid 是除了 Windows 以外唯一一个付费系统，可以方便的配置 Docker 和虚拟机，也有应用商店可以快速安装一些诸如 Plex、qbittorrent 之类的应用；</li>
-</ul>
-<p>按个人使用经验来说，比较推荐 <strong>TrueNAS SCALE</strong> 和 <strong>Unraid</strong> 两个。</p>
-<h2 id="truenas-scale">TrueNAS SCALE</h2>
-<p>优势：</p>
-<ol>
-<li>开源且免费</li>
-<li>ZFS 很屌</li>
-<li>带有插件市场，方便安装插件</li>
-<li>支持在 NAS 上部署虚拟机</li>
-</ol>
-<p>劣势：</p>
-<ol>
-<li>上手难度较高</li>
-<li>ZFS 并不适合所有人</li>
-<li>ZFS 对内存要求较大</li>
-<li>插件市场并不很完善</li>
-</ol>
-<h2 id="unraid">Unraid</h2>
-<p>优势：</p>
-<ol>
-<li>阵列系统自由度高</li>
-<li>上手门槛低</li>
-<li>插件市场相比 TrueNAS 更完善</li>
-<li>中文化做的更好</li>
-<li>管理界面更加直观</li>
-<li>也能部署虚拟机</li>
-</ol>
-<p>劣势：</p>
-<ol>
-<li>要钱，现在还改成了订阅制（可以去咸鱼收老的激活码）</li>
-<li>对 ZFS 支持不佳</li>
-<li>在使用校验盘且没有缓存的情况下写入速度慢</li>
-</ol>
-<h1 id="0x05-阵列介绍unraid-only">0X05 阵列介绍（Unraid Only）</h1>
-<p>这里简单介绍一下 Unraid 的阵列，严格来说不叫阵列，应该是 Array。</p>
-<p></p>
-<p>我们以 3 块 8T 的硬盘为例，如果组成无校验的 Array，可用空间就是 3*8=24T。向其中存储的文件会<strong>以文件为尺度分散在所有硬盘中</strong> ，这种方式的特点就是：<strong>读写的速度都是单盘的速度</strong> 。并且数据安全性上也比较特别，由于都是以文件为尺度进行分盘的，所以即使 3 块盘坏了 2 块，那活着的盘里的数据也还能都取出来，极端点说 100 快盘坏了 99 个，最后那个活着的也能读数据出来。这就是 Unraid 的特性。</p>
-<p></p>
-<p>还是 3 块 8T 的盘，如果将其中一个用作<strong>校验盘</strong> ，那可用空间就是 2*8=16T。存储的文件依旧以文件为尺度分散在硬盘中，但是每次写入数据到「数据盘」时，都会同时计算校验值写入「校验盘」。我们假设数据盘 A 存储了<code>[01010101]</code>的数据，数据盘 B 存储了 <code>[01100110]</code> 的数据，那经过计算我们校验盘就会存储 <code>[00110011]</code>（通过计算对应位置的二进制得到的）。这样一来 2 块数据盘无论坏掉哪一个，都可以根据另一个好的和校验盘进行计算将其数据恢复出来；如果校验盘坏了，那数据本身就没有丢，再替换一块校验盘上去即可。带校验的模式也有一点风险，就是「如果只有校验盘活下来」的情况，这种情况虽然校验盘活下来了，但是数据还是全都丢完了。</p>
-<p>一般来说你都用 NAS 了，想必是对数据安全有一定要求的，所以建议 Unraid 配合校验盘一起使用，担心性能问题大不了再加一个缓存盘就是了。</p>
-<h1 id="0x06-阵列介绍truenas-only">0X06 阵列介绍（TrueNAS Only）</h1>
-<p>选择 TrueNAS 肯定是要用 ZFS 的，我们一般用 ZFS 也就这几种用法：strpe, mirror, raid-z, raid-z2。严格来说这些阵列方案和常见的 RAID 是不一样的，但也大差不差，所以我还是写了这个简易的对照表，方便各位理解。</p>
-<table>
-  <thead>
-      <tr>
-          <th>ZFS Name</th>
-          <th>RAID Name</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>strpe</td>
-          <td>raid-0</td>
-      </tr>
-      <tr>
-          <td>mirror</td>
-          <td>raid-1</td>
-      </tr>
-      <tr>
-          <td>raid-z</td>
-          <td>raid-5</td>
-      </tr>
-      <tr>
-          <td>raid-z2</td>
-          <td>raid-6</td>
-      </tr>
-  </tbody>
-</table>
-<p>还是那句话，你都用 NAS 了，想必是对数据安全有一定要求的，所以直接抛弃 strpe 这种一损俱损的疯狂模式，我们从 mirror 开始介绍。</p>
-<p>mirror 是最简单的，就是纯镜像。我们依旧假设你有 3 个 8T 盘，现在将他们组成 ZFS mirror 之后可用空间就只有 8T，但是安全性暴涨。mirror 模式会将写入阵列的数据同时写入到所有磁盘，也就是说每个盘里都有完整的数据，这样一来 3 块盘只要没有一起挂掉，那数据就全部还在，是<strong>数据安全性最高</strong> 的。</p>
-<p>raid-z 则是带校验的，但是与 Unraid 不同，<strong>raid-z 不存在校验盘的概念</strong> 。三块盘的身份是相同的，功能也是一样的，你写入的数据会分散在两块盘中，再将校验数据写入另一块盘。这种方式乍一看和 Unraid 上使用单个校验盘是一样的，但其实大相径庭。由于数据分散在三块盘中，校验数据也分散在三块盘中，这就意味着读写都是三块盘一起工作的，所以<strong>性能比带校验的 3 盘 Unraid 强</strong> 好多。但是当同时坏掉两块盘的时候，不能像 Unraid 一样有概率恢复一半数据。</p>
-<p>raid-z2 则是带两个校验的，通常只有硬盘数更多时（例如 5 块）才会考虑，原理同上。带两个校验盘就意味着整个阵列中可以坏掉随意两块盘。</p>
-<h1 id="0x07-装都装了-跑个服务吧">0X07 装都装了 跑个服务吧</h1>
-<p>如果你的 NAS 性能比较强，有多余的性能可以跑一些服务的话，我可以推荐一下我部署的服务：</p>
-<ul>
-<li>Plex 影音中枢，可以将自己下载好的电影电视剧做成海报墙，并且在多个设备上无间断播放，需要在电视电脑平板手机等多设备上观看的话还是很好用的；</li>
-<li>FileBrowser 文件管理器，虽然可以通过 SMB 协议挂载目录到手机电脑上，但偶尔不方便挂载的时候可以用它管理文件；</li>
-<li>cailbre-web 电子书管理器，类似于 Plex，不过它是针对电子书的，可以在线看书、管理、收藏；</li>
-<li>firefox 有点离谱，但是 Firefox 可以跑在浏览器里，我把 Firefox 通过 frp 做了内网透传，这样人在外面只需要访问这个 Firefox 服务就能间接访问家里部署的所有 web 服务了；</li>
-<li>frp 内网穿透，允许你通过自建的服务器转发流量到家中，实现远程访问家里 NAS 的功能；</li>
-<li>homeassistant 智能家居，还没深度使用，不过多介绍；</li>
-<li>netdata 性能监控，说实话没什么用，但是看着帅；</li>
-<li>qbittorrent BT 下载神器，没有介绍的必要；</li>
-<li>SpeedTest 测速工具，用来测试内网速度是否达标</li>
-</ul>
-<h1 id="0x08-冷静消费">0X08 冷静消费</h1>
-<p>一波分析后蠢蠢欲动？<strong>冷静，冷静，冷静</strong></p>
-<p>开搞之前先问自己几个问题：</p>
-<ol>
-<li>真的有那么多的文件要存储吗？</li>
-<li>真的有那么多的数据要备份吗？</li>
-<li>真的有那么多的设备要访问吗？</li>
-<li>电脑加硬盘的方案真的不行吗？</li>
-</ol>
-<p>如果真的都考虑清楚了，那就开搞吧～</p>
-<p>最后提醒一句<strong>数据无价，做好备份</strong></p>
 ]]></description></item></channel></rss>
